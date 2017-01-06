@@ -218,6 +218,267 @@
 
 
   
+    <article id="post-mac如何搭建Hexo博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/07/mac如何搭建Hexo博客/">mac如何搭建Hexo博客</a>
+    </h1>
+  
+
+        
+        <a href="/2017/01/07/mac如何搭建Hexo博客/" class="archive-article-date">
+  	<time datetime="2017-01-06T17:11:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1、Hexo搭建"><a href="#1、Hexo搭建" class="headerlink" title="1、Hexo搭建"></a>1、Hexo搭建</h2><p><img src="/pictures/2017_1_7/hexo_xmind.jpg" alt=""></p>
+<p>####环境<br>一、环境安装</p>
+<ol>
+<li><p>node.js（在node.js官网中下载安装）node.js官网</p>
+</li>
+<li><p>git（OS系统中直接安装x-code就可以了）</p>
+</li>
+<li><p>hexo</p>
+</li>
+</ol>
+<p>1）打开OS系统终端</p>
+<p>2）输入安装hexo的代码(此处安装时有可能会提示输入系统管理员密码)</p>
+<p>$ sudo npm install -g hexo<br>二、hexo创建静态博客</p>
+<ol>
+<li><p>新建blog文件夹</p>
+</li>
+<li><p>在终端进入该文件夹，初始化博客</p>
+</li>
+</ol>
+<p>$ hexo init</p>
+<ol>
+<li>上述完成后，生成原始文件；blog文件夹就是博客的根目录</li>
+</ol>
+<ol>
+<li>本地查看：启用本地服务命令(退出按ctrl+c)</li>
+</ol>
+<p>$ hexo s</p>
+<ol>
+<li>将出现的地址输入浏览器，即可可查看到本地效果</li>
+</ol>
+<p>三、github配置</p>
+<ol>
+<li><p>注册github账号并登陆</p>
+</li>
+<li><p>获取本机的SSH口令</p>
+</li>
+</ol>
+<p>1）输入获取代码，回车直到出现图片所示图形为止</p>
+<p>$ ssh-keygen</p>
+<p>2）输入编译代码</p>
+<p>$ vim ~/.ssh/id_rsa.pub<br>3）出现SSH口令后，将红框部分复制，并在下方输入:q，随后按下回车可以退出该窗口</p>
+<p>4）进入到github页面设置SSH口令</p>
+<p>点击用户下拉菜单中的settings（step1)</p>
+<p>点击左侧的SHH and GPG keys（step2)</p>
+<p>在Title中输入口令名称（随意）（step3)</p>
+<p>在key中贴上SSH口令（step4)</p>
+<ol>
+<li>创建新的仓库</li>
+</ol>
+<p>1）创建新的仓库（repOSitory）</p>
+<p>点击用户左侧的+号菜单中的New repOSitory（step1)</p>
+<p>在repOSitory name中输入二级域名，格式请严格遵照username.github.io（step2)</p>
+<p>ps：username填写github的登录用户名，否则上线的时候会报错</p>
+<p>是否公开选项可以选取Public（step3)</p>
+<p>勾选step4处，会自动生成一份可编辑的README.md文件（建议勾选）（step4)</p>
+<p>点击create repOSitory生成仓库完毕（step5)</p>
+<p>2）查看新建的仓库（repOSitory）</p>
+<p>可以回到github个人首页点击右侧的仓库区</p>
+<p>进入后在step1处选择并复制http地址，注意此时step2处应该是空的</p>
+<p>四、发布博客</p>
+<ol>
+<li>设置blog配置文件</li>
+</ol>
+<p>1）打开blog文件夹下的_config.yml文件</p>
+<p>2）找到最下方的type，输入git（注意冒号后面是带空格的）</p>
+<p>3）repo行可能没有，需要自己输入，后面跟上github上仓库中复制的http地址（注意此时1、2两处应该是一样的username），不然上传时会报错</p>
+<p>4）其他博客设置</p>
+<p>title：博客名称</p>
+<p>subtitle：博客副标题</p>
+<p>description：博客描述</p>
+<p>author：作者</p>
+<p>language：语言（简体中文是zh-CN）</p>
+<ol>
+<li>在终端上传博客</li>
+</ol>
+<p>1）进入终端，输入git上传插件安装代码（安装时会提示输入github用户名及密码）</p>
+<p>  $ npm install hexo-deployer-git –save<br>2）安装完毕后，输入获取代码</p>
+<p>  $ hexo g<br>3）最后输入上传代码</p>
+<p>  $ hexo d<br>4）重新在github仓库查看上传文件，此时在step2中会有之前bolg中生成的文件</p>
+<p>5）step3处就是你的博客地址</p>
+<p>五、新建与更新博客</p>
+<ol>
+<li>新建博客</li>
+</ol>
+<p>1）终端bolg文件下，输入新建博客代码</p>
+<pre><code>$ hexo new &apos;filename&apos;
+</code></pre><p>2）此时在bolg/source/_posts/下面会看到新建的博客</p>
+<p>3）博客文件的后缀是.md文件，OS下推荐使用MOU编辑器mou下载地址</p>
+<ol>
+<li>更新博客</li>
+</ol>
+<p>1）完成编辑后，在终端上依次重复以下代码（此时必须先将编辑器关闭，否则会出现获取错误）</p>
+<pre><code>$ hexo g
+$ hexo d
+</code></pre><p>2）完成后便能刷新博客网页看到新更新的内容了</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/07/mac如何搭建Hexo博客/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-深入了解java接口和抽象类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/01/深入了解java接口和抽象类/">深入了解Java接口和抽象类</a>
+    </h1>
+  
+
+        
+        <a href="/2017/01/01/深入了解java接口和抽象类/" class="archive-article-date">
+  	<time datetime="2016-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、抽象类"><a href="#一、抽象类" class="headerlink" title="一、抽象类"></a>一、抽象类</h2><p>　　在了解抽象类之前，先来了解一下抽象方法。抽象方法是一种特殊的方法：它只有声明，而没有具体的实现。抽象方法的声明格式为：<br>　　<br>　　<br><code>abstract void fun();</code></p>
+<p>　　抽象方法必须用abstract关键字进行修饰。如果一个类含有抽象方法，则称这个类为抽象类，抽象类必须在类前用abstract关键字修饰。因为抽象类中含有无具体实现的方法，所以不能用抽象类创建对象。</p>
+<p>　　下面要注意一个问题：在《JAVA编程思想》一书中，将抽象类定义为“包含抽象方法的类”，但是后面发现如果一个类不包含抽象方法，只是用abstract修饰的话也是抽象类。也就是说抽象类不一定必须含有抽象方法。个人觉得这个属于钻牛角尖的问题吧，因为如果一个抽象类不包含任何抽象方法，为何还要设计为抽象类？所以暂且记住这个概念吧，不必去深究为什么。<br>　　<br>　　<br><code>[public] abstract class ClassName {
+    abstract void fun();
+}</code></p>
+<p>　　从这里可以看出，抽象类就是为了继承而存在的，如果你定义了一个抽象类，却不去继承它，那么等于白白创建了这个抽象类，因为你不能用它来做任何事情。对于一个父类，如果它的某个方法在父类中实现出来没有任何意义，必须根据子类的实际需求来进行不同的实现，那么就可以将这个方法声明为abstract方法，此时这个类也就成为abstract类了。</p>
+<p>　　包含抽象方法的类称为抽象类，但并不意味着抽象类中只能有抽象方法，它和普通类一样，同样可以拥有成员变量和普通的成员方法。注意，抽象类和普通类的主要有三点区别：</p>
+<p>　　1.抽象方法必须为public或者protected（因为如果为private，则不能被子类继承，子类便无法实现该方法），缺省情况下默认为public。</p>
+<p>　　2.抽象类不能用来创建对象；</p>
+<p>　　3.如果一个类继承于一个抽象类，则子类必须实现父类的抽象方法。如果子类没有实现父类的抽象方法，则必须将子类也定义为为abstract类。<br>　　在其他方面，抽象类和普通的类并没有区别。
+　　</p>
+<h2 id="二、接口"><a href="#二、接口" class="headerlink" title="二、接口"></a>二、接口</h2><p>　　接口，英文称作interface，在软件工程中，接口泛指供别人调用的方法或者函数。从这里，我们可以体会到Java语言设计者的初衷，它是对行为的抽象。在Java中，定一个接口的形式如下：
+　　</p>
+<p><code>[public] interface InterfaceName {
+ //
+}</code></p>
+<p>　　接口中可以含有 变量和方法。但是要注意，接口中的变量会被隐式地指定为public static final变量（并且只能是public static final变量，用private修饰会报编译错误），而方法会被隐式地指定为public abstract方法且只能是public abstract方法（用其他关键字，比如private、protected、static、 final等修饰会报编译错误），并且接口中所有的方法不能有具体的实现，也就是说，接口中的方法必须都是抽象方法。从这里可以隐约看出接口和抽象类的区别，接口是一种极度抽象的类型，它比抽象类更加“抽象”，并且一般情况下不在接口中定义变量。</p>
+<p>　　要让一个类遵循某组特地的接口需要使用implements关键字，具体格式如下：<br>　　<br><code>class ClassName implements Interface1,Interface2,[....]{
+}</code></p>
+<p>　　可以看出，允许一个类遵循多个特定的接口。如果一个非抽象类遵循了某个接口，就必须实现该接口中的所有方法。对于遵循某个接口的抽象类，可以不实现该接口中的抽象方法。</p>
+<p>##三、抽象类和接口的区别<br>1.语法层面上的区别</p>
+<p>　　1）抽象类可以提供成员方法的实现细节，而接口中只能存在public abstract 方法；</p>
+<p>　　2）抽象类中的成员变量可以是各种类型的，而接口中的成员变量只能是public static final类型的；</p>
+<p>　　3）接口中不能含有静态代码块以及静态方法，而抽象类可以有静态代码块和静态方法；</p>
+<p>　　4）一个类只能继承一个抽象类，而一个类却可以实现多个接口。</p>
+<p>2.设计层面上的区别</p>
+<p>　　1）抽象类是对一种事物的抽象，即对类抽象，而接口是对行为的抽象。抽象类是对整个类整体进行抽象，包括属性、行为，但是接口却是对类局部（行为）进行抽象。举个简单的例子，飞机和鸟是不同类的事物，但是它们都有一个共性，就是都会飞。那么在设计的时候，可以将飞机设计为一个类Airplane，将鸟设计为一个类Bird，但是不能将 飞行 这个特性也设计为类，因此它只是一个行为特性，并不是对一类事物的抽象描述。此时可以将 飞行 设计为一个接口Fly，包含方法fly( )，然后Airplane和Bird分别根据自己的需要实现Fly这个接口。然后至于有不同种类的飞机，比如战斗机、民用飞机等直接继承Airplane即可，对于鸟也是类似的，不同种类的鸟直接继承Bird类即可。从这里可以看出，继承是一个 “是不是”的关系，而 接口 实现则是 “有没有”的关系。如果一个类继承了某个抽象类，则子类必定是抽象类的种类，而接口实现则是有没有、具备不具备的关系，比如鸟是否能飞（或者是否具备飞行这个特点），能飞行则可以实现这个接口，不能飞行就不实现这个接口。</p>
+<p>　　2）设计层面不同，抽象类作为很多子类的父类，它是一种模板式设计。而接口是一种行为规范，它是一种辐射式设计。什么是模板式设计？最简单例子，大家都用过ppt里面的模板，如果用模板A设计了ppt B和ppt C，ppt B和ppt C公共的部分就是模板A了，如果它们的公共部分需要改动，则只需要改动模板A就可以了，不需要重新对ppt B和ppt C进行改动。而辐射式设计，比如某个电梯都装了某种报警器，一旦要更新报警器，就必须全部更新。也就是说对于抽象类，如果需要添加新的方法，可以直接在抽象类中添加具体的实现，子类可以不进行变更；而对于接口则不行，如果接口进行了变更，则所有实现这个接口的类都必须进行相应的改动。</p>
+<p>　　下面看一个网上流传最广泛的例子：门和警报的例子：门都有open( )和close( )两个动作，此时我们可以定义通过抽象类和接口来定义这个抽象概念：</p>
+<p><code>abstract class Door {
+    public abstract void open();
+    public abstract void close();
+}</code></p>
+<p>或者：</p>
+<p><code>interface Door {
+    public abstract void open();
+    public abstract void close();
+}</code></p>
+<p>但是现在如果我们需要门具有报警alarm( )的功能，那么该如何实现？下面提供两种思路：</p>
+<p>　　1）将这三个功能都放在抽象类里面，但是这样一来所有继承于这个抽象类的子类都具备了报警功能，但是有的门并不一定具备报警功能；</p>
+<p>　　2）将这三个功能都放在接口里面，需要用到报警功能的类就需要实现这个接口中的open( )和close( )，也许这个类根本就不具备open( )和close( )这两个功能，比如火灾报警器。</p>
+<p>　　从这里可以看出， Door的open() 、close()和alarm()根本就属于两个不同范畴内的行为，open()和close()属于门本身固有的行为特性，而alarm()属于延伸的附加行为。因此最好的解决办法是单独将报警设计为一个接口，包含alarm()行为,Door设计为单独的一个抽象类，包含open和close两种行为。再设计一个报警门继承Door类和实现Alarm接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">interface Alram &#123;</div><div class="line">    void alarm();</div><div class="line">&#125;</div><div class="line"> </div><div class="line">abstract class Door &#123;</div><div class="line">    void open();</div><div class="line">    void close();</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class AlarmDoor extends Door implements Alarm &#123;</div><div class="line">    void oepn() &#123;</div><div class="line">      //....</div><div class="line">    &#125;</div><div class="line">    void close() &#123;</div><div class="line">      //....</div><div class="line">    &#125;</div><div class="line">    void alarm() &#123;</div><div class="line">      //....</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/01/深入了解java接口和抽象类/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
   
 
 
@@ -320,6 +581,14 @@
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
