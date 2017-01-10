@@ -6,33 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/itgoyo">
-  <title>Mac下配置adb及Android命令 | itgoyo</title>
+  <title>Archives: 2019/10 | itgoyo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Mac下配置adb及Android命令带着欣喜若狂的心情，买了一个Mac本，刚拿到它的时候感觉真的是一件艺术品，哈哈。废话不多说，里面配置Android开发环境。
-
-找到android sdk的本地路径， 我的是：
-
-ADB  /Android/adt-bundle-mac-x86_64-20131030/sdk/platform-tools
-Android  /Android/adt-bundl">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Mac下配置adb及Android命令">
-<meta property="og:url" content="https://github.com/itgoyo/2019/01/01/Mac下配置adb及Android命令/index.html">
+  <meta name="description" content="talk is cheap,show me the girl.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="itgoyo">
+<meta property="og:url" content="https://github.com/itgoyo/archives/2019/10/index.html">
 <meta property="og:site_name" content="itgoyo">
-<meta property="og:description" content="Mac下配置adb及Android命令带着欣喜若狂的心情，买了一个Mac本，刚拿到它的时候感觉真的是一件艺术品，哈哈。废话不多说，里面配置Android开发环境。
-
-找到android sdk的本地路径， 我的是：
-
-ADB  /Android/adt-bundle-mac-x86_64-20131030/sdk/platform-tools
-Android  /Android/adt-bundl">
-<meta property="og:updated_time" content="2017-01-10T12:35:52.000Z">
+<meta property="og:description" content="talk is cheap,show me the girl.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下配置adb及Android命令">
-<meta name="twitter:description" content="Mac下配置adb及Android命令带着欣喜若狂的心情，买了一个Mac本，刚拿到它的时候感觉真的是一件艺术品，哈哈。废话不多说，里面配置Android开发环境。
-
-找到android sdk的本地路径， 我的是：
-
-ADB  /Android/adt-bundle-mac-x86_64-20131030/sdk/platform-tools
-Android  /Android/adt-bundl">
+<meta name="twitter:title" content="itgoyo">
+<meta name="twitter:description" content="talk is cheap,show me the girl.">
   
     <link rel="alternative" href="/atom.xml" title="itgoyo" type="application/atom+xml">
   
@@ -185,204 +169,60 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Mac下配置adb及Android命令" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Mac下配置adb及Android命令
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/10/07/mac如何搭建Hexo博客/" class="archive-article-date">
+  	<time datetime="2019-10-06T17:11:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-07</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/10/07/mac如何搭建Hexo博客/">mac如何搭建Hexo博客</a>
     </h1>
   
 
-        
-        <a href="/2019/01/01/Mac下配置adb及Android命令/" class="archive-article-date">
-  	<time datetime="2018-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Mac下配置adb及Android命令"><a href="#Mac下配置adb及Android命令" class="headerlink" title="Mac下配置adb及Android命令"></a>Mac下配置adb及Android命令</h1><p>带着欣喜若狂的心情，买了一个<code>Mac</code>本，刚拿到它的时候感觉真的是一件艺术品，哈哈。废话不多说，里面配置<code>Android</code>开发环境。</p>
-<ol>
-<li><p>找到<code>android sdk</code>的本地路径，<br> 我的是：</p>
-<ul>
-<li><code>ADB</code><br>  <code>/Android/adt-bundle-mac-x86_64-20131030/sdk/platform-tools</code></li>
-<li><code>Android</code><br>  <code>/Android/adt-bundle-mac-x86_64-20131030/sdk/tools</code></li>
-</ul>
-</li>
-<li><p>打开终端输入</p>
-<ul>
-<li><code>touch .bash_profile</code>创建</li>
-<li><code>open -e .bash_profile</code>打开</li>
-</ul>
-</li>
-<li><p>添加路径<br> <code>.bash_profile</code>打开了，我们在这里添加路径，</p>
-<ul>
-<li>如果打开的文档里面已经有内容,我们只要之后添加<code>:XXXX</code><strong>(注意前面一定要用冒号隔开)</strong>       </li>
-<li>如果是一个空白文档的话，我们就输入一下内容<br>  <code>export PATH=${PATH}:XXXX</code><br>我的是<br><code>export PATH=${PATH}:/Android/adt-bundle-mac-x86_64-20131030/sdk/tools:${PATH}:/Android/adt-bundle-mac-x86_64-20131030/sdk/platform-tools;</code><br>保存，关掉这个文档，</li>
-</ul>
-</li>
-<li>终端输入命令<br> <code>source .bash_profile</code></li>
-<li>大功告成</li>
-</ol>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="https://thumbnail0.baidupcs.com/thumbnail/1e9dc7eedd3e6baab0faa0b50dc5701e?fid=70235434-250528-259712182317602&amp;time=1483747200&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-ecXZGnQJAJsI78Z3LAIjJEbkg8I%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=147311944981915991&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="https://thumbnail0.baidupcs.com/thumbnail/72aa3c0a87f1ca1e0977ce2cd49b46b9?fid=70235434-250528-852617317709567&amp;time=1483747200&amp;rt=sh&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-Ro05xhjsKdnN0xMf4rJgrWalie4%3D&amp;expires=8h&amp;chkv=0&amp;chkbd=0&amp;chkpc=&amp;dp-logid=147534635472582943&amp;dp-callid=0&amp;size=c710_u400&amp;quality=100">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/itgoyo/2019/01/01/Mac下配置adb及Android命令/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
   
   
-    <a href="/2017/01/10/windows10 使用Markdown Pad2不能预览/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title"></div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-
-
-
-
-  
-  <div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Mac下配置adb及Android命令" data-title="Mac下配置adb及Android命令" data-url="https://github.com/itgoyo/2019/01/01/Mac下配置adb及Android命令/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:'itgoyo'};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
+    </div></section>
   
 
-
+    
 
 
           </div>
@@ -405,8 +245,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
