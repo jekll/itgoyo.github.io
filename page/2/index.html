@@ -171,19 +171,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Android卸载反馈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
+      <a class="article-title" href="/2015/01/01/Android卸载反馈/">Android卸载反馈</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
+        <a href="/2015/01/01/Android卸载反馈/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -191,22 +191,34 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
-<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
-<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
-<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
-  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
-<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-</ul>
+        <h1 id="Android卸载反馈"><a href="#Android卸载反馈" class="headerlink" title="Android卸载反馈"></a>Android卸载反馈</h1><p>最初记得是在360安全卫士中出现的，在手机上卸载他的应用之后浏览器就会弹出一个反馈页面，让用户进行反馈，感觉这种功能对于产品改进特别有帮助。<br>但是仔细一想该怎么去实现却犯愁了，最开始想这也简单啊，不就是监听下自身被卸载就可以了，应该系统会有卸载的广播，可惜没有。甚至其他的一些<br>方法也是不行的，因为你程序都被卸载了，你的代码怎么会执行呢？皮之不存，毛将焉附。那360是怎样实现的呢？说句真心话360做的产品还是非常有创新<br>的，虽然有些时候他会损坏用户的利益，不过但从技术方面，着实让人信服。</p>
+<p>既然<code>Java</code>实现不了，那就得考虑下其他的了，自然最先想到的就是<code>JNI</code>了，可惜<code>C</code>的部分不懂，上网搜了很多资料和介绍，找得到可以通过一下方式实现:   </p>
+<ul>
+<li><p>通过<code>c</code>中的<code>fork</code>方法来复制一个子进程。复制出来的子进程在父进程被销毁后，仍然可以存在。<br>  <code>pid_t fpid = fork()</code>被调用前，就一个进程执行该段代码，这条语句执行之后，就会有两个进程执行该代码，两个进程执行没有固定先后顺序，只要看<br>  系统调度策略，<code>fork()</code>函数的特别之处在于调用一次会返回两次结果：   </p>
+<pre><code>- 返回值大于0，当前是父进程。
+- 返回0，当前是子进程。
+- 返回小于0的负值。(出错了，可能是内存不足或者是进程数已经达到系统最大值)
+</code></pre></li>
+<li><p><code>fork</code>出子进程后让子进程一直去监听<code>/data/data/packageName</code>是否存在，如果不存在了，那就说明程序被卸载了，但是这样一直去轮训判断肯定会浪费<br>  系统资源的，当然也会更加费电，对用户来讲肯定是有损害的。所以这种技术最好也不好用，不然大家的手机以后还能了得。万恶的产品。</p>
 </li>
-<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
-<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
-<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
-<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
-</ul>
+<li><p>得到程序被卸载之后弹出浏览器打开指定反馈页面。这就要用到<code>am</code>命令了，最早知道这个命令是在开发<code>TV</code>版的时候，遥控器找不到了，程序安装后无法<br> 打开了，用该命令就不怕了，哈哈。但是在<code>c</code>中怎么执行<code>am</code>命令呢？这就要用到<code>execlp()</code>函数，该函数就是<code>c</code>中执行系统命令的函数。</p>
 </li>
 </ul>
+<p>好了，主要的内容上面都分析完了，下面上代码。</p>
+<ul>
+<li><p><code>Java</code>层定义<code>natvie</code>方法。   </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"@@@"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		String packageDir = <span class="string">"/data/data/"</span> + getPackageName();</div><div class="line">		initUninstallFeedback(packageDir, Build.VERSION.SDK_INT);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">initUninstallFeedback</span><span class="params">(String packagePath, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.loadLibrary(<span class="string">"uninstall_feedback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建jni目录，增加<code>Android.mk</code>以及<code>uninstall_feedback.c</code>文件。<br><code>Android.mk</code>的内容:</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := uninstall_feedback</div><div class="line">LOCAL_SRC_FILES := uninstall_feedback.c</div><div class="line"></div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</div><div class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<p><code>uninstall_feedback.c</code>的实现: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将Java中的String转换成c中的char字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Jstring2CStr</span><span class="params">(JNIEnv* env, jstring jstr)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span>* rtn = <span class="literal">NULL</span>;</div><div class="line">	jclass clsstring = (*env)-&gt;FindClass(env, <span class="string">"java/lang/String"</span>); <span class="comment">//String</span></div><div class="line">	jstring strencode = (*env)-&gt;NewStringUTF(env, <span class="string">"GB2312"</span>); <span class="comment">// 得到一个java字符串 "GB2312"</span></div><div class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, clsstring, <span class="string">"getBytes"</span>,</div><div class="line">			<span class="string">"(Ljava/lang/String;)[B"</span>); <span class="comment">//[ String.getBytes("gb2312");</span></div><div class="line">	jbyteArray barr = (jbyteArray)(*env)-&gt;CallObjectMethod(env, jstr, mid,</div><div class="line">			strencode); <span class="comment">// String .getByte("GB2312");</span></div><div class="line">	jsize alen = (*env)-&gt;GetArrayLength(env, barr); <span class="comment">// byte数组的长度</span></div><div class="line">	jbyte* ba = (*env)-&gt;GetByteArrayElements(env, barr, JNI_FALSE);</div><div class="line">	<span class="keyword">if</span> (alen &gt; <span class="number">0</span>) &#123;</div><div class="line">		rtn = (<span class="keyword">char</span>*) <span class="built_in">malloc</span>(alen + <span class="number">1</span>); <span class="comment">//""</span></div><div class="line">		<span class="built_in">memcpy</span>(rtn, ba, alen);</div><div class="line">		rtn[alen] = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	(*env)-&gt;ReleaseByteArrayElements(env, barr, ba, <span class="number">0</span>); <span class="comment">//</span></div><div class="line">	<span class="keyword">return</span> rtn;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Java_com_charon_uninstallfeedback_MainActivity_initUninstallFeedback</span><span class="params">(</span></span></div><div class="line">		JNIEnv* env, jobject thiz, jstring packageDir, jint sdkVersion) &#123;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> * pd = Jstring2CStr(env, packageDir);</div><div class="line"></div><div class="line">	<span class="comment">//fork子进程，以执行轮询任务</span></div><div class="line">	<span class="keyword">pid_t</span> pid = fork();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// fork失败了</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// 可以一直采用一直判断文件是否存在的方式去判断，但是这样效率稍低，下面使用监听的方式，死循环，每个一秒判断一次，这样太浪费资源了。</span></div><div class="line">		<span class="keyword">int</span> check = <span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span> (check) &#123;</div><div class="line">			FILE* file = fopen(pd, <span class="string">"rt"</span>);</div><div class="line">			<span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (sdkVersion &gt;= <span class="number">17</span>) &#123;</div><div class="line">					<span class="comment">// Android4.2系统之后支持多用户操作，所以得指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"--user"</span>, <span class="string">"0"</span>, <span class="string">"-a"</span>,</div><div class="line">							<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// Android4.2以前的版本无需指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"-a"</span>,</div><div class="line">						<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125;</div><div class="line">				check = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">			&#125;</div><div class="line">			sleep(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>编译so文件。<code>Windows</code>下要用<code>cygwin</code>来操作。<br>上面的介绍是在<code>Eclipse</code>中进行的，用<code>ndk-build</code>命令来编译<code>so</code>。具体请看之前写的<code>JNI基础</code>这篇文章。</li>
+</ul>
+<p>有关如何在<code>Android Stuido</code>中进行<code>ndk</code>开发请看另一篇文章。</p>
 <hr>
 <ul>
 <li>邮箱 ：itgoyo@gmail.com  </li>
@@ -235,109 +247,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android应用发布" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android应用发布/">Android应用发布</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android应用发布/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android应用发布"><a href="#Android应用发布" class="headerlink" title="Android应用发布"></a>Android应用发布</h1><p>需要身份证扫描件、手持身份证正面照、图标(96x96、512x512)、应用截图(一般480x800,6张)进行每个网站的开发者注册(需要审核，有的比较慢，尽量提前审核)</p>
-<ul>
-<li><strong><a href="https://play.google.com/apps/publish" target="_blank" rel="external">GooglePlay</a>自动审核，速度很快，但是要上缴25刀</strong></li>
-<li><strong><a href="http://open.qq.com/?from=tap" target="_blank" rel="external">腾讯开发平台</a>史上最好，没有之一、快、大，腾讯帝国根深蒂固</strong></li>
-<li><strong><a href="http://app.taobao.com" target="_blank" rel="external">淘宝手机助手</a>很快，每次他都是首发…，但是需要jpg格式的截图和图标，十八罗汉速度非凡</strong></li>
-<li><strong><a href="http://open.app.360.cn/" target="_blank" rel="external">360应用开发平台</a>实力不容小视,但是对广告审核很严，感觉不是很好</strong>    </li>
-<li><strong><a href="http://developer.baidu.com/" target="_blank" rel="external">百度开发者中心(关联安卓及91)</a>这个不多说了，都是泪，各种麻烦、各种慢、各种不合理，众里寻他千百度，他想几度就几度</strong>      </li>
-<li><strong><a href="http://dev.apk.hiapk.com/login" target="_blank" rel="external">安卓市场</a>特别慢，百度上了，他各种理由不给上。</strong>     </li>
-<li><strong><a href="http://market.sj.91.com/Users/Login.aspx?ReturnUrl=%2fDefault.aspx" target="_blank" rel="external">91</a>慢，不说了，三家市场不如别人一家</strong>     </li>
-<li><strong><a href="http://developer.wandoujia.com" target="_blank" rel="external">豌豆荚开发者中心</a>还不错,账号用了手机号</strong>      </li>
-<li><strong><a href="http://dev.anzhi.com/" target="_blank" rel="external">安智市场</a>账号不是邮箱，而是账号名,不支持广告</strong></li>
-<li><strong><a href="http://dev.gfan.com/" target="_blank" rel="external">机锋</a>必须用机锋的广告，太霸道了</strong>        </li>
-<li><strong><a href="http://dev.mumayi.com/index/" target="_blank" rel="external">木蚂蚁</a>需要在有米广告中加入木蚂蚁的渠道号</strong></li>
-<li><strong><a href="http://developer.xiaomi.com" target="_blank" rel="external">小米</a></strong></li>
-<li><strong><a href="http://dev.eoemarket.com/" target="_blank" rel="external">优亿市场</a>账号是用户名不是邮箱</strong></li>
-<li><strong><a href="http://dev.10086.cn/" target="_blank" rel="external">10086</a>密码最后一位是*</strong></li>
-<li><strong><a href="http://developer.meizu.com" target="_blank" rel="external">魅族</a>风格独特要做适配</strong></li>
-<li><strong><a href="http://www.anzhuoapk.com" target="_blank" rel="external">易用汇</a></strong></li>
-<li><strong><a href="http://open.189.cn/" target="_blank" rel="external">天翼开发平台</a></strong></li>
-<li><strong><a href="http://www.eomarket.com/developer" target="_blank" rel="external">易优市场</a></strong></li>
-<li><strong><a href="apk.angeeks.com">安极市场</a></strong></li>
-<li><strong><a href="http://dev.3g.cn/" target="_blank" rel="external">3G安卓市场</a></strong></li>
-<li><strong><a href="http://www.nduoa.com/developer" target="_blank" rel="external">N多市场</a></strong></li>
-<li><strong><a href="http://dev.liqucn.com/index.php?m=member&amp;c=index&amp;a=login" target="_blank" rel="external">安卓星空</a></strong></li>
-<li><strong><a href="http://admin.app.sohu.com/platform/index" target="_blank" rel="external">搜狐应用市场</a>账号为搜狐邮箱</strong></li>
-<li><strong><a href="http://dev.wo.com.cn/index.action" target="_blank" rel="external">沃商城</a></strong></li>
-</ul>
-<p>做死系列</p>
-<ul>
-<li><strong><a href="http://dev.appchina.com/" target="_blank" rel="external">应用汇</a>貌似已经不收录个人应用，也不说明一下，等你提交后就说不收录该类内容</strong></li>
-<li><strong><a href="http://dev.51vapp.com/" target="_blank" rel="external">网讯安卓应用市场</a>(要软件著作权，不然通过不了)</strong></li>
-<li><strong><a href="http://developer.lenovomm.com" target="_blank" rel="external">联想</a>很难发布，他会把你定位成劣质应用，好吧，劣质公司，你看你吧ThinkPad弄成什么样了</strong></li>
-<li><strong><a href="http://developer.huawei.com/" target="_blank" rel="external">华为</a>不收录个人应用</strong></li>
-<li><strong><a href="http://m.163.com/android/" target="_blank" rel="external">网易</a>灰常垃圾，等你全部弄好后还要加他QQ让他审核，完了他会告诉你我们不接受个人应用，不做死就不会死</strong></li>
-<li><strong><a href="http://play.jd.com/download/" target="_blank" rel="external">京东</a>不好好卖东西，整个应用市场，又没人管理</strong></li>
-</ul>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android应用发布/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/Android卸载反馈/">展开全文 >></a>
         </p>
       
 
@@ -547,6 +457,179 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-ApplicationId vs PackageName" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/ApplicationId vs PackageName/">ApplicationId vs PackageName</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/ApplicationId vs PackageName/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ApplicationId-vs-PackageName"><a href="#ApplicationId-vs-PackageName" class="headerlink" title="ApplicationId vs PackageName"></a>ApplicationId vs PackageName</h1><p>曾几何时，自从转入<code>Studio</code>阵营后就发现多了个<code>applicationId &quot;com.xx.xxx&quot;</code>，虽然知道肯定会有区别，但是我却没有仔细去看，只想着把它和<code>packageName</code>设置成相同即可(原谅我的懒惰- -!)。         </p>
+<p>直到今天在官网看<code>Gradle</code>使用时，终于忍不住要搞明白它俩的区别。         </p>
+<p>在<code>Android</code>官方文档中有一句是这样描述<code>applicationId</code>的:<code>applicationId : the effective packageName</code>，真是言简意赅，那既然<code>applicationId</code>是有效的包明了，<code>packageName</code>算啥？     </p>
+<p>所有<code>Android</code>应用都有一个包名。包名在设备上能唯一的标示一个应用，它在<code>Google Play</code>应用商店中也是唯一的。这就意味着一旦你使用一个包名发布应用后，你就永 远不能改变它的包名；如果你改了包名就会导致你的应用被认为是一个新的应用，并且已经使用你之前应用的用户将不会看到作为更新的新应用包。          </p>
+<p>之前的<code>Android Gradle</code>构建系统中，应用的包名是由你的<code>manifest</code>文件中的根元素中的<code>package</code>属性定义的:       </p>
+<p><code>AndroidManifest.xml:</code>          </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    package=&quot;com.example.my.app&quot;</div><div class="line">    android:versionCode=&quot;1&quot;</div><div class="line">    android:versionName=&quot;1.0&quot; &gt;</div></pre></td></tr></table></figure>
+<p>然而，这里定义的包也有第二个目的：就是被用来命名你的<code>R</code>资源类(以及解析任何与<code>Activities</code>相关的类名)的包。在上面的示例中，生成的<code>R</code>类就是<code>com.example.my.app.R</code>，所以如果你在其他的包中想引用资源，就需要导入<code>com.example.my.app.R</code>。      </p>
+<p>伴随着新的<code>Android Gradle</code>构建系统，你可以很简单的为你的应用构建多个不同的版本；例如，你可以同时为你的应用构建一个免费版本和一个专业版(使用<code>flavors</code>)，并且他们应该在<code>Google Play</code>商店中有不同的包，这样才能让他们可以被单独安装和购买，同时安装两个，等等。同样的你也可能同时为你的应用构建<code>debug</code>版、<code>alpha</code>版和<code>beta</code>版(使用<code>build types</code>)，这些也可以同样使用不同的包名。    </p>
+<p>在这同时，你在代码中导入的<code>R</code>类必须一直保持一直；在为应用构建不同的版本时<code>.java</code>源文件都不应该发生变化。</p>
+<p>因此,我们解耦了<code>package name</code>的两种用法:       </p>
+<ul>
+<li>在生成的<code>.apk</code>中的<code>manifest</code>文件中使用的最终的包名以及在你的设备和<code>Google Play</code>商店中用来标示你的包名叫做<code>application id</code>的值。</li>
+<li>在源代码中指向<code>R</code>类的包名以及在解析任何与<code>activity/service</code>注册相关的包名继续叫做<code>package name</code>。</li>
+</ul>
+<p>可以在<code>gradle</code>文件中像如下指定<code>application id</code>:  </p>
+<p><code>app/build.gradle:</code>         </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion 19</div><div class="line">    buildToolsVersion &quot;19.1&quot;</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        applicationId &quot;com.example.my.app&quot;</div><div class="line">        minSdkVersion 15</div><div class="line">        targetSdkVersion 19</div><div class="line">        versionCode 1</div><div class="line">        versionName &quot;1.0&quot;</div><div class="line">    &#125;</div><div class="line">    ...</div></pre></td></tr></table></figure>
+<p>像之前一样，你需要在<code>Manifest</code>文件中指定你在代码中使用的’package name’，像上面<code>AndroidManifest.xml</code>的例子。<br><strong><em>下面进入关键部分了：</em></strong>当你按照上面的方式做完后，这两个包就是相互独立的了。你现在可以很简单的重构你的代码-通过修改<code>Manifest</code>中的包名来修改在你的<code>activitise</code>和<code>services</code>中使用的包和在重构你在代码中的引用声明。这不会影响你应用的最终<code>id</code>，也就是在<code>Gradle</code>文件中的<code>applicationId</code>。       </p>
+<p>你可以通过以下<code>Gradle DSL</code>方法为应用的<code>flavors</code>和<code>build types</code>指定不同的<code>applicationId</code>:       </p>
+<p><code>app/buid.gradle:</code>      </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">productFlavors &#123;</div><div class="line">    pro &#123;</div><div class="line">        applicationId = &quot;com.example.my.pkg.pro&quot;</div><div class="line">    &#125;</div><div class="line">    free &#123;</div><div class="line">        applicationId = &quot;com.example.my.pkg.free&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">buildTypes &#123;</div><div class="line">    debug &#123;</div><div class="line">        applicationIdSuffix &quot;.debug&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">....</div></pre></td></tr></table></figure>
+<p>(在<code>Android Studio</code>中你也可以通过图形化的<code>Project Structure</code>的对话框来更改上面所有的配置)</p>
+<p><strong><em>注意:</em></strong>为了兼容性，如果你在<code>build.gradle</code>文件中没有定义<code>applicationId</code> ，那<code>applicationId</code>就是与<code>AndroidManifest.xml</code>中配置的包名相同的默认值。在这种情况下，这两者显然脱不了干系，如果你试图重构代码中的包就将会导致同时会改变你应用程序的<code>id</code>！在<code>Android Studio</code>中新创建的项目都是同时指定他们俩。     </p>
+<p><strong><em>注意2:</em></strong><code>package name</code>必须在默认的<code>AndroidManifest.xml</code>文件中指定。如果有多个<code>manifest</code>文件(例如对每个<code>flavor</code>制定一个<code>manifest</code>或者每个<code>build type</code>制定一个<code>manifest</code>)时，<code>package name</code>是可选的，但是如果你指定的话，它必须与主<code>manifest</code>中指定的<code>pakcage</code>相同。</p>
+<hr>
+<ul>
+<li>邮箱 ：charon.chui@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/ApplicationId vs PackageName/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
+<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
+<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
+<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
+  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
+<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
+<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
+</ul>
+</li>
+<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
+<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
+<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
+<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Android开发中的MVP模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -714,97 +797,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-ApplicationId vs PackageName" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/ApplicationId vs PackageName/">ApplicationId vs PackageName</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/ApplicationId vs PackageName/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ApplicationId-vs-PackageName"><a href="#ApplicationId-vs-PackageName" class="headerlink" title="ApplicationId vs PackageName"></a>ApplicationId vs PackageName</h1><p>曾几何时，自从转入<code>Studio</code>阵营后就发现多了个<code>applicationId &quot;com.xx.xxx&quot;</code>，虽然知道肯定会有区别，但是我却没有仔细去看，只想着把它和<code>packageName</code>设置成相同即可(原谅我的懒惰- -!)。         </p>
-<p>直到今天在官网看<code>Gradle</code>使用时，终于忍不住要搞明白它俩的区别。         </p>
-<p>在<code>Android</code>官方文档中有一句是这样描述<code>applicationId</code>的:<code>applicationId : the effective packageName</code>，真是言简意赅，那既然<code>applicationId</code>是有效的包明了，<code>packageName</code>算啥？     </p>
-<p>所有<code>Android</code>应用都有一个包名。包名在设备上能唯一的标示一个应用，它在<code>Google Play</code>应用商店中也是唯一的。这就意味着一旦你使用一个包名发布应用后，你就永 远不能改变它的包名；如果你改了包名就会导致你的应用被认为是一个新的应用，并且已经使用你之前应用的用户将不会看到作为更新的新应用包。          </p>
-<p>之前的<code>Android Gradle</code>构建系统中，应用的包名是由你的<code>manifest</code>文件中的根元素中的<code>package</code>属性定义的:       </p>
-<p><code>AndroidManifest.xml:</code>          </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    package=&quot;com.example.my.app&quot;</div><div class="line">    android:versionCode=&quot;1&quot;</div><div class="line">    android:versionName=&quot;1.0&quot; &gt;</div></pre></td></tr></table></figure>
-<p>然而，这里定义的包也有第二个目的：就是被用来命名你的<code>R</code>资源类(以及解析任何与<code>Activities</code>相关的类名)的包。在上面的示例中，生成的<code>R</code>类就是<code>com.example.my.app.R</code>，所以如果你在其他的包中想引用资源，就需要导入<code>com.example.my.app.R</code>。      </p>
-<p>伴随着新的<code>Android Gradle</code>构建系统，你可以很简单的为你的应用构建多个不同的版本；例如，你可以同时为你的应用构建一个免费版本和一个专业版(使用<code>flavors</code>)，并且他们应该在<code>Google Play</code>商店中有不同的包，这样才能让他们可以被单独安装和购买，同时安装两个，等等。同样的你也可能同时为你的应用构建<code>debug</code>版、<code>alpha</code>版和<code>beta</code>版(使用<code>build types</code>)，这些也可以同样使用不同的包名。    </p>
-<p>在这同时，你在代码中导入的<code>R</code>类必须一直保持一直；在为应用构建不同的版本时<code>.java</code>源文件都不应该发生变化。</p>
-<p>因此,我们解耦了<code>package name</code>的两种用法:       </p>
-<ul>
-<li>在生成的<code>.apk</code>中的<code>manifest</code>文件中使用的最终的包名以及在你的设备和<code>Google Play</code>商店中用来标示你的包名叫做<code>application id</code>的值。</li>
-<li>在源代码中指向<code>R</code>类的包名以及在解析任何与<code>activity/service</code>注册相关的包名继续叫做<code>package name</code>。</li>
-</ul>
-<p>可以在<code>gradle</code>文件中像如下指定<code>application id</code>:  </p>
-<p><code>app/build.gradle:</code>         </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion 19</div><div class="line">    buildToolsVersion &quot;19.1&quot;</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        applicationId &quot;com.example.my.app&quot;</div><div class="line">        minSdkVersion 15</div><div class="line">        targetSdkVersion 19</div><div class="line">        versionCode 1</div><div class="line">        versionName &quot;1.0&quot;</div><div class="line">    &#125;</div><div class="line">    ...</div></pre></td></tr></table></figure>
-<p>像之前一样，你需要在<code>Manifest</code>文件中指定你在代码中使用的’package name’，像上面<code>AndroidManifest.xml</code>的例子。<br><strong><em>下面进入关键部分了：</em></strong>当你按照上面的方式做完后，这两个包就是相互独立的了。你现在可以很简单的重构你的代码-通过修改<code>Manifest</code>中的包名来修改在你的<code>activitise</code>和<code>services</code>中使用的包和在重构你在代码中的引用声明。这不会影响你应用的最终<code>id</code>，也就是在<code>Gradle</code>文件中的<code>applicationId</code>。       </p>
-<p>你可以通过以下<code>Gradle DSL</code>方法为应用的<code>flavors</code>和<code>build types</code>指定不同的<code>applicationId</code>:       </p>
-<p><code>app/buid.gradle:</code>      </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">productFlavors &#123;</div><div class="line">    pro &#123;</div><div class="line">        applicationId = &quot;com.example.my.pkg.pro&quot;</div><div class="line">    &#125;</div><div class="line">    free &#123;</div><div class="line">        applicationId = &quot;com.example.my.pkg.free&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">buildTypes &#123;</div><div class="line">    debug &#123;</div><div class="line">        applicationIdSuffix &quot;.debug&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">....</div></pre></td></tr></table></figure>
-<p>(在<code>Android Studio</code>中你也可以通过图形化的<code>Project Structure</code>的对话框来更改上面所有的配置)</p>
-<p><strong><em>注意:</em></strong>为了兼容性，如果你在<code>build.gradle</code>文件中没有定义<code>applicationId</code> ，那<code>applicationId</code>就是与<code>AndroidManifest.xml</code>中配置的包名相同的默认值。在这种情况下，这两者显然脱不了干系，如果你试图重构代码中的包就将会导致同时会改变你应用程序的<code>id</code>！在<code>Android Studio</code>中新创建的项目都是同时指定他们俩。     </p>
-<p><strong><em>注意2:</em></strong><code>package name</code>必须在默认的<code>AndroidManifest.xml</code>文件中指定。如果有多个<code>manifest</code>文件(例如对每个<code>flavor</code>制定一个<code>manifest</code>或者每个<code>build type</code>制定一个<code>manifest</code>)时，<code>package name</code>是可选的，但是如果你指定的话，它必须与主<code>manifest</code>中指定的<code>pakcage</code>相同。</p>
-<hr>
-<ul>
-<li>邮箱 ：charon.chui@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/ApplicationId vs PackageName/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-BroadcastReceiver安全问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -868,6 +860,174 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/BroadcastReceiver安全问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Handler导致内存泄露分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Handler导致内存泄露分析/">Handler导致内存泄露分析</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Handler导致内存泄露分析/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Handler导致内存泄露分析"><a href="#Handler导致内存泄露分析" class="headerlink" title="Handler导致内存泄露分析"></a>Handler导致内存泄露分析</h1><p>有关内存泄露请猛戳<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.md">内存泄露</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Handler mHandler = <span class="keyword">new</span> Handler() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">	    <span class="comment">// do something.</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当我们这样创建<code>Handler</code>的时候<code>Android Lint</code>会提示我们这样一个<code>warning： In Android, Handler classes should be static or leaks might occur.</code>。       </p>
+<p>一直以来没有仔细的去分析泄露的原因，先把主要原因列一下：    </p>
+<ul>
+<li><code>Android</code>程序第一次创建的时候，默认会创建一个<code>Looper</code>对象，<code>Looper</code>去处理<code>Message Queue</code>中的每个<code>Message</code>,主线程的<code>Looper</code>存在整个应用程序的生命周期.</li>
+<li><code>Hanlder</code>在主线程创建时会关联到<code>Looper</code>的<code>Message Queue</code>,<code>Message</code>添加到消息队列中的时候<code>Message(排队的Message)</code>会持有当前<code>Handler</code>引用，<br>当<code>Looper</code>处理到当前消息的时候，会调用<code>Handler#handleMessage(Message)</code>.就是说在<code>Looper</code>处理这个<code>Message</code>之前，<br>会有一条链<code>MessageQueue -&gt; Message -&gt; Handler -&gt; Activity</code>，由于它的引用导致你的<code>Activity</code>被持有引用而无法被回收`</li>
+<li><strong>在java中，no-static的内部类会隐式的持有当前类的一个引用。static的内部类则没有。</strong></li>
+</ul>
+<p>##具体分析<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Handler mHandler = <span class="keyword">new</span> Handler() &#123;</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">		  <span class="comment">// do something</span></div><div class="line">		&#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	<span class="comment">// 发送一个10分钟后执行的一个消息</span></div><div class="line">	mHandler.postDelayed(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">	  <span class="meta">@Override</span></div><div class="line">	  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">	&#125;, <span class="number">600000</span>);</div><div class="line"></div><div class="line">	<span class="comment">// 结束当前的Activity</span></div><div class="line">	finish();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在<code>finish()</code>的时候，该<code>Message</code>还没有被处理，<code>Message</code>持有<code>Handler</code>,<code>Handler</code>持有<code>Activity</code>,这样会导致该<code>Activity</code>不会被回收，就发生了内存泄露.</p>
+<p>##解决方法 </p>
+<ul>
+<li>通过程序逻辑来进行保护。<ul>
+<li>如果<code>Handler</code>中执行的是耗时的操作，在关闭<code>Activity</code>的时候停掉你的后台线程。线程停掉了，就相当于切断了<code>Handler</code>和外部连接的线，<br><code>Activity</code>自然会在合适的时候被回收。 </li>
+<li>如果<code>Handler</code>是被<code>delay</code>的<code>Message</code>持有了引用，那么在<code>Activity</code>的<code>onDestroy()</code>方法要调用<code>Handler</code>的<code>remove*</code>方法，把消息对象从消息队列移除就行了。 <ul>
+<li>关于<code>Handler.remove*</code>方法<ul>
+<li><code>removeCallbacks(Runnable r)</code> ——清除r匹配上的Message。    </li>
+<li><code>removeC4allbacks(Runnable r, Object token)</code> ——清除r匹配且匹配token（Message.obj）的Message，token为空时，只匹配r。</li>
+<li><code>removeCallbacksAndMessages(Object token)</code> ——清除token匹配上的Message。</li>
+<li><code>removeMessages(int what)</code> ——按what来匹配     </li>
+<li><code>removeMessages(int what, Object object)</code> ——按what来匹配<br>我们更多需要的是清除以该<code>Handler</code>为<code>target</code>的所有<code>Message(Callback)</code>就调用如下方法即可<code>handler.removeCallbacksAndMessages(null)</code>;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将<code>Handler</code>声明为静态类。<br>  静态类不持有外部类的对象，所以你的<code>Activity</code>可以随意被回收。但是不持有<code>Activity</code>的引用，如何去操作<code>Activity</code>中的一些对象？ 这里要用到弱引用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> MyHandler mHandler;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		mHandler = <span class="keyword">new</span> MyHandler(<span class="keyword">this</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// Remove all Runnable and Message.</span></div><div class="line">		mHandler.removeCallbacksAndMessages(<span class="keyword">null</span>);</div><div class="line">		<span class="keyword">super</span>.onDestroy();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>&#123;</div><div class="line">		<span class="comment">// WeakReference to the outer class's instance.</span></div><div class="line">		<span class="keyword">private</span> WeakReference&lt;MyActivity&gt; mOuter;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">MyHandler</span><span class="params">(MyActivity activity)</span> </span>&#123;</div><div class="line">			mOuter = <span class="keyword">new</span> WeakReference&lt;MyActivity&gt;(activity);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">			MyActivity outer = mOuter.get();</div><div class="line">			<span class="keyword">if</span> (outer != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="comment">// Do something with outer as your wish.</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Handler导致内存泄露分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-HttpURLConnection与HttpClient" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/HttpURLConnection与HttpClient/">HttpURLConnection与HttpClient</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/HttpURLConnection与HttpClient/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="HttpURLConnection与HttpClient"><a href="#HttpURLConnection与HttpClient" class="headerlink" title="HttpURLConnection与HttpClient"></a>HttpURLConnection与HttpClient</h1><ul>
+<li><code>Java</code>的<code>HttpURLConnection</code><br>  请求默认带<code>Gzip</code>压缩。</li>
+<li><code>Apache</code>的<code>HttpClient</code><br>  请求默认不带<code>Gzip</code>压缩。</li>
+</ul>
+<p>一般对于<code>API</code>请求返回的数据大多是<code>Json</code>类的字符串，<code>Gzip</code>压缩可以使数据大小大幅降低。<br><code>Retrofit</code>及<code>Volley</code>框架默认在<code>Android Gingerbread(API 9)</code>及以上都是用<code>HttpURLConnection</code>，9以下用<code>HttpClient</code>。       </p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/HttpURLConnection与HttpClient/">展开全文 >></a>
         </p>
       
 
@@ -1165,184 +1325,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Gradle专题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Github个人主页绑定域名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Github个人主页绑定域名/">Github个人主页绑定域名</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Github个人主页绑定域名/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Github个人主页绑定域名"><a href="#Github个人主页绑定域名" class="headerlink" title="Github个人主页绑定域名"></a>Github个人主页绑定域名</h1><p><code>Github</code>虽然很好，可毕竟是免费的，还是有不少限制的。写到这里，特意去看了下<code>Github</code>对免费用户究竟有什么限制。发现除了300M的空间限制（还是所谓软限制），没有其他限制。所以用它来作为博客平台，真是再理想不过了。</p>
-<h2 id="创建步骤"><a href="#创建步骤" class="headerlink" title="创建步骤"></a>创建步骤</h2><ol>
-<li><p>建立一个博客<code>repository</code><br> 建立一个命名为<code>username.github.io</code>的<code>repository</code>, <code>username</code>就是你在<code>Github</code>上的用户名或机构名</p>
-</li>
-<li><p>增加主页<br> <code>clone</code>该<code>repository</code>到本地，增加<code>index.html</code></p>
-</li>
-<li><p>提交<br> <code>commit</code>并且<code>push</code>该次修改。</p>
-</li>
-<li><p>OK<br> 打开浏览器输入 <code>username.github.io</code> 即可。注意提交之后可能需要一小段时间的延迟。</p>
-</li>
-</ol>
-<h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><ol>
-<li>在<code>repository</code>根目录新建<code>CNAME</code>文件, 内容为<code>xxx.com</code>(要绑定的域名),然后<code>commit</code>、<code>push</code>.</li>
-<li>在自己的域名管理页面中,进入域名解析.<br> <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/bindhost.jpg?raw=true" alt="image"><br> <strong>注意记录值 <code>username.github.io.</code> (最后面有一个.)</strong></li>
-</ol>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Github</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Github个人主页绑定域名/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Handler导致内存泄露分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Handler导致内存泄露分析/">Handler导致内存泄露分析</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Handler导致内存泄露分析/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Handler导致内存泄露分析"><a href="#Handler导致内存泄露分析" class="headerlink" title="Handler导致内存泄露分析"></a>Handler导致内存泄露分析</h1><p>有关内存泄露请猛戳<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.md">内存泄露</a></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Handler mHandler = <span class="keyword">new</span> Handler() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">	    <span class="comment">// do something.</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当我们这样创建<code>Handler</code>的时候<code>Android Lint</code>会提示我们这样一个<code>warning： In Android, Handler classes should be static or leaks might occur.</code>。       </p>
-<p>一直以来没有仔细的去分析泄露的原因，先把主要原因列一下：    </p>
-<ul>
-<li><code>Android</code>程序第一次创建的时候，默认会创建一个<code>Looper</code>对象，<code>Looper</code>去处理<code>Message Queue</code>中的每个<code>Message</code>,主线程的<code>Looper</code>存在整个应用程序的生命周期.</li>
-<li><code>Hanlder</code>在主线程创建时会关联到<code>Looper</code>的<code>Message Queue</code>,<code>Message</code>添加到消息队列中的时候<code>Message(排队的Message)</code>会持有当前<code>Handler</code>引用，<br>当<code>Looper</code>处理到当前消息的时候，会调用<code>Handler#handleMessage(Message)</code>.就是说在<code>Looper</code>处理这个<code>Message</code>之前，<br>会有一条链<code>MessageQueue -&gt; Message -&gt; Handler -&gt; Activity</code>，由于它的引用导致你的<code>Activity</code>被持有引用而无法被回收`</li>
-<li><strong>在java中，no-static的内部类会隐式的持有当前类的一个引用。static的内部类则没有。</strong></li>
-</ul>
-<p>##具体分析<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Handler mHandler = <span class="keyword">new</span> Handler() &#123;</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">		  <span class="comment">// do something</span></div><div class="line">		&#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	<span class="comment">// 发送一个10分钟后执行的一个消息</span></div><div class="line">	mHandler.postDelayed(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">	  <span class="meta">@Override</span></div><div class="line">	  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">	&#125;, <span class="number">600000</span>);</div><div class="line"></div><div class="line">	<span class="comment">// 结束当前的Activity</span></div><div class="line">	finish();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在<code>finish()</code>的时候，该<code>Message</code>还没有被处理，<code>Message</code>持有<code>Handler</code>,<code>Handler</code>持有<code>Activity</code>,这样会导致该<code>Activity</code>不会被回收，就发生了内存泄露.</p>
-<p>##解决方法 </p>
-<ul>
-<li>通过程序逻辑来进行保护。<ul>
-<li>如果<code>Handler</code>中执行的是耗时的操作，在关闭<code>Activity</code>的时候停掉你的后台线程。线程停掉了，就相当于切断了<code>Handler</code>和外部连接的线，<br><code>Activity</code>自然会在合适的时候被回收。 </li>
-<li>如果<code>Handler</code>是被<code>delay</code>的<code>Message</code>持有了引用，那么在<code>Activity</code>的<code>onDestroy()</code>方法要调用<code>Handler</code>的<code>remove*</code>方法，把消息对象从消息队列移除就行了。 <ul>
-<li>关于<code>Handler.remove*</code>方法<ul>
-<li><code>removeCallbacks(Runnable r)</code> ——清除r匹配上的Message。    </li>
-<li><code>removeC4allbacks(Runnable r, Object token)</code> ——清除r匹配且匹配token（Message.obj）的Message，token为空时，只匹配r。</li>
-<li><code>removeCallbacksAndMessages(Object token)</code> ——清除token匹配上的Message。</li>
-<li><code>removeMessages(int what)</code> ——按what来匹配     </li>
-<li><code>removeMessages(int what, Object object)</code> ——按what来匹配<br>我们更多需要的是清除以该<code>Handler</code>为<code>target</code>的所有<code>Message(Callback)</code>就调用如下方法即可<code>handler.removeCallbacksAndMessages(null)</code>;</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>将<code>Handler</code>声明为静态类。<br>  静态类不持有外部类的对象，所以你的<code>Activity</code>可以随意被回收。但是不持有<code>Activity</code>的引用，如何去操作<code>Activity</code>中的一些对象？ 这里要用到弱引用</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> MyHandler mHandler;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		mHandler = <span class="keyword">new</span> MyHandler(<span class="keyword">this</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// Remove all Runnable and Message.</span></div><div class="line">		mHandler.removeCallbacksAndMessages(<span class="keyword">null</span>);</div><div class="line">		<span class="keyword">super</span>.onDestroy();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>&#123;</div><div class="line">		<span class="comment">// WeakReference to the outer class's instance.</span></div><div class="line">		<span class="keyword">private</span> WeakReference&lt;MyActivity&gt; mOuter;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">MyHandler</span><span class="params">(MyActivity activity)</span> </span>&#123;</div><div class="line">			mOuter = <span class="keyword">new</span> WeakReference&lt;MyActivity&gt;(activity);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">			MyActivity outer = mOuter.get();</div><div class="line">			<span class="keyword">if</span> (outer != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="comment">// Do something with outer as your wish.</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Handler导致内存泄露分析/">展开全文 >></a>
         </p>
       
 
