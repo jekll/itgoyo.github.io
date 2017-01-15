@@ -167,6 +167,486 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/性能优化/">性能优化</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/性能优化/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="代码优化原则"><a href="#代码优化原则" class="headerlink" title="代码优化原则:      "></a>代码优化原则:      </h2><ul>
+<li>时间换时间：<br>  如禁用电脑的一些开机启动项，通过减少这些没必要的启动项的时间从而节省开机时间<br>  如网站界面上数据的分批获取，AJAX技术</li>
+<li>时间换空间：<br>  如拷贝文件时new一个字节数组当缓冲器，即byte[] buffer = new byte[1024]。<br>  为什么只new一个1024个字节的数组呢，new一个更大的字节数组不是一下就把文件拷贝完了么？这么做就是为了牺牲时间节省有限的内存空间</li>
+<li>空间换时间：<br>  如用Windows系统自带的搜索文件的功能搜索文件时会很慢，但是我们牺牲电脑硬盘空间安装一个everything软件来搜索文件就特别快</li>
+<li>空间换空间：<br>  如虚拟内存</li>
+</ul>
+<h2 id="Android开发中的体现"><a href="#Android开发中的体现" class="headerlink" title="Android开发中的体现"></a>Android开发中的体现</h2><ul>
+<li>采用硬件加速，在清单文件中<code>application</code>节点添加<code>android:hardwareAccelerated=”true”</code>。不过这个需要在<code>android 3.0</code>才可以使用。<code>android4.0</code>这个选项是默认开启的。</li>
+<li><code>View</code>中设置缓存属性<code>setDrawingCache</code>为<code>true</code>.</li>
+<li>优化你的布局.</li>
+<li>动态加载<code>View</code>. 采用<code>ViewStub</code>避免一些不经常的视图长期握住引用.</li>
+<li>将<code>Acitivity</code>中的<code>Window</code>的背景图设置为空。<code>getWindow().setBackgroundDrawable(null);``android</code>的默认背景是不是为空。</li>
+<li>采用<code>&lt;merge&gt;</code>优化布局层数。 采用<code>&lt;include&gt;</code>来共享布局。</li>
+<li>利用<code>TraceView</code>查看跟踪函数调用。有的放矢的优化。</li>
+<li><code>cursor</code>的使用。不过要注意管理好<code>cursor</code>,不要每次打开关闭<code>cursor</code>.因为打开关闭<code>Cursor</code>非常耗时。 <code>Cursor.require</code>用于刷<code>cursor</code>.</li>
+<li>采用<code>SurfaceView</code>在子线程刷新<code>UI</code>, 避免手势的处理和绘制在同一<code>UI</code>线程（普通<code>View</code>都这样做）。</li>
+<li>采用<code>JNI</code>，将耗时间的处理放到<code>c/c++</code>层来处理。</li>
+<li>有些能用文件操作的，尽量采用文件操作，文件操作的速度比数据库的操作要快10倍左右。</li>
+<li>避免创建不必要的对象</li>
+<li>如果方法用不到成员变量，可以把方法申明为<code>static</code>，性能会提高到15%到20%</li>
+<li>避免使用<code>getter/setter</code>存取<code>field</code>，可以把<code>field</code>申明为<code>public</code>，直接访问</li>
+<li><code>static</code>的变量如果不需要修改，应该使用<code>static final</code>修饰符定义为常量</li>
+<li>使用增强<code>for</code>循环,比普通<code>for</code>循环效率高，但是也有缺点就是在遍历 集合过程中，不能对集合本身进行操作</li>
+<li>合理利用浮点数，浮点数比整型慢两倍；</li>
+<li>针对ListView的性能优化</li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/性能优化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-性能优化相关工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/性能优化相关工具/">性能优化相关工具</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/性能优化相关工具/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="性能优化相关工具"><a href="#性能优化相关工具" class="headerlink" title="性能优化相关工具"></a>性能优化相关工具</h1><p>有关性能优化的文章请参考<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%8A%A0%E5%BC%BA/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md">性能优化</a>和<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%8A%A0%E5%BC%BA/%E5%B8%83%E5%B1%80%E4%BC%98%E5%8C%96.md">布局优化</a>    </p>
+<p>###DDMS(百宝箱)</p>
+<p>#####查看进程的内存使用</p>
+<p><code>DDMS</code>可以让你查看到一个进程使用的堆内存。    </p>
+<ol>
+<li>在<code>Device</code>了表选择你想查看的进程。</li>
+<li>点击<code>Update Heap</code>按钮来开启查看进程堆内存信息。</li>
+<li>在<code>Heap</code>页面，点击<code>Cause GC</code>来执行垃圾回收。</li>
+<li>在列表中点击一个对象类型来查看它所分配的内存大小。   </li>
+</ol>
+<p>#####追踪对象的内存分配情况     </p>
+<ol>
+<li>在<code>Device</code>了表选择你想查看的进程。</li>
+<li>在<code>Allocation Tracker</code>页面，点击<code>Start Tracking</code>按钮来开始追踪。</li>
+<li>点击<code>Get Allocations</code>来查看从你点击<code>Start Tracking</code>之后分配内存的对象列表。 你可以再次点击<code>Get Allocations</code>来添加新分配内存的对象列表。 </li>
+<li>停止追踪或者清除数据可以点击<code>Stop Tracking</code>按钮。 </li>
+<li>在列表中单独点击一行来查看详细的信息。</li>
+</ol>
+<p>#####使用文件系统</p>
+<p><code>DDMS</code>提供了一个文件浏览器来供你查看、拷贝、删除文件。</p>
+<ol>
+<li>在<code>Device</code>页面，选中你想要查看的设备。</li>
+<li>从设备中拷贝文件，用文件浏览器选择文件后点击<code>Pull file</code>按钮。</li>
+<li>拷贝文件到设备中，点击<code>Push file</code>按钮。</li>
+</ol>
+<p>#####检查线程信息  </p>
+<p><code>Thread</code>页面可以显示指定进程中当前正在运行的线程。 </p>
+<ol>
+<li>在<code>Device</code>页面，选择想要查看的进程。 </li>
+<li>点击<code>Update Threads</code>按钮。   </li>
+<li>在<code>Thread</code>页面，你可以查看对应的线程信息。 </li>
+</ol>
+<p>#####启动方法分析</p>
+<p>方法分析可以追踪一个方法的特定信息，例如调用数量，执行时间、耗时等。如果想要更精确的控制想要收集的数据，可以使用<code>startMethodTracing()</code>和<code>stopMethodTracing()</code>方法。    </p>
+<p>在你开始使用方法分析之前请知晓如下限制:    </p>
+<ul>
+<li>在<code>Android 2.1</code>及以前的设备必须有<code>SD</code>卡，并且你的应用必须有写入<code>SD</code>卡的权限。 </li>
+<li>在<code>Android 2.2</code>及以后的设备中不需要<code>SD</code>卡，<code>trace log</code>文件会直接被导入到开发机上。</li>
+</ul>
+<p>开启方法分析:    </p>
+<ol>
+<li>在<code>Device</code>页面，选择想要开启方法分析的进程。</li>
+<li>点击<code>Start Method Profiling</code>按钮。</li>
+<li>在<code>Android 4.4</code>及以后，可以选择<code>trace_based profiling</code>或者基本的<code>sample-based profiling</code>选项。在之前的版本智能使用<code>trace-based profiling</code>。</li>
+<li>在应用中操作界面来执行你想要分析的方法。 </li>
+<li>点击<code>Stop Method Profiling</code>按钮。<code>DDMS</code>会停止分析并且将在<code>Start Method Profiling</code>和<code>Stop Method Profiling</code>中间手机的方法分析数据使用<code>Traceview</code>打开。   </li>
+</ol>
+<h5 id="使用网络流量工具"><a href="#使用网络流量工具" class="headerlink" title="使用网络流量工具"></a>使用网络流量工具</h5><p>从<code>Android 4.0</code>开始,<code>DDMS</code>包含了一个网络使用情况的页面来支持跟踪应用的网络请求。</p>
+<p>如图:   </p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/ddms-network.png?raw=true" alt="image">。 </p>
+<p>通过检测数据交互的频繁性以及在每次连接中数据的传递量，你可以知道应用中具体可以做的更好更高效的地方。<br>想要更好的查看引起数据交互的地方，可以使用<code>TrafficsStats</code>这个<code>API</code>，它也可以使用<code>setThreadStatsTag()</code>方法来设置数据使用情况的<code>tag</code>，</p>
+<p>首先要讲到的是<code>Systrace</code>，之前在淘宝面试的时候被问到，如有查找<code>UI</code>绘制卡顿的问题，我没答上来。早点知道<code>Systrace</code>就好了(当然只知道工具是不够的，也要懂得里面的原理)。</p>
+<h3 id="Systrace"><a href="#Systrace" class="headerlink" title="Systrace"></a>Systrace</h3><p><code>Systrace</code>有什么用呢？官方文档中有一片文章的标题是：使用<code>Systrace</code>进行<code>UI</code>性能分析。    </p>
+<p>在应用程序开发的过程中，你需要检查用户交互是否平滑流畅，运行在稳定的60fps。如果中间出了些问题，导致某一帧延迟，我们想要解决该问题的第一步就是理解系统如何操作的。     </p>
+<p><code>Systrace</code>工具可以让你来手机和观察整个<code>android</code>设备的时间信息，也称为<code>trace</code>。它会显示每个时间点上的<code>CPU</code>消耗图，显示每个线程在显示的内容以及每个进程当时在做的操作。</p>
+<p>在使用<code>Systracv</code>来分析应用之前，你需要手机应用的<code>trace log</code>信息。生成的<code>trace</code>能够让你清晰的观察系统在该时间内所做的任何事情。 </p>
+<h5 id="生成Trace"><a href="#生成Trace" class="headerlink" title="生成Trace"></a>生成Trace</h5><p>为了能创建一个<code>trace</code>，你必须要执行如下几个操作。 首先，你要有一个<code>Android 4.1</code>及以上的设备。将该设备设置为<code>debugging</code>，连接你的设备并且安装应用。有些类型的信息，特别是一些硬盘的活动和内核工作队列，需要设备获取<code>root</code>权限才可以。 然而，大多数的<code>Systrace log</code>的数据只需要设备开启开发者<code>debugging</code>就可以了。     </p>
+<p><code>Systrace</code>可以通过命令行或者图形化界面的方式来运行，在<code>Studio</code>中打开<code>Android Device Monitor</code>然后选择<code>Systracv</code>图标<img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-button.png?raw=true" alt="image">。 </p>
+<p>下面以命令行的方式为例，这里只讲解一下<code>Android 4.3</code>及以上的使用方式:     </p>
+<ul>
+<li>确保设备已经通过<code>USB</code>连接并且开启了<code>debugging</code>模式。 </li>
+<li>设置一些参数并执行<code>trace</code>命令，例如:        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line">    $ cd android-sdk/platform-tools/systrace</div><div class="line">    $ python systrace.py --time=10 -o mynewtrace.html sched gfx view wm</div><div class="line">    ```  </div><div class="line">    执行完上面的命令后就会在`sdk/platform-tools/systrace/mynewtrace.html`生成对应的`html`文件。 </div><div class="line">- 在设备上执行一些你想要`trace`的过程。     </div><div class="line"></div><div class="line">悲剧了，生成了对应的`html`文件，但是我死活打不开。打开是白屏，折腾了我半天，最后终于找到了解决方法:   </div><div class="line"></div><div class="line">&gt;  Firstly, if anyone is using Chrome v50.0+ on OS X, just try this please.</div><div class="line"></div><div class="line">&gt; open chrome browser and go to &quot;chrome://tracing&quot;</div><div class="line">&gt; in the tracing page, click load and select the systrace generated html file.</div><div class="line">&gt; Secondly, I think it&apos;s a bug which is confirmed by Google.</div><div class="line"></div><div class="line">`OK`了。 </div><div class="line"></div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace_file.png?raw=true =)。 </div><div class="line"></div><div class="line">看不懂！！！</div><div class="line"></div><div class="line">#####分析Trace</div><div class="line"></div><div class="line">用浏览器打开上面生成的`mynewtrace.html`。    下面为了能明显的说明，我就用官网提供的例子来说明了。   </div><div class="line"></div><div class="line">######查看Frames</div><div class="line">从打开的文件中我们能看到每个应用都有一行`frame`的圆圈来标示渲染的帧，通常都是绿色的。黄色或者红的圆圈标示超过了我们对保障60fps所需的16毫秒绘制时间。。 可以在文件上面按`w`键来放大文件以便能更好的观看查找。   </div><div class="line">&gt; ***提示:***在文件上面按`?`键可以查看对应的快捷键。  </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/frame-unselected.png?raw=true)。 </div><div class="line"></div><div class="line">在`Android 5.0`以上的设备上，显示工作呗分为`UI Thread`和`Render Thread`。在之前的版本，所有工作都是在`UI Thread`进行的。 点击某个单独的`frame`图标来查看它们所需的时间。</div><div class="line"></div><div class="line">######观看Alerts    </div><div class="line"></div><div class="line">`Systracv`会自动分析`trace`过程的时间，并且通过`alerts`提示该展现问题，以及建议如何处理。    </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/frame-selected.png?raw=true) </div><div class="line"></div><div class="line">如上图所示，在你点击一个比较慢的`frame`时，下面就会显示一个`alert`。在这种情况下，它直说可能是`ListView`服用以及重复渲染的问题。 如果你发现`UI Thread`做了太多的工作，你可以使用`TraceView`进行代码分析，来找到具体哪些操作导致了消耗时间。</div><div class="line"></div><div class="line">如下，你也可以通过点击窗口右边的`Alerts`来查看当前所有的`alert`。这样会直接展开`Alert`窗口。   </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/frame-selected-alert-tab.png?raw=true)</div><div class="line"></div><div class="line">下面我们以另外一个例子来分析一下它的`Frame`：    </div><div class="line"></div><div class="line">我们点击某一红色`frame`来查看这一阵的一些相关警告:   </div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-frame-zoomin.png?raw=true)</div><div class="line">可以看到这里说耗时32毫秒，这已经远远超过了16毫秒的绘制时间。 我们可以通过`Description`来查看描述内容。   </div><div class="line">下面是另外一个渲染过慢的例子:     </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-2-frame.png?raw=true)</div><div class="line">从上图，我们发现了`Scheduling delay`的警告，加起来能看到总的绘制时间大约是19毫秒。   </div><div class="line">`Scheduling delay`的意思是调度延迟，也就是说一个县城在处理这部分操作时，在很长时间内没有被分配到`CPU`上面进行运算，这样就导致了很长时间内没有完成操作。    我们选择这一帧中最长的一块，来观察下:    </div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-2-slice.png?raw=true)</div><div class="line"></div><div class="line">我们在上图看到了`Wall duration`，他代表着这一块开始到结束的总耗时。而在`CPU Duration`这里显示了`CPU`在处理该部分消耗的时间。 很明显，真个区域用了18毫秒，但是`CPU`实际处理只用了4毫秒，也就是说剩下的14毫秒就可能有问题了。     </div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-2-cpu.png?raw=true)</div><div class="line"></div><div class="line">可以看到，4个线程都比较忙。  </div><div class="line"></div><div class="line">选择其中一个线程来查看是哪个应用在使用它，这里看到了一个包名为`com.udinic.keepbusyapp`的应用。也就是说由于另外一个应用占用了`CPU`,，导致了我们的应用未能获取到足够的`CPU`资源。      </div><div class="line"></div><div class="line"></div><div class="line">#####追踪代码</div><div class="line"></div><div class="line">在`Android 4.3`以上你可以使用`Trace`类来在代码中添加(很熟悉有木有，在看源码的时候经常看到)。这样能查看到此时你的应用线程都做了哪些操作。 </div><div class="line">下面的代码展示了如何使用`Trace`类来追踪两个代码块部分:   </div><div class="line">```java</div><div class="line">public void ProcessPeople() &#123;</div><div class="line">    Trace.beginSection(&quot;ProcessPeople&quot;);</div><div class="line">    try &#123;</div><div class="line">        Trace.beginSection(&quot;Processing Jane&quot;);</div><div class="line">        try &#123;</div><div class="line">            // code for Jane task...</div><div class="line">        &#125; finally &#123;</div><div class="line">            Trace.endSection(); // ends &quot;Processing Jane&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Trace.beginSection(&quot;Processing John&quot;);</div><div class="line">        try &#123;</div><div class="line">            // code for John task...</div><div class="line">        &#125; finally &#123;</div><div class="line">            Trace.endSection(); // ends &quot;Processing John&quot;</div><div class="line">        &#125;</div><div class="line">    &#125; finally &#123;</div><div class="line">        Trace.endSection(); // ends &quot;ProcessPeople&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>###Traceview</p>
+<p><code>Traceview</code>是一个性能测试工具，展示了所有方法的运行时间。    </p>
+<blockquote>
+<p>Traceview is a graphical viewer for execution logs that you create by using the Debug class to log tracing information in your code. Traceview can help you debug your application and profile its performance.</p>
+</blockquote>
+<p>#####创建Trace文件  </p>
+<p>想要使用<code>Traceview</code>你需要创建一个包含你想分析部分的<code>trace</code>信息的<code>log</code>文件。<br>有两种方式来生成<code>trace logs</code>：    </p>
+<ul>
+<li><p>在你测试的类中添加<code>startMethodTracing()</code>和<code>stopMethodTracing()</code>的代码，来指定开始和结束获取<code>trace</code>信息。这种方式是非常精确的，因为你可以在代码中指定开始和结束的位置。     </p>
+</li>
+<li><p>使用<code>DDMS</code>中的方法来生成。这种方式就不太精确。虽然这种方式不能精确的指定起始和结束位置，但是如果在你无法修改源代码或者不需要精确时间的时候是非常有用的。 </p>
+</li>
+</ul>
+<p>在开始生成<code>trace log</code>信息时，你需要知道如下的限制条件:    </p>
+<ul>
+<li>如果你在测试代码中使用，你的应用必须要用<code>WRITE_EXTERNAL_STORAGE</code>的权限。 </li>
+<li><p>如果你使用<code>DDMS</code>生成:     </p>
+<ul>
+<li><code>Android 2.1</code>之前必须有<code>SD</code>卡，并且你的应用也要有写入<code>SD</code>卡的权限。 </li>
+<li><code>Android 2.2</code>之后不需要<code>SD</code>卡，<code>trace log</code>文件会直接生成到你的开发机上。   </li>
+</ul>
+</li>
+</ul>
+<p>在测试代码中调用<code>startMethodTracing()</code>方法的时候，你可以指定系统生成<code>trace</code>文件的名字。结束的时候调用<code>stopMethodTracing()</code>方法。这些方法开始和结束时贯穿整个虚拟中的。例如你可以在你<code>activity</code>的<code>onCreate()</code>方法中调用<code>startMethodTracing()</code>方法，然后在<code>activity</code>的<code>onDestroy()</code>方法中调用<code>stopMethodTracing()</code>方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// start tracing to "/sdcard/calc.trace"</span></div><div class="line">Debug.startMethodTracing(<span class="string">"calc"</span>);</div><div class="line"><span class="comment">// ...</span></div><div class="line"><span class="comment">// stop tracing</span></div><div class="line">Debug.stopMethodTracing();</div></pre></td></tr></table></figure></p>
+<p>在调用<code>startMethodTracing()</code>方法的时候，系统创建一个名为<code>&lt;trace-base-name&gt;.trace</code>的文件。它包含方法的二进制<code>trace</code>数据和一个线程与方法名的对应集合。<br>然后系统就开始生成<code>trace</code>数据，直到调用<code>stopMethodTracing()</code>方法。如果在你调用<code>stopMethodTracing()</code>方法之前系统已经达到了最大的缓冲大小，系统就会停止<code>trace</code>并且在控制台发出一个通知。     </p>
+<p>#####拷贝Trace文件到电脑上</p>
+<p>在模拟器或者机器上生成<code>&lt;trace-base-name&gt;.trace</code>文件后，你需要拷贝他们到你的电脑上，你可以使用<code>adb pull</code>命令来拷贝：<br><code>adb pull /sdcard/calc.trace /tmp</code></p>
+<p>#####在Traceview中查看trace文件    </p>
+<p>运行<code>Traceview</code>并且查看<code>trace</code>文件:     </p>
+<ol>
+<li>打开<code>Android Device Monitor</code>。</li>
+<li>在<code>Android Device Monitor</code>的状态栏中点击<code>DDMS</code>并且选择一个进程。 </li>
+<li>点击<code>Start Method Profiling</code>图标开始查看。</li>
+<li>在查看完后点击<code>Stop Method Profiling</code>图标来显示<code>traceview</code>。  </li>
+</ol>
+<p>大体的样子如下:    </p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview_1.png?raw=true" alt="image"> </p>
+<p>#####Traceview Layout     </p>
+<p>如果你有一个<code>trace log</code>文件(通过添加<code>tracing</code>代码或者用DDMS生成)，你可以把该文件加载到<code>Traceview</code>中，这将会把<code>log</code>数据显示为两部分:    </p>
+<ul>
+<li><code>timeline panel</code>-展示了每个线程和方法的起始和结束</li>
+<li><code>profile panel</code>-提供了一个方法中的执行内容的简述</li>
+</ul>
+<p>#####Timeline Panel</p>
+<p>每个线程都会以时间从左往右递增的方式在单独的一行中显示它的执行情况，</p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview_timeline.png?raw=true" alt="image"></p>
+<p>#####Profile Panel</p>
+<p>显示了一个方法所消耗的时间的概要情况。在表格中会同时显示<code>inclusive</code>和<code>exclusive</code>的时间。<code>Exclusive</code>的时间是该方法所消耗的时间。<code>InClusive</code>的时间是该方法消耗的时间加上任何调的方法所消耗的时间。我们简单的将调用的方法叫做<code>parents</code>，被调用的方法叫做<code>children</code>。如果一个方法被调用，它会显示对应的<code>parents</code>和<code>children</code>。<code>parents</code>会显示一个紫色的背景，<code>children</code>会显示一个黄色的背景。最后一列显示了该方法所调用的总数的调用数。在下面的图中我们能看到一共有14个地方调用了<code>LoadListener.nativeFinished()</code> . </p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview_profile.png?raw=true" alt="image"></p>
+<ul>
+<li>Name 方法名</li>
+<li>Inclusive CPU Time， CPU在处理该方法以及所有子方法(被它调用的所有方法)所消耗的时间。</li>
+<li>Exlusive CPU Time, CPU在处理该方法的耗时。</li>
+<li>Inclusive/Exclusive Real Time， 从方法开始执行到执行结束的耗时。 </li>
+<li>Cal+Rec, 这个方法被调用的次数，以及递归被调用的次数。 </li>
+<li>CPU/Real time per Call, 在处理这个方法时的<code>CPU</code>耗时的平均值。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview-getview.png?raw=true" alt="image"></p>
+<p>上图中<code>getView</code>方法被调用了12次，每次<code>CPU</code>消耗2.8秒，但是每次调用的总耗时是162秒，这里肯定有问题。<br>而看看这个方法的children，我们可以看到这其中的每个方法在耗时方面是如何分布的。Thread.join()方法战局了98%的inclusive real time。这个方法在等待另一个线程结束的时候被调用。在Children中另外一个方法就是Tread.start()方法，而之所以整个方法耗时很长，我猜测是因为在getView()方法中启动了线程并且在等待它的结束。</p>
+<p>但是这个线程在哪儿？</p>
+<p>我们在getView()方法中并不能看到这个线程做了什么，因为这段逻辑不在getView()方法之中。于是我找到了Thread.run()方法，就是在线程被创建出来时候所运行的方法。而跟随这个方法一路向下，我找到了问题的元凶。</p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview-thread.png?raw=true" alt="image"></p>
+<p>我发现了BgService.doWork()方法的每次调用花费了将近14毫秒，并且有四十个这东西！而且getView()中还有可能调用多次这个方法，这就解释了为什么getView()方法执行时间如此之长。这个方法让CPU长时间的保持在了繁忙状态。而看看Exclusive CPU time，我们可以看到他占据了80%的CPU时间！此外，根据Exclusive CPU time排序，可以帮我们更好的定位那些耗时很长的方法，而他们很有可能就是造成性能问题的罪魁祸首。</p>
+<p>关注这些耗时方法，例如getView()，View#onDraw()等方法，可以很好的帮助我们寻找为什么应用运行缓慢的原因。但有些时候，还会有一些其他的东西来占用宝贵的CPU资源，而这些资源如果被运用在UI的绘制上，也许我们的应用会更加流畅。Garbage Collector垃圾回收机制会不时的运行，回收那些没用的对象，通常来讲这不会影响我们在前台运行的程序。但如果GC被运行的过于频繁，他同样可以影响我们应用的执行效率。而我们该如何知道回收的是否过于频繁了呢…</p>
+<p>###Monitors</p>
+<p>在<code>Android Studio</code>中下方的<code>Android Monitor</code>中可以看到<code>Monitors</code>工具栏，它能不断的去检测内存、网络、CPU的消耗情况。</p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/monitor.png?raw=true" alt="image"></p>
+<p>我们可以直接点击<code>Dump Java Heap</code>或者<code>Call GC</code>等按钮，以便更好的去观察内存的使用情况。点击后会生成一个<code>.hprof</code>的文件。生成后直接使用<code>Studio</code>打开<code>.hprof</code>文件即可。  </p>
+<p>说到这里插一嘴,<a href="https://github.com/CharonChui/AndroidNote/blob/master/Java%E5%9F%BA%E7%A1%80/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6.md">有关Java垃圾回收机制请参考</a></p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/dump_href.png?raw=true" alt="image"><br>在左边能看到所有堆内存中的实例。后面会显示他所占用的内存大小。</p>
+<p>对于内存泄漏的分析可以使用<code>MAT</code>或者<code>LeakCanary</code>来进行。这里就不仔细说了。   </p>
+<p>#####不同虚拟机的内存管理 </p>
+<p><code>Android Monitor</code>使用的<code>Virtual Machine(VM)</code>:    </p>
+<ul>
+<li><code>Android 4.3(API Level 18)</code>及以前的版本使用<code>Dalvik VM</code> .</li>
+<li><code>Android 4.4(API Level 19)</code>默认使用<code>Dalvik VM</code>，<code>Android RunTime(ART)</code>是可选的。</li>
+<li><code>Android 4.3(API Level 18)</code>及更高的版本使用<code>ART VM</code>.</li>
+</ul>
+<p>虚拟之执行垃圾回收。Dalvik虚拟机使用一个标记和清除垃圾收集方案。<code>ART</code>虚拟机使用分代收集算法与标记和清楚手机算法相结合的方式。 <code>Logcat</code>会显示一些垃圾回收相关的信息。     </p>
+<p>#####GPU使用情况</p>
+<p>上面也显示了<code>GPU</code>的使用情况，这里要说一句，如果想要显示它，必须要在手机的开发者中心中开启<code>GPU显示配置文件</code>选项，将其设置为显示与<code>adb shell dumpsys gfxinfo</code>。然后再点击<code>Studio</code>中的按钮重新开始就可以看到了。 每一条线意味着一帧被绘制出来了。而线的颜色又代表不同的阶段：    </p>
+<ul>
+<li>Draw(蓝色)代表着<code>View.onDraw()</code>方法。如果这个值很高就说明可能是该<code>View</code>比较复杂。 在这个环节会创建/刷新DisplayList中的对象，这些对象在后面会被转换成GPU可以明白的OpenGL命令。而这个值比较高可能是因为view比较复杂，需要更多的时间去创建他们的display list，或者是因为有太多的view在很短的时间内被创建。</li>
+<li><p>Prepare(紫色)，从<code>Android 6.0</code>开始，一个新的线程被引进来帮助<code>UI</code>线程进行绘制。 这个线程叫做<code>Render Thread</code>。它负责转换它负责转换display list到OpenGL命令并且送至GPU。在这过程中，UI线程可以继续开始处理后面的帧。而在UI线程将所有资源传递给RenderThread过程中所消耗的时间，就是紫色阶段所消耗的时间。如果在这过程中有很多的资源都要进行传递，display list会变得过多过于沉重，从而导致在这一阶段过长的耗时。</p>
+</li>
+<li><p>Process(红色) 执行Display list中的内容并创建OpenGL命令。如果有过多或者过于复杂的display list需要执行的话，那么这阶段会消耗较长的时间，因为这样的话会有很多的view被重绘。而重绘往往发生在界面的刷新或是被移动出了被覆盖的区域。</p>
+</li>
+<li><p>Execute (黄色) – 发送OpenGL命令到GPU。这个阶段是一个阻塞调用，因为CPU在这里只会发送一个含有一些OpenGL命令的缓冲区给GPU，并且等待GPU返回空的缓冲区以便再次传递下一帧的OpenGL命令。而这些缓冲区的总量是一定的，如果GPU太过于繁忙，那么CPU则会去等待下一个空缓冲区。所以，如果我们看到这一阶段耗时比较长，那可能是因为GPU过于繁忙的绘制UI，而造成这个的原因则可能是在短时间内绘制了过于复杂的view。</p>
+</li>
+<li><p>Measure/Layout(绿色) 代表<code>Measure</code>和<code>Layout</code>的时间。 </p>
+</li>
+</ul>
+<p>###Hierarchy Viewer</p>
+<p>布局分析工具，非常常用。</p>
+<p>在<code>Android Device Monitor</code>中打开<code>Hierarchy Viewer</code>即可。</p>
+<ul>
+<li>连接你的手机或者模拟器。<br>  出于安全性考虑，<code>Hierarchy Viewer</code>只能连接开发者版的系统的手机。 </li>
+<li>运行程序，并且让界面显示出来。</li>
+<li>启动<code>hierarchy view</code>工具，接着就能看到左边栏显示出了对应的设备，展开后可以看到一些组件的名称。这个页面包含了应用的界面以及系统的界面。选择你的应用中想要查看的界面直接双击就可以了。    </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/gettingstarted_image005.png?raw=true" alt="image"><br>如果你的界面显示的不是这个样子，少一些东西的话，你可以使用<code>Window&gt;Reset Perspective</code>来重置样式。 </p>
+<p>但是我并打不开。<br>如果你的手机是<code>Android 4.1</code>及以上版本你必须要在你的电脑上设置一个<code>ANDROID_HVPROTO</code>DE 环境变量才可以。</p>
+<ul>
+<li>Windows<br>  增加一个名为<code>ANDROID_HVPROTO</code>值为<code>ddm</code>的环境变量就可以了。 </li>
+<li><p>Mac </p>
+<ul>
+<li>打开<code>.bash_profile</code><ul>
+<li><code>touch .bash_profile</code>创建</li>
+<li><code>open -e .bash_profile</code>打开</li>
+</ul>
+</li>
+<li><p>添加    </p>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#Hierarchy Viewer Variable              </div><div class="line">export ANDROID_HVPROTO=ddm</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>source .bash_profile</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>如果配置完成后仍然不能用的话，你可以:   </p>
+<ul>
+<li>关闭<code>Android Studio</code>.</li>
+<li>执行<code>add kill-server</code>，然后<code>adb start-server</code>.</li>
+<li>通过命令行开始<code>hierarchyviewer</code>.</li>
+</ul>
+<p>好了，我们直接打开自己的页面进行查看布局吧(有点慢)。<br>它是介个样子滴 ：<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/hierarchy_vierwe_page.png?raw=true" alt="image"></p>
+<p>我们可以看到所有结构，点击对一个的节点，能直接看到该界面的<code>UI</code>效果，并展示该布局包含多少个<code>View</code>，以及该布局<code>measure,draw,layout</code>所消耗的时间。选中<code>Show Extras</code>选项可以看到在右下角看到界面效果。   </p>
+<p>选中要查看的节点后点击<code>Profile Node</code>选项，可以看到如下界面:    </p>
+<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/hierarchy_profile_node.png?raw=true" alt="image"></p>
+<p>可以看到每个布局都出现了三个点。有不同的颜色,从左到右这三个点分别表示:   </p>
+<ul>
+<li>左边的点代表<code>Draw</code>阶段。</li>
+<li>中间的点代表了<code>Layout</code>阶段。</li>
+<li>右边的点代表了<code>Execute</code>阶段。</li>
+</ul>
+<p>这三个点有分别对应了<code>pipeline</code>中的不同阶段，如下图:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/gettingstarted_image015.png?raw=true" alt="image"></p>
+<p>不同的颜色代表不同的性能:    </p>
+<ul>
+<li>绿色代表渲染的非常快，至少是其他<code>View</code>的一半。</li>
+<li>黄色代表<code>View</code>渲染比最后那一半的<code>View</code>快。</li>
+<li>红色代表<code>View</code>渲染是几乎是在最慢的那部分中间。</li>
+</ul>
+<p><code>Hierarchy Viewer</code>测量的是相对的表现能力，所以总会有一个红色的节点，它并不意味者该<code>View</code>一定是绘制的太慢。 </p>
+<p>###过度绘制</p>
+<p>在开发者选项中将调试GPU过度绘制设置为显示过度绘制区域，就能看到程序的绘制情况。<br>过度绘制往往发生在我们需要在一个东西上面绘制另外一个东西，例如在一个红色的背景上画一个黄色的按钮。那么GPU就需要先画出红色背景，再在他上面绘制黄色按钮，此时过度绘制就是不可避免的了。如果我们有太多层需要绘制，那么则会过度的占用GPU导致我们每帧消耗的时间超过16毫秒。<br>这些过度绘制可能发生在我们给Activity或Fragment设置了全屏的背景，同时又给ListView以及ListView的条目设置了背景色。而通过只设置一次背景色即可解决这样的问题。</p>
+<p>注意：默认的主题会为你指定一个默认的全屏背景色，如果你的activity又一个不透平的背景盖住了默认的背景色，那么你可以移除主题默认的背景色，这样也会移除一层的过度绘制。这可以通过配置主题配置或是通过代码的方法，在onCreate()方法中调用getWindow().setBackgroundDrawable(null)方法来实现。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/overdraw-gif.gif?raw=true" alt="image"></p>
+<p>###Hardware Acceleration</p>
+<p>在Honeycomb版本中引入了硬件加速（Hardware Accleration）后，我们的应用在绘制的时候就有了全新的绘制模型。它引入了DisplayList结构，用来记录View的绘制命令，以便更快的进行渲染。但还有一些很好的功能开发者们往往会忽略或者使用不当——View layers。</p>
+<p>使用View layers（硬件层），我们可以将view渲染入一个非屏幕区域缓冲区（off-screen buffer，前面透明度部分提到过），并且根据我们的需求来操控它。这个功能主要是针对动画，因为它能让复杂的动画效果更加的流畅。而不使用硬件层的话，View会在动画属性（例如coordinate, scale, alpha值等）改变之后进行一次刷新。而对于相对复杂的view，这一次刷新又会连带它所有的子view进行刷新，并各自重新绘制，相当的耗费性能。使用View layers，通过调用硬件层，GPU直接为我们的view创建一个结构，并且不会造成view的刷新。而我们可以在避免刷新的情况下对这个结构进行进行很多种的操作，例如x/y位置变换，旋转，透明度等等。总之，这意味着我们可以对一个让一个复杂view执行动画的同时，又不会刷新！这会让动画看起来更加的流畅。<br>在阅读了ViewPager的源码后，我发现了在滑动的时候会自动为左右两页启动一个硬件层，并且在滑动结束后移除掉。</p>
+<p>在两页间滑动的时候创建硬件层也是可以理解的，但对我来说小有不幸。通常来讲加入硬件层是为了让ViewPager的滑动更加流畅，毕竟它们相对复杂。</p>
+<p>是的，但是再使用硬件layers的时候还是有几点要牢记在心：</p>
+<ul>
+<li>回收 – 硬件层会占用GPU中的一块内存。只在必要的时候使用他们，比如动画，并且事后注意回收。例如在上面ObjectAnimator的例子中，我们增加了一个动画结束监听以便在动画结束后可以移除硬件层。而在Property animator的例子中，我们使用了withLayers()，这会在动画开始时候自动创建硬件层并且在结束的时候自动移除。</li>
+<li>如果你在调用了硬件View layers后改变了View，那么会造成硬件硬件层的刷新并且再次重头渲染一遍view到非屏幕区域缓存中。这种情况通常发生在我们使用了硬件层暂时还不支持的属性（目前为止，硬件层只针对以下几种属性做了优化：otation、scale、x/y、translation、pivot和alpha）。例如，如果你另一个view执行动画，并且使用硬件层，在屏幕滑动他们的同时改变他的背景颜色，这就会造成硬件层的持续刷新。而以硬件层的持续刷新所造成的性能消耗来说，可能让它在这里的使用变得并不那么值。</li>
+</ul>
+<p>有关如何使用<code>Hardware Layer</code>请参考之前写的文章:<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%8A%A0%E5%BC%BA/%E9%80%9A%E8%BF%87Hardware%20Layer%E6%8F%90%E9%AB%98%E5%8A%A8%E7%94%BB%E6%80%A7%E8%83%BD.md">通过Hardware Layer提高动画性能</a></p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/性能优化相关工具/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android应用发布" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android应用发布/">Android应用发布</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android应用发布/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android应用发布"><a href="#Android应用发布" class="headerlink" title="Android应用发布"></a>Android应用发布</h1><p>需要身份证扫描件、手持身份证正面照、图标(96x96、512x512)、应用截图(一般480x800,6张)进行每个网站的开发者注册(需要审核，有的比较慢，尽量提前审核)</p>
+<ul>
+<li><strong><a href="https://play.google.com/apps/publish" target="_blank" rel="external">GooglePlay</a>自动审核，速度很快，但是要上缴25刀</strong></li>
+<li><strong><a href="http://open.qq.com/?from=tap" target="_blank" rel="external">腾讯开发平台</a>史上最好，没有之一、快、大，腾讯帝国根深蒂固</strong></li>
+<li><strong><a href="http://app.taobao.com" target="_blank" rel="external">淘宝手机助手</a>很快，每次他都是首发…，但是需要jpg格式的截图和图标，十八罗汉速度非凡</strong></li>
+<li><strong><a href="http://open.app.360.cn/" target="_blank" rel="external">360应用开发平台</a>实力不容小视,但是对广告审核很严，感觉不是很好</strong>    </li>
+<li><strong><a href="http://developer.baidu.com/" target="_blank" rel="external">百度开发者中心(关联安卓及91)</a>这个不多说了，都是泪，各种麻烦、各种慢、各种不合理，众里寻他千百度，他想几度就几度</strong>      </li>
+<li><strong><a href="http://dev.apk.hiapk.com/login" target="_blank" rel="external">安卓市场</a>特别慢，百度上了，他各种理由不给上。</strong>     </li>
+<li><strong><a href="http://market.sj.91.com/Users/Login.aspx?ReturnUrl=%2fDefault.aspx" target="_blank" rel="external">91</a>慢，不说了，三家市场不如别人一家</strong>     </li>
+<li><strong><a href="http://developer.wandoujia.com" target="_blank" rel="external">豌豆荚开发者中心</a>还不错,账号用了手机号</strong>      </li>
+<li><strong><a href="http://dev.anzhi.com/" target="_blank" rel="external">安智市场</a>账号不是邮箱，而是账号名,不支持广告</strong></li>
+<li><strong><a href="http://dev.gfan.com/" target="_blank" rel="external">机锋</a>必须用机锋的广告，太霸道了</strong>        </li>
+<li><strong><a href="http://dev.mumayi.com/index/" target="_blank" rel="external">木蚂蚁</a>需要在有米广告中加入木蚂蚁的渠道号</strong></li>
+<li><strong><a href="http://developer.xiaomi.com" target="_blank" rel="external">小米</a></strong></li>
+<li><strong><a href="http://dev.eoemarket.com/" target="_blank" rel="external">优亿市场</a>账号是用户名不是邮箱</strong></li>
+<li><strong><a href="http://dev.10086.cn/" target="_blank" rel="external">10086</a>密码最后一位是*</strong></li>
+<li><strong><a href="http://developer.meizu.com" target="_blank" rel="external">魅族</a>风格独特要做适配</strong></li>
+<li><strong><a href="http://www.anzhuoapk.com" target="_blank" rel="external">易用汇</a></strong></li>
+<li><strong><a href="http://open.189.cn/" target="_blank" rel="external">天翼开发平台</a></strong></li>
+<li><strong><a href="http://www.eomarket.com/developer" target="_blank" rel="external">易优市场</a></strong></li>
+<li><strong><a href="apk.angeeks.com">安极市场</a></strong></li>
+<li><strong><a href="http://dev.3g.cn/" target="_blank" rel="external">3G安卓市场</a></strong></li>
+<li><strong><a href="http://www.nduoa.com/developer" target="_blank" rel="external">N多市场</a></strong></li>
+<li><strong><a href="http://dev.liqucn.com/index.php?m=member&amp;c=index&amp;a=login" target="_blank" rel="external">安卓星空</a></strong></li>
+<li><strong><a href="http://admin.app.sohu.com/platform/index" target="_blank" rel="external">搜狐应用市场</a>账号为搜狐邮箱</strong></li>
+<li><strong><a href="http://dev.wo.com.cn/index.action" target="_blank" rel="external">沃商城</a></strong></li>
+</ul>
+<p>做死系列</p>
+<ul>
+<li><strong><a href="http://dev.appchina.com/" target="_blank" rel="external">应用汇</a>貌似已经不收录个人应用，也不说明一下，等你提交后就说不收录该类内容</strong></li>
+<li><strong><a href="http://dev.51vapp.com/" target="_blank" rel="external">网讯安卓应用市场</a>(要软件著作权，不然通过不了)</strong></li>
+<li><strong><a href="http://developer.lenovomm.com" target="_blank" rel="external">联想</a>很难发布，他会把你定位成劣质应用，好吧，劣质公司，你看你吧ThinkPad弄成什么样了</strong></li>
+<li><strong><a href="http://developer.huawei.com/" target="_blank" rel="external">华为</a>不收录个人应用</strong></li>
+<li><strong><a href="http://m.163.com/android/" target="_blank" rel="external">网易</a>灰常垃圾，等你全部弄好后还要加他QQ让他审核，完了他会告诉你我们不接受个人应用，不做死就不会死</strong></li>
+<li><strong><a href="http://play.jd.com/download/" target="_blank" rel="external">京东</a>不好好卖东西，整个应用市场，又没人管理</strong></li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android应用发布/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -281,427 +761,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-视频解码之软解与硬解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/视频解码之软解与硬解/">视频解码之软解与硬解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/视频解码之软解与硬解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="视频解码之软解与硬解"><a href="#视频解码之软解与硬解" class="headerlink" title="视频解码之软解与硬解"></a>视频解码之软解与硬解</h1><p><strong>硬解</strong>：从字面意思上理解就是用硬件来进行解码，通过显卡的视频加速功能对高清视频进行解码，很明显就是一个专门的电路板(这样好理解…)来进行视频的解码，是依靠显卡<code>GPU</code>的。                    </p>
-<p><strong>软解</strong>：字面上理解就是用软件进行解码，这样理解也对，但是实际最总还是要硬件来支持的，这个硬件就是<code>CPU</code>。</p>
-<p>既然有这两种不同的解码方式，我们在开发中该如何进行选择？哪个更好？                     </p>
-<ul>
-<li><p>硬解优缺点：<br>  显卡核心GPU拥有独特的计算方法，解码效率非常高，而且充当解码核心的模块成本并不高。这样不但能够减轻CPU的负担，还有着低功耗、发热少等特点。但是由于硬解码起步比较晚，<br>  软件和驱动对其的支持度低。硬解码内置有什么样的模块就能够解码什么样的视频，面对网络上杂乱无章的视频编码格式，不可能做到完全兼容同。此外，硬解码的滤镜、字母、画质增强方面都做的十分不足。</p>
-<p>  优点：低功耗、发热少、效率高。<br>  缺点：视频兼容性差、支持度低。                </p>
-</li>
-<li><p>软解优缺点：<br>  软解码技术的解码过程中，需要对大量的视频信息进行运算，对CPU性能的要求非常高。尤其是对高清晰度大码率的视频来说，巨大的运算量就会造成转换效率低、发热量大等问题。<br>  但是由于软解码的过程中不需要复杂的硬件支持，兼容性非常高。即使是新出的视频编码格式，只要安装好相应的解码器文件，就能顺利播放。而且软解码拥有丰富的滤镜、字幕、画面处理优化等效果，<br>  如果<code>CPU</code>足够强悍的话，能够实现更加出色的画面效果。</p>
-<p>  优点：  兼容强、全解码、效果好<br>  缺点：  对<code>CPU</code>要求高、效率低、发热大                 </p>
-</li>
-</ul>
-<p>关于软解与硬解究竟哪个更好的问题一直是争论的热点，其实我倒是感觉没有好坏之分，各自有各自的优缺点和使用条件，根据需要去选择才是最合适的。<br>播放码率比较大的视频，硬解可能流畅的播放，但是软解可能会出现演示、画面和声音卡顿不同步的问题。但是硬解播放出的视频大多都不允许在解码之后进行软件后处理，比如进行一些降噪锐化之类的后期滤镜，<br>这样可能会让人感觉画质不太好的。当然上面的这种情况也是和<code>CPU</code>及<code>GPU</code>能力的不同而不同的。 总的来说，还是各有春秋，适合你的才是最好的。 </p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/视频解码之软解与硬解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-屏幕适配之百分比方案详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/屏幕适配之百分比方案详解/">屏幕适配之百分比方案详解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/屏幕适配之百分比方案详解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="屏幕适配之百分比方案详解"><a href="#屏幕适配之百分比方案详解" class="headerlink" title="屏幕适配之百分比方案详解"></a>屏幕适配之百分比方案详解</h1><p><code>Android</code>设备碎片化十分严重，在开发过程中的适配工作也非常很繁琐，有关屏幕适配的介绍请看之前的文章<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80/%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D.md">屏幕适配</a>。</p>
-<p>最近看到<code>DrawerLayout</code>，<code>support v4</code>中提供的类，想到对<code>google</code>提供的这些支持库，自己一点都不熟悉，想着看看<code>Google</code>提供的支持库都有什么内容。结果看着看着在最后忽然看到了<code>Percent Support Library</code>。寻思怎么还百分比呢？仔细一看介绍，我擦，真是太有用了。</p>
-<blockquote>
-<p>###Percent Support Library<br>The Percent package provides APIs to support adding and managing percentage based dimensions in your app.</p>
-<p>The Percent Support library adds support for the PercentLayoutHelper.PercentLayoutParams interface and various classes, such as PercentFrameLayout and PercentRelativeLayout.</p>
-<p>After you download the Android Support Libraries, this library is located in the <sdk>/extras/android/support/percent directory. For more information on how to set up your project, follow the instructions in Adding libraries with resources.</sdk></p>
-<p>The Gradle build script dependency identifier for this library is as follows:<br><code>com.android.support:percent:23.3.0</code></p>
-</blockquote>
-<p>看到了吗？ 说提供了<code>PercentFrameLayout</code>和<code>PercentRelativeLayout</code>来支持百分比了。这样不就完美的解决了适配的问题嘛。啥也不说了，立马配置<code>cradle</code>来瞧瞧。   </p>
-<blockquote>
-<p>Subclass of FrameLayout that supports percentage based dimensions and margins. You can specify dimension or a margin of child by using attributes with “Percent” suffix. </p>
-</blockquote>
-<p>上代码:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">android.support.percent.PercentFrameLayout</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">        <span class="attr">android:src</span>=<span class="string">"@mipmap/ic_launcher"</span></div><div class="line">        <span class="attr">app:layout_widthPercent</span>=<span class="string">"50%"</span></div><div class="line">        <span class="attr">app:layout_heightPercent</span>=<span class="string">"50%"</span></div><div class="line">        <span class="attr">app:layout_marginTopPercent</span>=<span class="string">"25%"</span></div><div class="line">        <span class="attr">app:layout_marginLeftPercent</span>=<span class="string">"25%"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">android.support.percent.PercentFrameLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>效果如下:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/percent_frame.png?raw=true" alt="image"><br>完美.   </p>
-<p>支持的属性:    </p>
-<ul>
-<li><code>layout_widthPercent</code></li>
-<li><code>layout_heightPercent</code></li>
-<li><code>layout_marginPercent</code></li>
-<li><code>layout_marginLeftPercent</code></li>
-<li><code>layout_marginTopPercent</code></li>
-<li><code>layout_marginRightPercent</code></li>
-<li><code>layout_marginBottomPercent</code></li>
-<li><code>layout_marginStartPercent</code></li>
-<li><code>layout_marginEndPercent</code></li>
-<li><code>layout_aspectRatio</code></li>
-</ul>
-<blockquote>
-<p>It is not necessary to specify layout_width/height if you specify layout_widthPercent. However, if you want the view to be able to take up more space than what percentage value permits, you can add layout_width/height=”wrap_content”. In that case if the percentage size is too small for the View’s content, it will be resized using wrap_content rule.</p>
-</blockquote>
-<p>如果指定了<code>layout_widthPercent</code>就不用指定<code>layout_width/height</code>属性了。(<code>Studio</code>可能会提示错误，设置忽略就好)。然而，如果你想要该<code>View</code>能够占用比设置的百分比值更大的空间时，你可以指定<code>layout_widht/height=“wrap_content”</code>。在这种情况下，如果设置的百分比值在显示内容时太小时，将会使用<code>wrap_content</code>的值重新计算。</p>
-<p>就是这个意思:如果指定的百分比太小怕显示不开的话，也可以给它指定<code>wrap_content</code>属性，这样当显示不开的时候就会使用<code>wrap_content</code>的值。<br>如下:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">android.support.percent.PercentFrameLayout</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:src</span>=<span class="string">"@mipmap/ic_launcher"</span></div><div class="line">        <span class="attr">android:text</span>=<span class="string">"顶顶顶顶顶大大大"</span></div><div class="line">        <span class="attr">android:textSize</span>=<span class="string">"30dp"</span></div><div class="line">        <span class="attr">android:singleLine</span>=<span class="string">"true"</span></div><div class="line">        <span class="attr">app:layout_widthPercent</span>=<span class="string">"30%"</span></div><div class="line">        <span class="attr">app:layout_heightPercent</span>=<span class="string">"5%"</span></div><div class="line">        <span class="attr">app:layout_marginTopPercent</span>=<span class="string">"25%"</span></div><div class="line">        <span class="attr">app:layout_marginLeftPercent</span>=<span class="string">"25%"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">android.support.percent.PercentFrameLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>效果:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/percent_wrap.png?raw=true" alt="image">    </p>
-<p>加入<code>wrap_content</code>后一点效果也没有啊，还是显示不全啊，和没加<code>wrap_content</code>一样，- -!</p>
-<p>你也可以通过只设置<code>width</code>或者<code>height</code>和<code>layout_aspectRatio</code>这种比例值的方式来让第另一个值自动计算。例如，如果你想要使用<code>16:9</code>的比例，你可以使用:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">android:layout_width="300dp"</div><div class="line">app:layout_aspectRatio="178%"</div></pre></td></tr></table></figure></p>
-<p>这样将会在宽固定为<code>300dp</code>的基础上以16:9(1.78:1)来计算高度。</p>
-<p><code>PercentRelativeLayout</code>的使用都是一样的，这里就不贴了。   </p>
-<p>那它是怎么实现的呢？其实就是内部给通过属性换算，把本布局的宽高和百分比去计算每个<code>view</code>的大小和位置。但是还有为什么上面设置的<code>wrap_content</code>无效呢？是我理解错了吗？</p>
-<p>带着这两个疑问我们来看下源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PercentFrameLayout</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PercentLayoutHelper mHelper = <span class="keyword">new</span> PercentLayoutHelper(<span class="keyword">this</span>);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context, attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> LayoutParams <span class="title">generateDefaultLayoutParams</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> LayoutParams <span class="title">generateLayoutParams</span><span class="params">(AttributeSet attrs)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LayoutParams(getContext(), attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line">        mHelper.adjustChildren(widthMeasureSpec, heightMeasureSpec);</div><div class="line">        <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">        <span class="comment">// 从名字上就能看出来下面就是处理如果指定百分比过小不足显示内容时，就去使用`wrap_content`的逻辑</span></div><div class="line">        <span class="keyword">if</span> (mHelper.handleMeasuredStateTooSmall()) &#123;</div><div class="line">            <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onLayout(changed, left, top, right, bottom);</div><div class="line">        mHelper.restoreOriginalParams();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LayoutParams</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span>.<span class="title">LayoutParams</span></span></div><div class="line">            <span class="keyword">implements</span> <span class="title">PercentLayoutHelper</span>.<span class="title">PercentLayoutParams</span> &#123;</div><div class="line"></div><div class="line">        <span class="keyword">private</span> PercentLayoutHelper.PercentLayoutInfo mPercentLayoutInfo;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(Context c, AttributeSet attrs)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(c, attrs);</div><div class="line">            <span class="comment">// PercentLayoutInfo中去解析自定义属性的值</span></div><div class="line">            mPercentLayoutInfo = PercentLayoutHelper.getPercentLayoutInfo(c, attrs);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(width, height);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height, <span class="keyword">int</span> gravity)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(width, height, gravity);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(ViewGroup.LayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(source);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(MarginLayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(source);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(FrameLayout.LayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>((MarginLayoutParams) source);</div><div class="line">            gravity = source.gravity;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(LayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>((FrameLayout.LayoutParams) source);</div><div class="line">            mPercentLayoutInfo = source.mPercentLayoutInfo;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> PercentLayoutHelper.<span class="function">PercentLayoutInfo <span class="title">getPercentLayoutInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">if</span> (mPercentLayoutInfo == <span class="keyword">null</span>) &#123;</div><div class="line">                mPercentLayoutInfo = <span class="keyword">new</span> PercentLayoutHelper.PercentLayoutInfo();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">return</span> mPercentLayoutInfo;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setBaseAttributes</span><span class="params">(TypedArray a, <span class="keyword">int</span> widthAttr, <span class="keyword">int</span> heightAttr)</span> </span>&#123;</div><div class="line">            PercentLayoutHelper.fetchWidthAndHeight(<span class="keyword">this</span>, a, widthAttr, heightAttr);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>源码不长，主要是三个部分:    </p>
-<ul>
-<li>重写<code>onMeasure</code>，根据百分比转换成对应的尺寸</li>
-<li>重写<code>onLayout</code></li>
-<li>自定义<code>LayoutParams</code>，在<code>FrameLayout.LayoutParams</code>的基础上多实现了一个接口。包含了<code>PercentLayoutHelper.PercentLayoutInfo</code>属性，而文档中对<code>PercentLayoutInfo</code>的介绍是<code>Container for information about percentage dimensions and margins. It acts as an extension for LayoutParams.</code></li>
-</ul>
-<p>我们也先一步步的来分析，首先看下<code>mHelper.adjustChildren(widthMeasureSpec, heightMeasureSpec);</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Iterates over children and changes their width and height to one calculated from percentage</div><div class="line"> * values.</div><div class="line"> * <span class="doctag">@param</span> widthMeasureSpec Width MeasureSpec of the parent ViewGroup.</div><div class="line"> * <span class="doctag">@param</span> heightMeasureSpec Height MeasureSpec of the parent ViewGroup.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">adjustChildren</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"adjustChildren: "</span> + mHost + <span class="string">" widthMeasureSpec: "</span></div><div class="line">                + View.MeasureSpec.toString(widthMeasureSpec) + <span class="string">" heightMeasureSpec: "</span></div><div class="line">                + View.MeasureSpec.toString(heightMeasureSpec));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> widthHint = View.MeasureSpec.getSize(widthMeasureSpec);</div><div class="line">    <span class="keyword">int</span> heightHint = View.MeasureSpec.getSize(heightMeasureSpec);</div><div class="line">    <span class="comment">// mHost是由构造函数传递过来的，就是PercentFrameLayout自身。</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, N = mHost.getChildCount(); i &lt; N; i++) &#123;</div><div class="line">        View view = mHost.getChildAt(i);</div><div class="line">        ViewGroup.LayoutParams params = view.getLayoutParams();</div><div class="line">        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">            Log.d(TAG, <span class="string">"should adjust "</span> + view + <span class="string">" "</span> + params);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (params <span class="keyword">instanceof</span> PercentLayoutParams) &#123;</div><div class="line">            <span class="comment">// 通过PercentLayoutParams. getPercentLayoutInfo()方法得到PercentLayoutInfo，至于PercentLayoutInfo类在上面也说过了。</span></div><div class="line">            PercentLayoutInfo info =</div><div class="line">                    ((PercentLayoutParams) params).getPercentLayoutInfo();</div><div class="line">            <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">                Log.d(TAG, <span class="string">"using "</span> + info);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (params <span class="keyword">instanceof</span> ViewGroup.MarginLayoutParams) &#123;</div><div class="line">                    <span class="comment">// PercentFrameLayout.LayoutParams继承自FrameLayout.LayoutParams，而FrameLayout.LayoutParams又继承自ViewGroup.MarginLayoutParams</span></div><div class="line">                    info.fillMarginLayoutParams(view, (ViewGroup.MarginLayoutParams) params,</div><div class="line">                            widthHint, heightHint);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    info.fillLayoutParams(params, widthHint, heightHint);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>所以上面代码的意思就是通过对每个子<code>View</code>调用<code>getLayoutParams</code>方法，然后从该<code>LayoutParams</code>中获取到它的<code>PercentLayoutInfo</code>属性，然后再调用<code>PercentLayoutInfo.fillMarginLayoutParams()</code>方法。</p>
-<p>那我们继续看一下<code>PercentLayoutInfo.fillMarginLayoutParams()</code>方法的实现，该方法是根据百分比去设置尺寸和margin:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Fills &#123;<span class="doctag">@code</span> ViewGroup.MarginLayoutParams&#125; dimensions and margins based on percentage</div><div class="line"> * values.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillMarginLayoutParams</span><span class="params">(View view, ViewGroup.MarginLayoutParams params,</span></span></div><div class="line">        <span class="keyword">int</span> widthHint, <span class="keyword">int</span> heightHint) &#123;</div><div class="line">    <span class="comment">// 根据百分比值设置View的尺寸</span></div><div class="line">    fillLayoutParams(params, widthHint, heightHint);</div><div class="line"></div><div class="line">    <span class="comment">// 从注释中就能知道，fillLayoutParams是计算尺寸，那下面这部分就是处理margin了</span></div><div class="line">    <span class="comment">// mPreservedParams来记录原始的margin值</span></div><div class="line">    <span class="comment">// Preserve the original margins, so we can restore them after the measure step.</span></div><div class="line">    mPreservedParams.leftMargin = params.leftMargin;</div><div class="line">    mPreservedParams.topMargin = params.topMargin;</div><div class="line">    mPreservedParams.rightMargin = params.rightMargin;</div><div class="line">    mPreservedParams.bottomMargin = params.bottomMargin;</div><div class="line">    MarginLayoutParamsCompat.setMarginStart(mPreservedParams,</div><div class="line">            MarginLayoutParamsCompat.getMarginStart(params));</div><div class="line">    MarginLayoutParamsCompat.setMarginEnd(mPreservedParams,</div><div class="line">            MarginLayoutParamsCompat.getMarginEnd(params));</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (leftMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.leftMargin = (<span class="keyword">int</span>) (widthHint * leftMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (topMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.topMargin = (<span class="keyword">int</span>) (heightHint * topMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (rightMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.rightMargin = (<span class="keyword">int</span>) (widthHint * rightMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (bottomMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.bottomMargin = (<span class="keyword">int</span>) (heightHint * bottomMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">boolean</span> shouldResolveLayoutDirection = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">if</span> (startMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        MarginLayoutParamsCompat.setMarginStart(params,</div><div class="line">                (<span class="keyword">int</span>) (widthHint * startMarginPercent));</div><div class="line">        shouldResolveLayoutDirection = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (endMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        MarginLayoutParamsCompat.setMarginEnd(params,</div><div class="line">                (<span class="keyword">int</span>) (widthHint * endMarginPercent));</div><div class="line">        shouldResolveLayoutDirection = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (shouldResolveLayoutDirection &amp;&amp; (view != <span class="keyword">null</span>)) &#123;</div><div class="line">        <span class="comment">// Force the resolve pass so that start / end margins are propagated to the</span></div><div class="line">        <span class="comment">// matching left / right fields</span></div><div class="line">        MarginLayoutParamsCompat.resolveLayoutDirection(params,</div><div class="line">                ViewCompat.getLayoutDirection(view));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"after fillMarginLayoutParams: ("</span> + params.width + <span class="string">", "</span> + params.height</div><div class="line">                + <span class="string">")"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>再看一下<code>PercentLayoutInfo.fillLayoutParams()</code>的实现，该方法是通过百分比设置<code>View</code>的尺寸:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Fills &#123;<span class="doctag">@code</span> ViewGroup.LayoutParams&#125; dimensions based on percentage values.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillLayoutParams</span><span class="params">(ViewGroup.LayoutParams params, <span class="keyword">int</span> widthHint,</span></span></div><div class="line">        <span class="keyword">int</span> heightHint) &#123;</div><div class="line">    <span class="comment">// mPreservedParams来记录原始的宽高值</span></div><div class="line">    <span class="comment">// Preserve the original layout params, so we can restore them after the measure step.</span></div><div class="line">    mPreservedParams.width = params.width;</div><div class="line">    mPreservedParams.height = params.height;</div><div class="line"></div><div class="line">    <span class="comment">// We assume that width/height set to 0 means that value was unset. This might not</span></div><div class="line">    <span class="comment">// necessarily be true, as the user might explicitly set it to 0. However, we use this</span></div><div class="line">    <span class="comment">// information only for the aspect ratio. If the user set the aspect ratio attribute,</span></div><div class="line">    <span class="comment">// it means they accept or soon discover that it will be disregarded.</span></div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> widthNotSet =</div><div class="line">            (mPreservedParams.mIsWidthComputedFromAspectRatio</div><div class="line">                    || mPreservedParams.width == <span class="number">0</span>) &amp;&amp; (widthPercent &lt; <span class="number">0</span>);</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> heightNotSet =</div><div class="line">            (mPreservedParams.mIsHeightComputedFromAspectRatio</div><div class="line">                    || mPreservedParams.height == <span class="number">0</span>) &amp;&amp; (heightPercent &lt; <span class="number">0</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 如果指定了百分比属性，就用宽高值和百分比去算出具体的宽高</span></div><div class="line">    <span class="keyword">if</span> (widthPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 看到了吗？是根据父`View	`的宽高来乘以百分比，不是根据整个屏幕的宽高，这样可能会有问题，要是ListView这种的高度没法算了</span></div><div class="line">        params.width = (<span class="keyword">int</span>) (widthHint * widthPercent);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (heightPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.height = (<span class="keyword">int</span>) (heightHint * heightPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 如果指定了宽高的比例值，就用比例值去算出宽高，从这里能看出`aspectRatio`的优先级比百分比要高。他可以覆盖百分比之前设置的值。</span></div><div class="line">    <span class="keyword">if</span> (aspectRatio &gt;= <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (widthNotSet) &#123;</div><div class="line">            params.width = (<span class="keyword">int</span>) (params.height * aspectRatio);</div><div class="line">            <span class="comment">// Keep track that we've filled the width based on the height and aspect ratio.</span></div><div class="line">            mPreservedParams.mIsWidthComputedFromAspectRatio = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (heightNotSet) &#123;</div><div class="line">            params.height = (<span class="keyword">int</span>) (params.width / aspectRatio);</div><div class="line">            <span class="comment">// Keep track that we've filled the height based on the width and aspect ratio.</span></div><div class="line">            mPreservedParams.mIsHeightComputedFromAspectRatio = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"after fillLayoutParams: ("</span> + params.width + <span class="string">", "</span> + params.height + <span class="string">")"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">```    </div><div class="line"></div><div class="line">到这里`onMeasure`中通过百分比值设置宽高以及`margin`的部分就看完了，那我们接着看一下关于百分比值过小时对`wrap_content`的处理:     </div><div class="line">```<span class="function">java</span></div><div class="line"><span class="title">if</span> <span class="params">(mHelper.handleMeasuredStateTooSmall()</span>) &#123;</div><div class="line">    <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>看一下<code>PercentLayoutHelper.handleMeasuredStateTooSmall()</code>方法的实现:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Iterates over children and checks if any of them would like to get more space than it</div><div class="line"> * received through the percentage dimension.</div><div class="line"> *</div><div class="line"> * If you are building a layout that supports percentage dimensions you are encouraged to take</div><div class="line"> * advantage of this method. The developer should be able to specify that a child should be</div><div class="line"> * remeasured by adding normal dimension attribute with &#123;<span class="doctag">@code</span> wrap_content&#125; value. For example</div><div class="line"> * he might specify child's attributes as &#123;<span class="doctag">@code</span> app:layout_widthPercent="60%p"&#125; and</div><div class="line"> * &#123;<span class="doctag">@code</span> android:layout_width="wrap_content"&#125;. In this case if the child receives too little</div><div class="line"> * space, it will be remeasured with width set to &#123;<span class="doctag">@code</span> WRAP_CONTENT&#125;.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> True if the measure phase needs to be rerun because one of the children would like</div><div class="line"> * to receive more space.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMeasuredStateTooSmall</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> needsSecondMeasure = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, N = mHost.getChildCount(); i &lt; N; i++) &#123;</div><div class="line">        View view = mHost.getChildAt(i);</div><div class="line">        ViewGroup.LayoutParams params = view.getLayoutParams();</div><div class="line">        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">            Log.d(TAG, <span class="string">"should handle measured state too small "</span> + view + <span class="string">" "</span> + params);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (params <span class="keyword">instanceof</span> PercentLayoutParams) &#123;</div><div class="line">            PercentLayoutInfo info =</div><div class="line">                    ((PercentLayoutParams) params).getPercentLayoutInfo();</div><div class="line">            <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// shouldHandleMeasuredWidthTooSmall方法来进行判断</span></div><div class="line">                <span class="keyword">if</span> (shouldHandleMeasuredWidthTooSmall(view, info)) &#123;</div><div class="line">                    needsSecondMeasure = <span class="keyword">true</span>;</div><div class="line">                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (shouldHandleMeasuredHeightTooSmall(view, info)) &#123;</div><div class="line">                    needsSecondMeasure = <span class="keyword">true</span>;</div><div class="line">                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"should trigger second measure pass: "</span> + needsSecondMeasure);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> needsSecondMeasure;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>那继续看一下<code>shouldHandleMeasuredWidthTooSmall()</code>方法:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">shouldHandleMeasuredWidthTooSmall</span><span class="params">(View view, PercentLayoutInfo info)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> state = ViewCompat.getMeasuredWidthAndState(view) &amp; ViewCompat.MEASURED_STATE_MASK;</div><div class="line">    <span class="keyword">return</span> state == ViewCompat.MEASURED_STATE_TOO_SMALL &amp;&amp; info.widthPercent &gt;= <span class="number">0</span> &amp;&amp;</div><div class="line">            info.mPreservedParams.width == ViewGroup.LayoutParams.WRAP_CONTENT;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>继续看<code>ViewCompat.getMeasuredWidthAndState()</code>的源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMeasuredWidthAndState</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> IMPL.getMeasuredWidthAndState(view);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>继续往下看，这个<code>IMPL</code>是什么呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> ViewCompatImpl IMPL;</div><div class="line"><span class="keyword">static</span> &#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> version = android.os.Build.VERSION.SDK_INT;</div><div class="line">    <span class="keyword">if</span> (version &gt;= <span class="number">23</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> MarshmallowViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">21</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> LollipopViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">19</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> KitKatViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">17</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> JbMr1ViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">16</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> JBViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">15</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> ICSMr1ViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">14</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> ICSViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">11</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> HCViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">9</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> GBViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">7</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> EclairMr1ViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> BaseViewCompatImpl();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>继续看，<code>IMPL.getMeasuredWidthAndState()</code>，方法其实最终就是使用的<code>BaseViewCompatImpl.getMeasuredWidthAndState()</code>方法，接着看它的的源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMeasuredWidthAndState</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> view.getMeasuredWidth();</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<p>最后就是调用了<code>getMeasuredWidth()</code>方法。  没毛病- -!</p>
-<p><code>onMeasure</code>的到这里就分析完了。<br>那接着来看一下<code>onLayout</code>方法,<code>onLayout</code>方法直接调用了<code>PercentLayoutHelper.restoreOriginalParams</code>，:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Iterates over children and restores their original dimensions that were changed for</div><div class="line"> * percentage values. Calling this method only makes sense if you previously called</div><div class="line"> * &#123;<span class="doctag">@link</span> PercentLayoutHelper#adjustChildren(int, int)&#125;.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreOriginalParams</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, N = mHost.getChildCount(); i &lt; N; i++) &#123;</div><div class="line">        View view = mHost.getChildAt(i);</div><div class="line">        ViewGroup.LayoutParams params = view.getLayoutParams();</div><div class="line">        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">            Log.d(TAG, <span class="string">"should restore "</span> + view + <span class="string">" "</span> + params);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (params <span class="keyword">instanceof</span> PercentLayoutParams) &#123;</div><div class="line">            PercentLayoutInfo info =</div><div class="line">                    ((PercentLayoutParams) params).getPercentLayoutInfo();</div><div class="line">            <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">                Log.d(TAG, <span class="string">"using "</span> + info);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (params <span class="keyword">instanceof</span> ViewGroup.MarginLayoutParams) &#123;</div><div class="line">                    info.restoreMarginLayoutParams((ViewGroup.MarginLayoutParams) params);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    info.restoreLayoutParams(params);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>调用了<code>PercentLayoutInfo.restoreMarginLayoutParams()</code>方法，我们看下它的源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Restores original dimensions and margins after they were changed for percentage based</div><div class="line"> * values. Calling this method only makes sense if you previously called</div><div class="line"> * &#123;<span class="doctag">@link</span> PercentLayoutHelper.PercentLayoutInfo#fillMarginLayoutParams&#125;.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreMarginLayoutParams</span><span class="params">(ViewGroup.MarginLayoutParams params)</span> </span>&#123;</div><div class="line">    restoreLayoutParams(params);</div><div class="line">    <span class="comment">// mPreservedParams的值在之前ad</span></div><div class="line">    params.leftMargin = mPreservedParams.leftMargin;</div><div class="line">    params.topMargin = mPreservedParams.topMargin;</div><div class="line">    params.rightMargin = mPreservedParams.rightMargin;</div><div class="line">    params.bottomMargin = mPreservedParams.bottomMargin;</div><div class="line">    MarginLayoutParamsCompat.setMarginStart(params,</div><div class="line">            MarginLayoutParamsCompat.getMarginStart(mPreservedParams));</div><div class="line">    MarginLayoutParamsCompat.setMarginEnd(params,</div><div class="line">            MarginLayoutParamsCompat.getMarginEnd(mPreservedParams));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>意思是说，再他们被以百分比为基础的数据更改之后恢复成原始的尺寸和margin。<br>然后继续看一下<code>restoreLayoutParams()</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* Restores original dimensions after they were changed for percentage based values. Calling</div><div class="line">* this method only makes sense if you previously called</div><div class="line">* &#123;<span class="doctag">@link</span> PercentLayoutHelper.PercentLayoutInfo#fillLayoutParams&#125;.</div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreLayoutParams</span><span class="params">(ViewGroup.LayoutParams params)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!mPreservedParams.mIsWidthComputedFromAspectRatio) &#123;</div><div class="line">        <span class="comment">// Only restore the width if we didn't compute it based on the height and</span></div><div class="line">        <span class="comment">// aspect ratio in the fill pass.</span></div><div class="line">        params.width = mPreservedParams.width;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!mPreservedParams.mIsHeightComputedFromAspectRatio) &#123;</div><div class="line">        <span class="comment">// Only restore the height if we didn't compute it based on the width and</span></div><div class="line">        <span class="comment">// aspect ratio in the fill pass.</span></div><div class="line">        params.height = mPreservedParams.height;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// Reset the tracking flags.</span></div><div class="line">    mPreservedParams.mIsWidthComputedFromAspectRatio = <span class="keyword">false</span>;</div><div class="line">    mPreservedParams.mIsHeightComputedFromAspectRatio = <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>好了到这里也分析完了<code>onLayout</code>的方法，大意就是在<code>onMeasure</code>之前先将原始的宽高和<code>margin</code>都备份一下，然后在<code>onMeasure</code>中根据百分比去设置对应的宽高和<code>margin</code>，等到设置完之后在<code>onLayout</code>方法中再去将这些值恢复到之前备份的起始数据。说实话我没看明白为什么要这样做？</p>
-<p>通过上面的代码分析我们知道对布局影响力的优先顺序: <code>app:layout_aspectRatio &gt; app:layout_heightPercent &gt; android:layout_height</code>如果我们同时都设置这三个参数值的话，最终会用<code>app:layout_aspectRatio</code>的值。</p>
-<p>遗留问题:     </p>
-<ul>
-<li>为什么在<code>onLayout</code>方法中去恢复数据，这有什么作用？</li>
-<li>看代码在处理如果指定的百分比过小但又指定<code>wrap_content</code>时，会重新根据<code>wrap_content</code>去重新计算的逻辑没有错，但是为什么我在上面测试的时候确没效果？</li>
-<li>在上面分析代码时看到<code>fillLayoutParams</code>中是根据父<code>View</code>的宽高来乘以百分比，不是根据整个屏幕的宽高，这样可能会有问题，要是ListView这种的高度没法算了。</li>
-</ul>
-<hr>
-<ul>
-<li>邮箱 ：charon.chui@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/屏幕适配之百分比方案详解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-通过Hardware Layer提高动画性能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/通过Hardware Layer提高动画性能/">通过Hardware Layer提高动画性能</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/通过Hardware Layer提高动画性能/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="通过Hardware-Layer提高动画性能"><a href="#通过Hardware-Layer提高动画性能" class="headerlink" title="通过Hardware Layer提高动画性能"></a>通过Hardware Layer提高动画性能</h1><p>项目中越来越多的动画，越来越多的效果导致了应用性能越来越低。该如何提升。   </p>
-<p>###简介 </p>
-<p>在<code>View</code>播放动画的过程中每一帧都需要被重绘。如果使用<code>view layers</code>，就不用每帧都去重绘，因为<code>View</code>渲染一旦离开屏幕缓冲区就可以被重用。</p>
-<p>而且，<code>hardware layers</code>会在<code>GPU</code>上缓存，这样就会让一些动画过程中的操作变得更快。通过<code>hardware layers</code>可以快速的渲染一些简单的转变(位移、选中、缩放、颜色渐变)。由于很多动画都是这些动作的结合，所以<code>hardware layers</code>可以显著的提高动画性能。</p>
-<p>在<code>View</code>当中提供了三种类型的<code>Layer type</code>:    </p>
-<ul>
-<li><p>LAYER_TYPE_HARDWARE</p>
-<blockquote>
-<p>Indicates that the view has a hardware layer. A hardware layer is backed by a hardware specific texture (generally Frame Buffer Objects or FBO on OpenGL hardware) and causes the view to be rendered using Android’s hardware rendering pipeline, but only if hardware acceleration is turned on for the view hierarchy. When hardware acceleration is turned off, hardware layers behave exactly as software layers.</p>
-<p>A hardware layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
-<p>A hardware layer can be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a hardware layer can be used to render the view tree only once.</p>
-<p>A hardware layer can also be used to increase the rendering quality when rotation transformations are applied on a view. It can also be used to prevent potential clipping issues when applying 3D transforms on a view.    </p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li><p>LAYER_TYPE_SOFTWARE</p>
-<blockquote>
-<p>Indicates that the view has a software layer. A software layer is backed by a bitmap and causes the view to be rendered using Android’s software rendering pipeline, even if hardware acceleration is enabled.</p>
-<p>Software layers have various usages:</p>
-<p>When the application is not using hardware acceleration, a software layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
-<p>When the application is using hardware acceleration, a software layer is useful to render drawing primitives not supported by the hardware accelerated pipeline. It can also be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a software layer can be used to render the view tree only once.</p>
-<p>Software layers should be avoided when the affected view tree updates often. Every update will require to re-render the software layer, which can potentially be slow (particularly when hardware acceleration is turned on since the layer will have to be uploaded into a hardware texture after every update.)</p>
-</blockquote>
-</li>
-<li><p>LAYER_TYPE_NONE</p>
-<blockquote>
-<p>Indicates that the view does not have a layer.<br>  默认值。</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>首先使用的前提是在清单文件中开启了硬件加速。否则将无法使用<code>hardware layer</code>。这一点在上面的文档中也有说明。</p>
-<p><code>API</code>也是非常简单的，直接使用<code>View.setLayerType()</code>就好。使用时应该只是暂时的设置<code>Hardware Layer</code>，因为它们无法自动释放。<br>基本的使用步骤：    </p>
-<ul>
-<li>对每个想要在动画过程中进行缓存的<code>view</code>调用<code>View.setLayerType(View.LAYER_TYPE_HARDWARE, null)</code>方法。</li>
-<li>执行动画。</li>
-<li>在动画执行结束后调用<code>View.setLayerType(View.LAYER_TYPE_NONE, null)</code>方法来进行清除。</li>
-</ul>
-<p>示例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    mView.setLayerType(View.LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
-<p>但是如果在<code>4.0.x</code>的版本中使用上面的代码会本亏，必须要把<code>setLayerType</code>放到<code>Runnable</code>中。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    <span class="comment">//This will work successfully</span></div><div class="line">    post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</div><div class="line">            setLayerType(LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
-<p>如果你基于<code>minSdkVersion 16</code>以上并且使用<code>ViewPropertyAnimator</code>时，你可以使用<code>withLayer()</code>方法替代如上的操作:     </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mView.animate().translationX(<span class="number">150</span>).withLayer().start();</div></pre></td></tr></table></figure>
-<p>或者在<code>api 14</code>以上时使用<code>ViewCompat.animate().withLayer()</code><br>这样做，你的动画就会变得更流畅！</p>
-<p>###注意事项  </p>
-<p>你应该知道，事情没那么简单。<br><code>Hardware layers</code>有着惊人的提升动画性能的能力。然而，如果滥用，它的危害更大。<strong>不要盲目的使用<code>layers</code></strong></p>
-<ul>
-<li><p>首先，在有些情况下，<code>hardware layers</code>除了<code>view</code>渲染外还会执行更多的工作。缓存<code>layer</code>将会需要时间，因为首选第一步就需要两个过程: 先将这些<code>view</code>渲染到<code>GPU</code>的一个<code>layer</code>中然后<code>GPU</code>再渲染该<code>layer</code>到<code>Window</code>上。如果要渲染的<code>View</code>非常简单(例如一个纯色值),那么这样在初始化的时候就会增加<code>Hardware Layer</code>不必要的开销。</p>
-</li>
-<li><p>其次，对所有的缓存来讲，都有一个缓存失效的可能性。任何时候如果在动画过程中调用<code>view.invalidate()</code>，那么<code>layer</code>就必须要重新渲染。经常的废弃<code>hardware layers</code>会比没有<code>layers</code>的情况下更糟糕，因为如同上面讲到的<code>hardware layers</code>在设置缓存时会有额外的开销。如果你需要经常的重新缓存<code>layer</code>，那就会有极大的损害。    </p>
-<p>  这个问题也是非常容易出现的，因为动画经常有多个移动的部分。假如现在有一个三个部分移动的动画:     </p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Parent ViewGroup</div><div class="line">—-&gt; <span class="function">Child <span class="title">View1</span> <span class="params">(往左移动)</span></span></div><div class="line">—-&gt; Child <span class="title">View2</span> <span class="params">(往右移动)</span></div><div class="line">—-&gt; Child <span class="title">View3</span> <span class="params">(往上移动)</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<pre><code>如果你只在父布局`ViewGroup`上设置一个`layer`，那就将经常的缓存失效，因为`ViewGroup`会随着子`View`不断地改变。然而对每个单独的子`Views`而言，他们只是在位移。这种情况下，最好是对每个子`View上`设置`Hardware Layer`（而不是在父布局上）。
-
-***再次重申，通常是对多个子`View上`适当的设置`Hardware Layer`，这样他们就不会在动画运行时失效。***
-
-在手机开发者选项中的*显示硬件层更新（Show hardware layers updates）*功能是追踪这个问题的开发利器。当`View`渲染`Hardware Layer`的时候闪烁绿色，它应该在动画开始的时候闪烁一次（也就是`Layer`渲染初始化的时候），然而，如果你的`View`在整个动画期间都是绿色，那就是遇到失效的问题了。
-</code></pre><ul>
-<li>最后，<code>hardware layers</code>使用<code>GPU</code>内存，你当然不想出现内存泄漏的问题。所以你应该在必要的时候再去使用<code>hardware layers</code>，就想播放动画时。  </li>
-</ul>
-<p>这里也没有硬性规则。<code>Android</code>渲染系统是非常复杂的。就像所有性能问题一样，测试才是关键。通过使用“显示硬件层更新”开发者选项来确定<code>layers</code>是在帮你还是害你。</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/通过Hardware Layer提高动画性能/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
-<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
-<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
-<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
-  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
-<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-</ul>
-</li>
-<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
-<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
-<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
-<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
         </p>
       
 
@@ -1053,19 +1112,19 @@ jlrField.set(instance, combined);
 
 
   
-    <article id="post-性能优化相关工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-视频解码之软解与硬解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/性能优化相关工具/">性能优化相关工具</a>
+      <a class="article-title" href="/2015/01/01/视频解码之软解与硬解/">视频解码之软解与硬解</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/性能优化相关工具/" class="archive-article-date">
+        <a href="/2015/01/01/视频解码之软解与硬解/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -1073,226 +1132,18 @@ jlrField.set(instance, combined);
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="性能优化相关工具"><a href="#性能优化相关工具" class="headerlink" title="性能优化相关工具"></a>性能优化相关工具</h1><p>有关性能优化的文章请参考<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%8A%A0%E5%BC%BA/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.md">性能优化</a>和<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%8A%A0%E5%BC%BA/%E5%B8%83%E5%B1%80%E4%BC%98%E5%8C%96.md">布局优化</a>    </p>
-<p>###DDMS(百宝箱)</p>
-<p>#####查看进程的内存使用</p>
-<p><code>DDMS</code>可以让你查看到一个进程使用的堆内存。    </p>
-<ol>
-<li>在<code>Device</code>了表选择你想查看的进程。</li>
-<li>点击<code>Update Heap</code>按钮来开启查看进程堆内存信息。</li>
-<li>在<code>Heap</code>页面，点击<code>Cause GC</code>来执行垃圾回收。</li>
-<li>在列表中点击一个对象类型来查看它所分配的内存大小。   </li>
-</ol>
-<p>#####追踪对象的内存分配情况     </p>
-<ol>
-<li>在<code>Device</code>了表选择你想查看的进程。</li>
-<li>在<code>Allocation Tracker</code>页面，点击<code>Start Tracking</code>按钮来开始追踪。</li>
-<li>点击<code>Get Allocations</code>来查看从你点击<code>Start Tracking</code>之后分配内存的对象列表。 你可以再次点击<code>Get Allocations</code>来添加新分配内存的对象列表。 </li>
-<li>停止追踪或者清除数据可以点击<code>Stop Tracking</code>按钮。 </li>
-<li>在列表中单独点击一行来查看详细的信息。</li>
-</ol>
-<p>#####使用文件系统</p>
-<p><code>DDMS</code>提供了一个文件浏览器来供你查看、拷贝、删除文件。</p>
-<ol>
-<li>在<code>Device</code>页面，选中你想要查看的设备。</li>
-<li>从设备中拷贝文件，用文件浏览器选择文件后点击<code>Pull file</code>按钮。</li>
-<li>拷贝文件到设备中，点击<code>Push file</code>按钮。</li>
-</ol>
-<p>#####检查线程信息  </p>
-<p><code>Thread</code>页面可以显示指定进程中当前正在运行的线程。 </p>
-<ol>
-<li>在<code>Device</code>页面，选择想要查看的进程。 </li>
-<li>点击<code>Update Threads</code>按钮。   </li>
-<li>在<code>Thread</code>页面，你可以查看对应的线程信息。 </li>
-</ol>
-<p>#####启动方法分析</p>
-<p>方法分析可以追踪一个方法的特定信息，例如调用数量，执行时间、耗时等。如果想要更精确的控制想要收集的数据，可以使用<code>startMethodTracing()</code>和<code>stopMethodTracing()</code>方法。    </p>
-<p>在你开始使用方法分析之前请知晓如下限制:    </p>
+        <h1 id="视频解码之软解与硬解"><a href="#视频解码之软解与硬解" class="headerlink" title="视频解码之软解与硬解"></a>视频解码之软解与硬解</h1><p><strong>硬解</strong>：从字面意思上理解就是用硬件来进行解码，通过显卡的视频加速功能对高清视频进行解码，很明显就是一个专门的电路板(这样好理解…)来进行视频的解码，是依靠显卡<code>GPU</code>的。                    </p>
+<p><strong>软解</strong>：字面上理解就是用软件进行解码，这样理解也对，但是实际最总还是要硬件来支持的，这个硬件就是<code>CPU</code>。</p>
+<p>既然有这两种不同的解码方式，我们在开发中该如何进行选择？哪个更好？                     </p>
 <ul>
-<li>在<code>Android 2.1</code>及以前的设备必须有<code>SD</code>卡，并且你的应用必须有写入<code>SD</code>卡的权限。 </li>
-<li>在<code>Android 2.2</code>及以后的设备中不需要<code>SD</code>卡，<code>trace log</code>文件会直接被导入到开发机上。</li>
-</ul>
-<p>开启方法分析:    </p>
-<ol>
-<li>在<code>Device</code>页面，选择想要开启方法分析的进程。</li>
-<li>点击<code>Start Method Profiling</code>按钮。</li>
-<li>在<code>Android 4.4</code>及以后，可以选择<code>trace_based profiling</code>或者基本的<code>sample-based profiling</code>选项。在之前的版本智能使用<code>trace-based profiling</code>。</li>
-<li>在应用中操作界面来执行你想要分析的方法。 </li>
-<li>点击<code>Stop Method Profiling</code>按钮。<code>DDMS</code>会停止分析并且将在<code>Start Method Profiling</code>和<code>Stop Method Profiling</code>中间手机的方法分析数据使用<code>Traceview</code>打开。   </li>
-</ol>
-<h5 id="使用网络流量工具"><a href="#使用网络流量工具" class="headerlink" title="使用网络流量工具"></a>使用网络流量工具</h5><p>从<code>Android 4.0</code>开始,<code>DDMS</code>包含了一个网络使用情况的页面来支持跟踪应用的网络请求。</p>
-<p>如图:   </p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/ddms-network.png?raw=true" alt="image">。 </p>
-<p>通过检测数据交互的频繁性以及在每次连接中数据的传递量，你可以知道应用中具体可以做的更好更高效的地方。<br>想要更好的查看引起数据交互的地方，可以使用<code>TrafficsStats</code>这个<code>API</code>，它也可以使用<code>setThreadStatsTag()</code>方法来设置数据使用情况的<code>tag</code>，</p>
-<p>首先要讲到的是<code>Systrace</code>，之前在淘宝面试的时候被问到，如有查找<code>UI</code>绘制卡顿的问题，我没答上来。早点知道<code>Systrace</code>就好了(当然只知道工具是不够的，也要懂得里面的原理)。</p>
-<h3 id="Systrace"><a href="#Systrace" class="headerlink" title="Systrace"></a>Systrace</h3><p><code>Systrace</code>有什么用呢？官方文档中有一片文章的标题是：使用<code>Systrace</code>进行<code>UI</code>性能分析。    </p>
-<p>在应用程序开发的过程中，你需要检查用户交互是否平滑流畅，运行在稳定的60fps。如果中间出了些问题，导致某一帧延迟，我们想要解决该问题的第一步就是理解系统如何操作的。     </p>
-<p><code>Systrace</code>工具可以让你来手机和观察整个<code>android</code>设备的时间信息，也称为<code>trace</code>。它会显示每个时间点上的<code>CPU</code>消耗图，显示每个线程在显示的内容以及每个进程当时在做的操作。</p>
-<p>在使用<code>Systracv</code>来分析应用之前，你需要手机应用的<code>trace log</code>信息。生成的<code>trace</code>能够让你清晰的观察系统在该时间内所做的任何事情。 </p>
-<h5 id="生成Trace"><a href="#生成Trace" class="headerlink" title="生成Trace"></a>生成Trace</h5><p>为了能创建一个<code>trace</code>，你必须要执行如下几个操作。 首先，你要有一个<code>Android 4.1</code>及以上的设备。将该设备设置为<code>debugging</code>，连接你的设备并且安装应用。有些类型的信息，特别是一些硬盘的活动和内核工作队列，需要设备获取<code>root</code>权限才可以。 然而，大多数的<code>Systrace log</code>的数据只需要设备开启开发者<code>debugging</code>就可以了。     </p>
-<p><code>Systrace</code>可以通过命令行或者图形化界面的方式来运行，在<code>Studio</code>中打开<code>Android Device Monitor</code>然后选择<code>Systracv</code>图标<img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-button.png?raw=true" alt="image">。 </p>
-<p>下面以命令行的方式为例，这里只讲解一下<code>Android 4.3</code>及以上的使用方式:     </p>
-<ul>
-<li>确保设备已经通过<code>USB</code>连接并且开启了<code>debugging</code>模式。 </li>
-<li>设置一些参数并执行<code>trace</code>命令，例如:        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line">    $ cd android-sdk/platform-tools/systrace</div><div class="line">    $ python systrace.py --time=10 -o mynewtrace.html sched gfx view wm</div><div class="line">    ```  </div><div class="line">    执行完上面的命令后就会在`sdk/platform-tools/systrace/mynewtrace.html`生成对应的`html`文件。 </div><div class="line">- 在设备上执行一些你想要`trace`的过程。     </div><div class="line"></div><div class="line">悲剧了，生成了对应的`html`文件，但是我死活打不开。打开是白屏，折腾了我半天，最后终于找到了解决方法:   </div><div class="line"></div><div class="line">&gt;  Firstly, if anyone is using Chrome v50.0+ on OS X, just try this please.</div><div class="line"></div><div class="line">&gt; open chrome browser and go to &quot;chrome://tracing&quot;</div><div class="line">&gt; in the tracing page, click load and select the systrace generated html file.</div><div class="line">&gt; Secondly, I think it&apos;s a bug which is confirmed by Google.</div><div class="line"></div><div class="line">`OK`了。 </div><div class="line"></div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace_file.png?raw=true =)。 </div><div class="line"></div><div class="line">看不懂！！！</div><div class="line"></div><div class="line">#####分析Trace</div><div class="line"></div><div class="line">用浏览器打开上面生成的`mynewtrace.html`。    下面为了能明显的说明，我就用官网提供的例子来说明了。   </div><div class="line"></div><div class="line">######查看Frames</div><div class="line">从打开的文件中我们能看到每个应用都有一行`frame`的圆圈来标示渲染的帧，通常都是绿色的。黄色或者红的圆圈标示超过了我们对保障60fps所需的16毫秒绘制时间。。 可以在文件上面按`w`键来放大文件以便能更好的观看查找。   </div><div class="line">&gt; ***提示:***在文件上面按`?`键可以查看对应的快捷键。  </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/frame-unselected.png?raw=true)。 </div><div class="line"></div><div class="line">在`Android 5.0`以上的设备上，显示工作呗分为`UI Thread`和`Render Thread`。在之前的版本，所有工作都是在`UI Thread`进行的。 点击某个单独的`frame`图标来查看它们所需的时间。</div><div class="line"></div><div class="line">######观看Alerts    </div><div class="line"></div><div class="line">`Systracv`会自动分析`trace`过程的时间，并且通过`alerts`提示该展现问题，以及建议如何处理。    </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/frame-selected.png?raw=true) </div><div class="line"></div><div class="line">如上图所示，在你点击一个比较慢的`frame`时，下面就会显示一个`alert`。在这种情况下，它直说可能是`ListView`服用以及重复渲染的问题。 如果你发现`UI Thread`做了太多的工作，你可以使用`TraceView`进行代码分析，来找到具体哪些操作导致了消耗时间。</div><div class="line"></div><div class="line">如下，你也可以通过点击窗口右边的`Alerts`来查看当前所有的`alert`。这样会直接展开`Alert`窗口。   </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/frame-selected-alert-tab.png?raw=true)</div><div class="line"></div><div class="line">下面我们以另外一个例子来分析一下它的`Frame`：    </div><div class="line"></div><div class="line">我们点击某一红色`frame`来查看这一阵的一些相关警告:   </div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-frame-zoomin.png?raw=true)</div><div class="line">可以看到这里说耗时32毫秒，这已经远远超过了16毫秒的绘制时间。 我们可以通过`Description`来查看描述内容。   </div><div class="line">下面是另外一个渲染过慢的例子:     </div><div class="line"></div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-2-frame.png?raw=true)</div><div class="line">从上图，我们发现了`Scheduling delay`的警告，加起来能看到总的绘制时间大约是19毫秒。   </div><div class="line">`Scheduling delay`的意思是调度延迟，也就是说一个县城在处理这部分操作时，在很长时间内没有被分配到`CPU`上面进行运算，这样就导致了很长时间内没有完成操作。    我们选择这一帧中最长的一块，来观察下:    </div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-2-slice.png?raw=true)</div><div class="line"></div><div class="line">我们在上图看到了`Wall duration`，他代表着这一块开始到结束的总耗时。而在`CPU Duration`这里显示了`CPU`在处理该部分消耗的时间。 很明显，真个区域用了18毫秒，但是`CPU`实际处理只用了4毫秒，也就是说剩下的14毫秒就可能有问题了。     </div><div class="line">![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/systrace-2-cpu.png?raw=true)</div><div class="line"></div><div class="line">可以看到，4个线程都比较忙。  </div><div class="line"></div><div class="line">选择其中一个线程来查看是哪个应用在使用它，这里看到了一个包名为`com.udinic.keepbusyapp`的应用。也就是说由于另外一个应用占用了`CPU`,，导致了我们的应用未能获取到足够的`CPU`资源。      </div><div class="line"></div><div class="line"></div><div class="line">#####追踪代码</div><div class="line"></div><div class="line">在`Android 4.3`以上你可以使用`Trace`类来在代码中添加(很熟悉有木有，在看源码的时候经常看到)。这样能查看到此时你的应用线程都做了哪些操作。 </div><div class="line">下面的代码展示了如何使用`Trace`类来追踪两个代码块部分:   </div><div class="line">```java</div><div class="line">public void ProcessPeople() &#123;</div><div class="line">    Trace.beginSection(&quot;ProcessPeople&quot;);</div><div class="line">    try &#123;</div><div class="line">        Trace.beginSection(&quot;Processing Jane&quot;);</div><div class="line">        try &#123;</div><div class="line">            // code for Jane task...</div><div class="line">        &#125; finally &#123;</div><div class="line">            Trace.endSection(); // ends &quot;Processing Jane&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Trace.beginSection(&quot;Processing John&quot;);</div><div class="line">        try &#123;</div><div class="line">            // code for John task...</div><div class="line">        &#125; finally &#123;</div><div class="line">            Trace.endSection(); // ends &quot;Processing John&quot;</div><div class="line">        &#125;</div><div class="line">    &#125; finally &#123;</div><div class="line">        Trace.endSection(); // ends &quot;ProcessPeople&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<li><p>硬解优缺点：<br>  显卡核心GPU拥有独特的计算方法，解码效率非常高，而且充当解码核心的模块成本并不高。这样不但能够减轻CPU的负担，还有着低功耗、发热少等特点。但是由于硬解码起步比较晚，<br>  软件和驱动对其的支持度低。硬解码内置有什么样的模块就能够解码什么样的视频，面对网络上杂乱无章的视频编码格式，不可能做到完全兼容同。此外，硬解码的滤镜、字母、画质增强方面都做的十分不足。</p>
+<p>  优点：低功耗、发热少、效率高。<br>  缺点：视频兼容性差、支持度低。                </p>
+</li>
+<li><p>软解优缺点：<br>  软解码技术的解码过程中，需要对大量的视频信息进行运算，对CPU性能的要求非常高。尤其是对高清晰度大码率的视频来说，巨大的运算量就会造成转换效率低、发热量大等问题。<br>  但是由于软解码的过程中不需要复杂的硬件支持，兼容性非常高。即使是新出的视频编码格式，只要安装好相应的解码器文件，就能顺利播放。而且软解码拥有丰富的滤镜、字幕、画面处理优化等效果，<br>  如果<code>CPU</code>足够强悍的话，能够实现更加出色的画面效果。</p>
+<p>  优点：  兼容强、全解码、效果好<br>  缺点：  对<code>CPU</code>要求高、效率低、发热大                 </p>
 </li>
 </ul>
-<p>###Traceview</p>
-<p><code>Traceview</code>是一个性能测试工具，展示了所有方法的运行时间。    </p>
-<blockquote>
-<p>Traceview is a graphical viewer for execution logs that you create by using the Debug class to log tracing information in your code. Traceview can help you debug your application and profile its performance.</p>
-</blockquote>
-<p>#####创建Trace文件  </p>
-<p>想要使用<code>Traceview</code>你需要创建一个包含你想分析部分的<code>trace</code>信息的<code>log</code>文件。<br>有两种方式来生成<code>trace logs</code>：    </p>
-<ul>
-<li><p>在你测试的类中添加<code>startMethodTracing()</code>和<code>stopMethodTracing()</code>的代码，来指定开始和结束获取<code>trace</code>信息。这种方式是非常精确的，因为你可以在代码中指定开始和结束的位置。     </p>
-</li>
-<li><p>使用<code>DDMS</code>中的方法来生成。这种方式就不太精确。虽然这种方式不能精确的指定起始和结束位置，但是如果在你无法修改源代码或者不需要精确时间的时候是非常有用的。 </p>
-</li>
-</ul>
-<p>在开始生成<code>trace log</code>信息时，你需要知道如下的限制条件:    </p>
-<ul>
-<li>如果你在测试代码中使用，你的应用必须要用<code>WRITE_EXTERNAL_STORAGE</code>的权限。 </li>
-<li><p>如果你使用<code>DDMS</code>生成:     </p>
-<ul>
-<li><code>Android 2.1</code>之前必须有<code>SD</code>卡，并且你的应用也要有写入<code>SD</code>卡的权限。 </li>
-<li><code>Android 2.2</code>之后不需要<code>SD</code>卡，<code>trace log</code>文件会直接生成到你的开发机上。   </li>
-</ul>
-</li>
-</ul>
-<p>在测试代码中调用<code>startMethodTracing()</code>方法的时候，你可以指定系统生成<code>trace</code>文件的名字。结束的时候调用<code>stopMethodTracing()</code>方法。这些方法开始和结束时贯穿整个虚拟中的。例如你可以在你<code>activity</code>的<code>onCreate()</code>方法中调用<code>startMethodTracing()</code>方法，然后在<code>activity</code>的<code>onDestroy()</code>方法中调用<code>stopMethodTracing()</code>方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// start tracing to "/sdcard/calc.trace"</span></div><div class="line">Debug.startMethodTracing(<span class="string">"calc"</span>);</div><div class="line"><span class="comment">// ...</span></div><div class="line"><span class="comment">// stop tracing</span></div><div class="line">Debug.stopMethodTracing();</div></pre></td></tr></table></figure></p>
-<p>在调用<code>startMethodTracing()</code>方法的时候，系统创建一个名为<code>&lt;trace-base-name&gt;.trace</code>的文件。它包含方法的二进制<code>trace</code>数据和一个线程与方法名的对应集合。<br>然后系统就开始生成<code>trace</code>数据，直到调用<code>stopMethodTracing()</code>方法。如果在你调用<code>stopMethodTracing()</code>方法之前系统已经达到了最大的缓冲大小，系统就会停止<code>trace</code>并且在控制台发出一个通知。     </p>
-<p>#####拷贝Trace文件到电脑上</p>
-<p>在模拟器或者机器上生成<code>&lt;trace-base-name&gt;.trace</code>文件后，你需要拷贝他们到你的电脑上，你可以使用<code>adb pull</code>命令来拷贝：<br><code>adb pull /sdcard/calc.trace /tmp</code></p>
-<p>#####在Traceview中查看trace文件    </p>
-<p>运行<code>Traceview</code>并且查看<code>trace</code>文件:     </p>
-<ol>
-<li>打开<code>Android Device Monitor</code>。</li>
-<li>在<code>Android Device Monitor</code>的状态栏中点击<code>DDMS</code>并且选择一个进程。 </li>
-<li>点击<code>Start Method Profiling</code>图标开始查看。</li>
-<li>在查看完后点击<code>Stop Method Profiling</code>图标来显示<code>traceview</code>。  </li>
-</ol>
-<p>大体的样子如下:    </p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview_1.png?raw=true" alt="image"> </p>
-<p>#####Traceview Layout     </p>
-<p>如果你有一个<code>trace log</code>文件(通过添加<code>tracing</code>代码或者用DDMS生成)，你可以把该文件加载到<code>Traceview</code>中，这将会把<code>log</code>数据显示为两部分:    </p>
-<ul>
-<li><code>timeline panel</code>-展示了每个线程和方法的起始和结束</li>
-<li><code>profile panel</code>-提供了一个方法中的执行内容的简述</li>
-</ul>
-<p>#####Timeline Panel</p>
-<p>每个线程都会以时间从左往右递增的方式在单独的一行中显示它的执行情况，</p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview_timeline.png?raw=true" alt="image"></p>
-<p>#####Profile Panel</p>
-<p>显示了一个方法所消耗的时间的概要情况。在表格中会同时显示<code>inclusive</code>和<code>exclusive</code>的时间。<code>Exclusive</code>的时间是该方法所消耗的时间。<code>InClusive</code>的时间是该方法消耗的时间加上任何调的方法所消耗的时间。我们简单的将调用的方法叫做<code>parents</code>，被调用的方法叫做<code>children</code>。如果一个方法被调用，它会显示对应的<code>parents</code>和<code>children</code>。<code>parents</code>会显示一个紫色的背景，<code>children</code>会显示一个黄色的背景。最后一列显示了该方法所调用的总数的调用数。在下面的图中我们能看到一共有14个地方调用了<code>LoadListener.nativeFinished()</code> . </p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview_profile.png?raw=true" alt="image"></p>
-<ul>
-<li>Name 方法名</li>
-<li>Inclusive CPU Time， CPU在处理该方法以及所有子方法(被它调用的所有方法)所消耗的时间。</li>
-<li>Exlusive CPU Time, CPU在处理该方法的耗时。</li>
-<li>Inclusive/Exclusive Real Time， 从方法开始执行到执行结束的耗时。 </li>
-<li>Cal+Rec, 这个方法被调用的次数，以及递归被调用的次数。 </li>
-<li>CPU/Real time per Call, 在处理这个方法时的<code>CPU</code>耗时的平均值。</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview-getview.png?raw=true" alt="image"></p>
-<p>上图中<code>getView</code>方法被调用了12次，每次<code>CPU</code>消耗2.8秒，但是每次调用的总耗时是162秒，这里肯定有问题。<br>而看看这个方法的children，我们可以看到这其中的每个方法在耗时方面是如何分布的。Thread.join()方法战局了98%的inclusive real time。这个方法在等待另一个线程结束的时候被调用。在Children中另外一个方法就是Tread.start()方法，而之所以整个方法耗时很长，我猜测是因为在getView()方法中启动了线程并且在等待它的结束。</p>
-<p>但是这个线程在哪儿？</p>
-<p>我们在getView()方法中并不能看到这个线程做了什么，因为这段逻辑不在getView()方法之中。于是我找到了Thread.run()方法，就是在线程被创建出来时候所运行的方法。而跟随这个方法一路向下，我找到了问题的元凶。</p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/traceview-thread.png?raw=true" alt="image"></p>
-<p>我发现了BgService.doWork()方法的每次调用花费了将近14毫秒，并且有四十个这东西！而且getView()中还有可能调用多次这个方法，这就解释了为什么getView()方法执行时间如此之长。这个方法让CPU长时间的保持在了繁忙状态。而看看Exclusive CPU time，我们可以看到他占据了80%的CPU时间！此外，根据Exclusive CPU time排序，可以帮我们更好的定位那些耗时很长的方法，而他们很有可能就是造成性能问题的罪魁祸首。</p>
-<p>关注这些耗时方法，例如getView()，View#onDraw()等方法，可以很好的帮助我们寻找为什么应用运行缓慢的原因。但有些时候，还会有一些其他的东西来占用宝贵的CPU资源，而这些资源如果被运用在UI的绘制上，也许我们的应用会更加流畅。Garbage Collector垃圾回收机制会不时的运行，回收那些没用的对象，通常来讲这不会影响我们在前台运行的程序。但如果GC被运行的过于频繁，他同样可以影响我们应用的执行效率。而我们该如何知道回收的是否过于频繁了呢…</p>
-<p>###Monitors</p>
-<p>在<code>Android Studio</code>中下方的<code>Android Monitor</code>中可以看到<code>Monitors</code>工具栏，它能不断的去检测内存、网络、CPU的消耗情况。</p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/monitor.png?raw=true" alt="image"></p>
-<p>我们可以直接点击<code>Dump Java Heap</code>或者<code>Call GC</code>等按钮，以便更好的去观察内存的使用情况。点击后会生成一个<code>.hprof</code>的文件。生成后直接使用<code>Studio</code>打开<code>.hprof</code>文件即可。  </p>
-<p>说到这里插一嘴,<a href="https://github.com/CharonChui/AndroidNote/blob/master/Java%E5%9F%BA%E7%A1%80/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6.md">有关Java垃圾回收机制请参考</a></p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/dump_href.png?raw=true" alt="image"><br>在左边能看到所有堆内存中的实例。后面会显示他所占用的内存大小。</p>
-<p>对于内存泄漏的分析可以使用<code>MAT</code>或者<code>LeakCanary</code>来进行。这里就不仔细说了。   </p>
-<p>#####不同虚拟机的内存管理 </p>
-<p><code>Android Monitor</code>使用的<code>Virtual Machine(VM)</code>:    </p>
-<ul>
-<li><code>Android 4.3(API Level 18)</code>及以前的版本使用<code>Dalvik VM</code> .</li>
-<li><code>Android 4.4(API Level 19)</code>默认使用<code>Dalvik VM</code>，<code>Android RunTime(ART)</code>是可选的。</li>
-<li><code>Android 4.3(API Level 18)</code>及更高的版本使用<code>ART VM</code>.</li>
-</ul>
-<p>虚拟之执行垃圾回收。Dalvik虚拟机使用一个标记和清除垃圾收集方案。<code>ART</code>虚拟机使用分代收集算法与标记和清楚手机算法相结合的方式。 <code>Logcat</code>会显示一些垃圾回收相关的信息。     </p>
-<p>#####GPU使用情况</p>
-<p>上面也显示了<code>GPU</code>的使用情况，这里要说一句，如果想要显示它，必须要在手机的开发者中心中开启<code>GPU显示配置文件</code>选项，将其设置为显示与<code>adb shell dumpsys gfxinfo</code>。然后再点击<code>Studio</code>中的按钮重新开始就可以看到了。 每一条线意味着一帧被绘制出来了。而线的颜色又代表不同的阶段：    </p>
-<ul>
-<li>Draw(蓝色)代表着<code>View.onDraw()</code>方法。如果这个值很高就说明可能是该<code>View</code>比较复杂。 在这个环节会创建/刷新DisplayList中的对象，这些对象在后面会被转换成GPU可以明白的OpenGL命令。而这个值比较高可能是因为view比较复杂，需要更多的时间去创建他们的display list，或者是因为有太多的view在很短的时间内被创建。</li>
-<li><p>Prepare(紫色)，从<code>Android 6.0</code>开始，一个新的线程被引进来帮助<code>UI</code>线程进行绘制。 这个线程叫做<code>Render Thread</code>。它负责转换它负责转换display list到OpenGL命令并且送至GPU。在这过程中，UI线程可以继续开始处理后面的帧。而在UI线程将所有资源传递给RenderThread过程中所消耗的时间，就是紫色阶段所消耗的时间。如果在这过程中有很多的资源都要进行传递，display list会变得过多过于沉重，从而导致在这一阶段过长的耗时。</p>
-</li>
-<li><p>Process(红色) 执行Display list中的内容并创建OpenGL命令。如果有过多或者过于复杂的display list需要执行的话，那么这阶段会消耗较长的时间，因为这样的话会有很多的view被重绘。而重绘往往发生在界面的刷新或是被移动出了被覆盖的区域。</p>
-</li>
-<li><p>Execute (黄色) – 发送OpenGL命令到GPU。这个阶段是一个阻塞调用，因为CPU在这里只会发送一个含有一些OpenGL命令的缓冲区给GPU，并且等待GPU返回空的缓冲区以便再次传递下一帧的OpenGL命令。而这些缓冲区的总量是一定的，如果GPU太过于繁忙，那么CPU则会去等待下一个空缓冲区。所以，如果我们看到这一阶段耗时比较长，那可能是因为GPU过于繁忙的绘制UI，而造成这个的原因则可能是在短时间内绘制了过于复杂的view。</p>
-</li>
-<li><p>Measure/Layout(绿色) 代表<code>Measure</code>和<code>Layout</code>的时间。 </p>
-</li>
-</ul>
-<p>###Hierarchy Viewer</p>
-<p>布局分析工具，非常常用。</p>
-<p>在<code>Android Device Monitor</code>中打开<code>Hierarchy Viewer</code>即可。</p>
-<ul>
-<li>连接你的手机或者模拟器。<br>  出于安全性考虑，<code>Hierarchy Viewer</code>只能连接开发者版的系统的手机。 </li>
-<li>运行程序，并且让界面显示出来。</li>
-<li>启动<code>hierarchy view</code>工具，接着就能看到左边栏显示出了对应的设备，展开后可以看到一些组件的名称。这个页面包含了应用的界面以及系统的界面。选择你的应用中想要查看的界面直接双击就可以了。    </li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/gettingstarted_image005.png?raw=true" alt="image"><br>如果你的界面显示的不是这个样子，少一些东西的话，你可以使用<code>Window&gt;Reset Perspective</code>来重置样式。 </p>
-<p>但是我并打不开。<br>如果你的手机是<code>Android 4.1</code>及以上版本你必须要在你的电脑上设置一个<code>ANDROID_HVPROTO</code>DE 环境变量才可以。</p>
-<ul>
-<li>Windows<br>  增加一个名为<code>ANDROID_HVPROTO</code>值为<code>ddm</code>的环境变量就可以了。 </li>
-<li><p>Mac </p>
-<ul>
-<li>打开<code>.bash_profile</code><ul>
-<li><code>touch .bash_profile</code>创建</li>
-<li><code>open -e .bash_profile</code>打开</li>
-</ul>
-</li>
-<li><p>添加    </p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#Hierarchy Viewer Variable              </div><div class="line">export ANDROID_HVPROTO=ddm</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>source .bash_profile</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<p>如果配置完成后仍然不能用的话，你可以:   </p>
-<ul>
-<li>关闭<code>Android Studio</code>.</li>
-<li>执行<code>add kill-server</code>，然后<code>adb start-server</code>.</li>
-<li>通过命令行开始<code>hierarchyviewer</code>.</li>
-</ul>
-<p>好了，我们直接打开自己的页面进行查看布局吧(有点慢)。<br>它是介个样子滴 ：<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/hierarchy_vierwe_page.png?raw=true" alt="image"></p>
-<p>我们可以看到所有结构，点击对一个的节点，能直接看到该界面的<code>UI</code>效果，并展示该布局包含多少个<code>View</code>，以及该布局<code>measure,draw,layout</code>所消耗的时间。选中<code>Show Extras</code>选项可以看到在右下角看到界面效果。   </p>
-<p>选中要查看的节点后点击<code>Profile Node</code>选项，可以看到如下界面:    </p>
-<p><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/hierarchy_profile_node.png?raw=true" alt="image"></p>
-<p>可以看到每个布局都出现了三个点。有不同的颜色,从左到右这三个点分别表示:   </p>
-<ul>
-<li>左边的点代表<code>Draw</code>阶段。</li>
-<li>中间的点代表了<code>Layout</code>阶段。</li>
-<li>右边的点代表了<code>Execute</code>阶段。</li>
-</ul>
-<p>这三个点有分别对应了<code>pipeline</code>中的不同阶段，如下图:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/gettingstarted_image015.png?raw=true" alt="image"></p>
-<p>不同的颜色代表不同的性能:    </p>
-<ul>
-<li>绿色代表渲染的非常快，至少是其他<code>View</code>的一半。</li>
-<li>黄色代表<code>View</code>渲染比最后那一半的<code>View</code>快。</li>
-<li>红色代表<code>View</code>渲染是几乎是在最慢的那部分中间。</li>
-</ul>
-<p><code>Hierarchy Viewer</code>测量的是相对的表现能力，所以总会有一个红色的节点，它并不意味者该<code>View</code>一定是绘制的太慢。 </p>
-<p>###过度绘制</p>
-<p>在开发者选项中将调试GPU过度绘制设置为显示过度绘制区域，就能看到程序的绘制情况。<br>过度绘制往往发生在我们需要在一个东西上面绘制另外一个东西，例如在一个红色的背景上画一个黄色的按钮。那么GPU就需要先画出红色背景，再在他上面绘制黄色按钮，此时过度绘制就是不可避免的了。如果我们有太多层需要绘制，那么则会过度的占用GPU导致我们每帧消耗的时间超过16毫秒。<br>这些过度绘制可能发生在我们给Activity或Fragment设置了全屏的背景，同时又给ListView以及ListView的条目设置了背景色。而通过只设置一次背景色即可解决这样的问题。</p>
-<p>注意：默认的主题会为你指定一个默认的全屏背景色，如果你的activity又一个不透平的背景盖住了默认的背景色，那么你可以移除主题默认的背景色，这样也会移除一层的过度绘制。这可以通过配置主题配置或是通过代码的方法，在onCreate()方法中调用getWindow().setBackgroundDrawable(null)方法来实现。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/overdraw-gif.gif?raw=true" alt="image"></p>
-<p>###Hardware Acceleration</p>
-<p>在Honeycomb版本中引入了硬件加速（Hardware Accleration）后，我们的应用在绘制的时候就有了全新的绘制模型。它引入了DisplayList结构，用来记录View的绘制命令，以便更快的进行渲染。但还有一些很好的功能开发者们往往会忽略或者使用不当——View layers。</p>
-<p>使用View layers（硬件层），我们可以将view渲染入一个非屏幕区域缓冲区（off-screen buffer，前面透明度部分提到过），并且根据我们的需求来操控它。这个功能主要是针对动画，因为它能让复杂的动画效果更加的流畅。而不使用硬件层的话，View会在动画属性（例如coordinate, scale, alpha值等）改变之后进行一次刷新。而对于相对复杂的view，这一次刷新又会连带它所有的子view进行刷新，并各自重新绘制，相当的耗费性能。使用View layers，通过调用硬件层，GPU直接为我们的view创建一个结构，并且不会造成view的刷新。而我们可以在避免刷新的情况下对这个结构进行进行很多种的操作，例如x/y位置变换，旋转，透明度等等。总之，这意味着我们可以对一个让一个复杂view执行动画的同时，又不会刷新！这会让动画看起来更加的流畅。<br>在阅读了ViewPager的源码后，我发现了在滑动的时候会自动为左右两页启动一个硬件层，并且在滑动结束后移除掉。</p>
-<p>在两页间滑动的时候创建硬件层也是可以理解的，但对我来说小有不幸。通常来讲加入硬件层是为了让ViewPager的滑动更加流畅，毕竟它们相对复杂。</p>
-<p>是的，但是再使用硬件layers的时候还是有几点要牢记在心：</p>
-<ul>
-<li>回收 – 硬件层会占用GPU中的一块内存。只在必要的时候使用他们，比如动画，并且事后注意回收。例如在上面ObjectAnimator的例子中，我们增加了一个动画结束监听以便在动画结束后可以移除硬件层。而在Property animator的例子中，我们使用了withLayers()，这会在动画开始时候自动创建硬件层并且在结束的时候自动移除。</li>
-<li>如果你在调用了硬件View layers后改变了View，那么会造成硬件硬件层的刷新并且再次重头渲染一遍view到非屏幕区域缓存中。这种情况通常发生在我们使用了硬件层暂时还不支持的属性（目前为止，硬件层只针对以下几种属性做了优化：otation、scale、x/y、translation、pivot和alpha）。例如，如果你另一个view执行动画，并且使用硬件层，在屏幕滑动他们的同时改变他的背景颜色，这就会造成硬件层的持续刷新。而以硬件层的持续刷新所造成的性能消耗来说，可能让它在这里的使用变得并不那么值。</li>
-</ul>
-<p>有关如何使用<code>Hardware Layer</code>请参考之前写的文章:<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%8A%A0%E5%BC%BA/%E9%80%9A%E8%BF%87Hardware%20Layer%E6%8F%90%E9%AB%98%E5%8A%A8%E7%94%BB%E6%80%A7%E8%83%BD.md">通过Hardware Layer提高动画性能</a></p>
+<p>关于软解与硬解究竟哪个更好的问题一直是争论的热点，其实我倒是感觉没有好坏之分，各自有各自的优缺点和使用条件，根据需要去选择才是最合适的。<br>播放码率比较大的视频，硬解可能流畅的播放，但是软解可能会出现演示、画面和声音卡顿不同步的问题。但是硬解播放出的视频大多都不允许在解码之后进行软件后处理，比如进行一些降噪锐化之类的后期滤镜，<br>这样可能会让人感觉画质不太好的。当然上面的这种情况也是和<code>CPU</code>及<code>GPU</code>能力的不同而不同的。 总的来说，还是各有春秋，适合你的才是最好的。 </p>
 <hr>
 <ul>
 <li>邮箱 ：itgoyo@gmail.com  </li>
@@ -1321,7 +1172,135 @@ jlrField.set(instance, combined);
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/性能优化相关工具/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/视频解码之软解与硬解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-通过Hardware Layer提高动画性能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/通过Hardware Layer提高动画性能/">通过Hardware Layer提高动画性能</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/通过Hardware Layer提高动画性能/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="通过Hardware-Layer提高动画性能"><a href="#通过Hardware-Layer提高动画性能" class="headerlink" title="通过Hardware Layer提高动画性能"></a>通过Hardware Layer提高动画性能</h1><p>项目中越来越多的动画，越来越多的效果导致了应用性能越来越低。该如何提升。   </p>
+<p>###简介 </p>
+<p>在<code>View</code>播放动画的过程中每一帧都需要被重绘。如果使用<code>view layers</code>，就不用每帧都去重绘，因为<code>View</code>渲染一旦离开屏幕缓冲区就可以被重用。</p>
+<p>而且，<code>hardware layers</code>会在<code>GPU</code>上缓存，这样就会让一些动画过程中的操作变得更快。通过<code>hardware layers</code>可以快速的渲染一些简单的转变(位移、选中、缩放、颜色渐变)。由于很多动画都是这些动作的结合，所以<code>hardware layers</code>可以显著的提高动画性能。</p>
+<p>在<code>View</code>当中提供了三种类型的<code>Layer type</code>:    </p>
+<ul>
+<li><p>LAYER_TYPE_HARDWARE</p>
+<blockquote>
+<p>Indicates that the view has a hardware layer. A hardware layer is backed by a hardware specific texture (generally Frame Buffer Objects or FBO on OpenGL hardware) and causes the view to be rendered using Android’s hardware rendering pipeline, but only if hardware acceleration is turned on for the view hierarchy. When hardware acceleration is turned off, hardware layers behave exactly as software layers.</p>
+<p>A hardware layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
+<p>A hardware layer can be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a hardware layer can be used to render the view tree only once.</p>
+<p>A hardware layer can also be used to increase the rendering quality when rotation transformations are applied on a view. It can also be used to prevent potential clipping issues when applying 3D transforms on a view.    </p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>LAYER_TYPE_SOFTWARE</p>
+<blockquote>
+<p>Indicates that the view has a software layer. A software layer is backed by a bitmap and causes the view to be rendered using Android’s software rendering pipeline, even if hardware acceleration is enabled.</p>
+<p>Software layers have various usages:</p>
+<p>When the application is not using hardware acceleration, a software layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
+<p>When the application is using hardware acceleration, a software layer is useful to render drawing primitives not supported by the hardware accelerated pipeline. It can also be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a software layer can be used to render the view tree only once.</p>
+<p>Software layers should be avoided when the affected view tree updates often. Every update will require to re-render the software layer, which can potentially be slow (particularly when hardware acceleration is turned on since the layer will have to be uploaded into a hardware texture after every update.)</p>
+</blockquote>
+</li>
+<li><p>LAYER_TYPE_NONE</p>
+<blockquote>
+<p>Indicates that the view does not have a layer.<br>  默认值。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>首先使用的前提是在清单文件中开启了硬件加速。否则将无法使用<code>hardware layer</code>。这一点在上面的文档中也有说明。</p>
+<p><code>API</code>也是非常简单的，直接使用<code>View.setLayerType()</code>就好。使用时应该只是暂时的设置<code>Hardware Layer</code>，因为它们无法自动释放。<br>基本的使用步骤：    </p>
+<ul>
+<li>对每个想要在动画过程中进行缓存的<code>view</code>调用<code>View.setLayerType(View.LAYER_TYPE_HARDWARE, null)</code>方法。</li>
+<li>执行动画。</li>
+<li>在动画执行结束后调用<code>View.setLayerType(View.LAYER_TYPE_NONE, null)</code>方法来进行清除。</li>
+</ul>
+<p>示例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    mView.setLayerType(View.LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
+<p>但是如果在<code>4.0.x</code>的版本中使用上面的代码会本亏，必须要把<code>setLayerType</code>放到<code>Runnable</code>中。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    <span class="comment">//This will work successfully</span></div><div class="line">    post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</div><div class="line">            setLayerType(LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
+<p>如果你基于<code>minSdkVersion 16</code>以上并且使用<code>ViewPropertyAnimator</code>时，你可以使用<code>withLayer()</code>方法替代如上的操作:     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mView.animate().translationX(<span class="number">150</span>).withLayer().start();</div></pre></td></tr></table></figure>
+<p>或者在<code>api 14</code>以上时使用<code>ViewCompat.animate().withLayer()</code><br>这样做，你的动画就会变得更流畅！</p>
+<p>###注意事项  </p>
+<p>你应该知道，事情没那么简单。<br><code>Hardware layers</code>有着惊人的提升动画性能的能力。然而，如果滥用，它的危害更大。<strong>不要盲目的使用<code>layers</code></strong></p>
+<ul>
+<li><p>首先，在有些情况下，<code>hardware layers</code>除了<code>view</code>渲染外还会执行更多的工作。缓存<code>layer</code>将会需要时间，因为首选第一步就需要两个过程: 先将这些<code>view</code>渲染到<code>GPU</code>的一个<code>layer</code>中然后<code>GPU</code>再渲染该<code>layer</code>到<code>Window</code>上。如果要渲染的<code>View</code>非常简单(例如一个纯色值),那么这样在初始化的时候就会增加<code>Hardware Layer</code>不必要的开销。</p>
+</li>
+<li><p>其次，对所有的缓存来讲，都有一个缓存失效的可能性。任何时候如果在动画过程中调用<code>view.invalidate()</code>，那么<code>layer</code>就必须要重新渲染。经常的废弃<code>hardware layers</code>会比没有<code>layers</code>的情况下更糟糕，因为如同上面讲到的<code>hardware layers</code>在设置缓存时会有额外的开销。如果你需要经常的重新缓存<code>layer</code>，那就会有极大的损害。    </p>
+<p>  这个问题也是非常容易出现的，因为动画经常有多个移动的部分。假如现在有一个三个部分移动的动画:     </p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Parent ViewGroup</div><div class="line">—-&gt; <span class="function">Child <span class="title">View1</span> <span class="params">(往左移动)</span></span></div><div class="line">—-&gt; Child <span class="title">View2</span> <span class="params">(往右移动)</span></div><div class="line">—-&gt; Child <span class="title">View3</span> <span class="params">(往上移动)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>如果你只在父布局`ViewGroup`上设置一个`layer`，那就将经常的缓存失效，因为`ViewGroup`会随着子`View`不断地改变。然而对每个单独的子`Views`而言，他们只是在位移。这种情况下，最好是对每个子`View上`设置`Hardware Layer`（而不是在父布局上）。
+
+***再次重申，通常是对多个子`View上`适当的设置`Hardware Layer`，这样他们就不会在动画运行时失效。***
+
+在手机开发者选项中的*显示硬件层更新（Show hardware layers updates）*功能是追踪这个问题的开发利器。当`View`渲染`Hardware Layer`的时候闪烁绿色，它应该在动画开始的时候闪烁一次（也就是`Layer`渲染初始化的时候），然而，如果你的`View`在整个动画期间都是绿色，那就是遇到失效的问题了。
+</code></pre><ul>
+<li>最后，<code>hardware layers</code>使用<code>GPU</code>内存，你当然不想出现内存泄漏的问题。所以你应该在必要的时候再去使用<code>hardware layers</code>，就想播放动画时。  </li>
+</ul>
+<p>这里也没有硬性规则。<code>Android</code>渲染系统是非常复杂的。就像所有性能问题一样，测试才是关键。通过使用“显示硬件层更新”开发者选项来确定<code>layers</code>是在帮你还是害你。</p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/通过Hardware Layer提高动画性能/">展开全文 >></a>
         </p>
       
 
