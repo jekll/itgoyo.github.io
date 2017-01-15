@@ -392,18 +392,18 @@ var _hmt = _hmt || [];
   
 <nav id="article-nav">
   
-    <a href="/2015/01/01/性能优化/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/01/01/布局优化/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          性能优化
+          布局优化
         
       </div>
     </a>
   
   
-    <a href="/2015/01/01/Android6.0权限系统/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Android6.0权限系统</div>
+    <a href="/2015/01/01/屏幕适配之百分比方案详解/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">屏幕适配之百分比方案详解</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -417,15 +417,15 @@ var _hmt = _hmt || [];
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="发布library到Maven仓库" data-title="发布library到Maven仓库" data-url="https://github.com/itgoyo/2015/01/01/发布library到Maven仓库/"></div>
+	<div class="ds-thread" data-thread-key="<%=key%>" data-title="<%=title%>" data-url="<%=url%>"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
-	var duoshuoQuery = {short_name:'itgoyo'};
+	var duoshuoQuery = {short_name:'<%= config.duoshuo_shortname %>'};
 	(function() {
 		var ds = document.createElement('script');
 		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//itgoyo.github.io/duoshuo/embed.js';
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
