@@ -6,27 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/itgoyo">
-  <title>Hexo加入百度统计 | itgoyo</title>
+  <title>Archives | itgoyo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###litten的主题yilia编辑文件 themes/yilia/_config.yml ,添加一行配置，可以删除原来的google analytics
-1baidu_tongji: true
-新建 themes/yilia/layout/_partial/baidu_tongji.ejs 内容如下
-12345&amp;lt;% if (theme.baidu_tongji) &amp;#123; %&amp;gt;">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Hexo加入百度统计">
-<meta property="og:url" content="https://github.com/itgoyo/2017/01/15/Hexo加入百度统计/index.html">
+  <meta name="description" content="talk is cheap,show me the girl.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="itgoyo">
+<meta property="og:url" content="https://github.com/itgoyo/archives/page/7/index.html">
 <meta property="og:site_name" content="itgoyo">
-<meta property="og:description" content="###litten的主题yilia编辑文件 themes/yilia/_config.yml ,添加一行配置，可以删除原来的google analytics
-1baidu_tongji: true
-新建 themes/yilia/layout/_partial/baidu_tongji.ejs 内容如下
-12345&amp;lt;% if (theme.baidu_tongji) &amp;#123; %&amp;gt;">
-<meta property="og:updated_time" content="2017-01-15T04:29:45.000Z">
+<meta property="og:description" content="talk is cheap,show me the girl.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo加入百度统计">
-<meta name="twitter:description" content="###litten的主题yilia编辑文件 themes/yilia/_config.yml ,添加一行配置，可以删除原来的google analytics
-1baidu_tongji: true
-新建 themes/yilia/layout/_partial/baidu_tongji.ejs 内容如下
-12345&amp;lt;% if (theme.baidu_tongji) &amp;#123; %&amp;gt;">
+<meta name="twitter:title" content="itgoyo">
+<meta name="twitter:description" content="talk is cheap,show me the girl.">
   
     <link rel="alternative" href="/atom.xml" title="itgoyo" type="application/atom+xml">
   
@@ -179,203 +169,64 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Hexo加入百度统计" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Hexo加入百度统计
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2014" class="archive-year">2014</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2014/11/01/Retrofit详解(上)/" class="archive-article-date">
+  	<time datetime="2014-10-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2014-11-01</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2014/11/01/Retrofit详解(上)/">Retrofit详解(上)</a>
     </h1>
   
 
-        
-        <a href="/2017/01/15/Hexo加入百度统计/" class="archive-article-date">
-  	<time datetime="2017-01-15T04:07:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###litten的主题yilia<br>编辑文件 themes/yilia/_config.yml ,添加一行配置，可以删除原来的google analytics</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">baidu_tongji: <span class="keyword">true</span></div></pre></td></tr></table></figure>
-<p>新建 themes/yilia/layout/_partial/baidu_tongji.ejs 内容如下</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;% if (theme.baidu_tongji) &#123; %&gt;</div><div class="line">&lt;script type="text/javascript"&gt;</div><div class="line">#申请的百度统计代码</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;% &#125; %&gt;</div></pre></td></tr></table></figure>
-<p>编辑themes/yilia/layout/_partial/head.ejs 在  前添加</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;%- partial(<span class="string">"baidu_tongji"</span>) %&gt;</div></pre></td></tr></table></figure>
-<p>重新生产部署站点即可。<br>Light主题<br>编辑文件 themes/light/_config.yml ,添加一行配置，可以删除原来的google analytics</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">baidu_tongji: <span class="keyword">true</span>`</div></pre></td></tr></table></figure>
-<p>新建 themes/light/layout/_partial/baidu_analytics.ejs 内容如下</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">%</span> <span class="attr">if</span> (<span class="attr">theme.baidu_tongji</span>) &#123; %&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></div><div class="line">#申请的百度统计代码</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></div></pre></td></tr></table></figure>
-<p>编辑themes/light/layout/_partial/head.ejs 在  前添加</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;%- partial(<span class="string">"baidu_tongji"</span>) %&gt;`</div></pre></td></tr></table></figure>
-<p>重新生产部署站点即可。</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gamail.com</li>
-<li>Good Luck!</li>
-</ul>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="http://i1.piimg.com/567571/dd3e6baab0faa0b5.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="http://i1.piimg.com/567571/87f1ca1e0977ce2c.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/itgoyo/2017/01/15/Hexo加入百度统计/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2017/01/15/Hexo加入评论功能/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Hexo加入评论功能
-        
-      </div>
-    </a>
   
   
-    <a href="/2017/01/10/怎么在Hexo搭建GithubPage中加入网易云音乐/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">怎么在Hexo搭建GithubPage中加入网易云音乐</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-
-
-
-
-  
-  <div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Hexo加入百度统计" data-title="Hexo加入百度统计" data-url="https://github.com/itgoyo/2017/01/15/Hexo加入百度统计/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:'undefined'};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
+    </div></section>
   
 
-
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/page/6/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/5/">5</a><a class="page-number" href="/archives/page/6/">6</a><span class="page-number current">7</span>
+    </nav>
+  
 
 
           </div>
@@ -398,8 +249,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
