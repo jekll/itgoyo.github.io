@@ -68,16 +68,12 @@ var _hmt = _hmt || [];
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/随笔/">随笔</a></li>
+				<li><a href="/tags/">所有文章</a></li>
 	        
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
     		
-    			
-    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
-    			
-            
     			
     			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
     			
@@ -154,7 +150,7 @@ var _hmt = _hmt || [];
 				
 					<li style="width: 50%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 50%"><a href="/tags/">所有文章</a></li>
 		        
 				</ul>
 			</nav>
@@ -171,19 +167,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-AndroidStudio中进行ndk开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/AndroidStudio中进行ndk开发/">AndroidStudio中进行ndk开发</a>
+      <a class="article-title" href="/2015/01/01/性能优化/">性能优化</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/AndroidStudio中进行ndk开发/" class="archive-article-date">
+        <a href="/2015/01/01/性能优化/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -191,27 +187,31 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="AndroidStudio中进行ndk开发"><a href="#AndroidStudio中进行ndk开发" class="headerlink" title="AndroidStudio中进行ndk开发"></a>AndroidStudio中进行ndk开发</h1><ul>
-<li>创建工程，声明<code>native</code>方法。                 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">startDaemon</span><span class="params">(String serviceName, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">   <span class="keyword">static</span> &#123;</div><div class="line">       System.loadLibrary(<span class="string">"daemon"</span>);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-</li>
+        <h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="代码优化原则"><a href="#代码优化原则" class="headerlink" title="代码优化原则:      "></a>代码优化原则:      </h2><ul>
+<li>时间换时间：<br>  如禁用电脑的一些开机启动项，通过减少这些没必要的启动项的时间从而节省开机时间<br>  如网站界面上数据的分批获取，AJAX技术</li>
+<li>时间换空间：<br>  如拷贝文件时new一个字节数组当缓冲器，即byte[] buffer = new byte[1024]。<br>  为什么只new一个1024个字节的数组呢，new一个更大的字节数组不是一下就把文件拷贝完了么？这么做就是为了牺牲时间节省有限的内存空间</li>
+<li>空间换时间：<br>  如用Windows系统自带的搜索文件的功能搜索文件时会很慢，但是我们牺牲电脑硬盘空间安装一个everything软件来搜索文件就特别快</li>
+<li>空间换空间：<br>  如虚拟内存</li>
 </ul>
-<ul>
-<li>生成<code>class</code>文件。<br>  执行<code>Build-Make Project</code>命令，生成<code>class</code>文件。所在目录为<code>app_path/build/intermediates/classes/debug</code></li>
-</ul>
-<ul>
-<li><p>执行<code>javah</code>生成<code>.h文件</code>                    </p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">	C:\Users\Administrator&gt;javah -help</div><div class="line">	用法:</div><div class="line">	  javah [options] &lt;classes&gt;</div><div class="line">	其中, [options] 包括:</div><div class="line">	  -o &lt;file&gt;                输出文件 (只能使用 -d 或 -o 之一)</div><div class="line">	  -d &lt;dir&gt;                 输出目录</div><div class="line">	  -v  -verbose             启用详细输出</div><div class="line">	  -h  --help  -?           输出此消息</div><div class="line">	  -version                 输出版本信息</div><div class="line">	  -jni                     生成 JNI 样式的标头文件 (默认值)</div><div class="line">	  -force                   始终写入输出文件</div><div class="line">	  -classpath &lt;path&gt;        从中加载类的路径</div><div class="line">	  -cp &lt;path&gt;               从中加载类的路径</div><div class="line">	  -bootclasspath &lt;path&gt;    从中加载引导类的路径</div><div class="line">	```	</div><div class="line">	在`Studio Terminal`中进入到`src/main`目录下执行`javah`命令:       </div><div class="line">	`javah -d jni -classpath &lt;SDK_android.jar&gt;;&lt;APP_classes&gt; &lt;class&gt;`</div><div class="line">	</div><div class="line">	`F:\DaemonService\app\src\main&gt;javah -d jni -classpath C:\develop\android-sdk-windows\platforms\android-22\android.jar;..\..\build\intermediates\classes\debug com.charonchui.daemonservice.service.DaemonService`</div><div class="line">	执行完成后就会在`src/main/jni`目录下生成`com_charonchui_daemonservice_service_DaemonService.h`文件。</div><div class="line"></div><div class="line">- 在`module/src/main/jni`目录下创建对应的`.c`文件。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- 配置`ndk`路径，在项目右键`Moudle Setting`中设置。              </div><div class="line">    ![image](https://raw.githubusercontent.com/CharonChui/Pictures/master/studio_ndk_jni.png?raw=true)    </div><div class="line">	</div><div class="line">- 在`build.gradle`中配置`ndk`选项              </div><div class="line"></div><div class="line">    ```java</div><div class="line">	android &#123;</div><div class="line">		compileSdkVersion 23</div><div class="line">		buildToolsVersion &quot;23.0.1&quot;</div><div class="line"></div><div class="line">		defaultConfig &#123;</div><div class="line">			applicationId &quot;com.charonchui.daemonservice&quot;</div><div class="line">			minSdkVersion 8</div><div class="line">			targetSdkVersion 23</div><div class="line">			versionCode 1</div><div class="line">			versionName &quot;1.0&quot;</div><div class="line"></div><div class="line">			ndk &#123;</div><div class="line">				moduleName &quot;uninstall_feedback&quot; // 配置so名字</div><div class="line">				ldLibs &quot;log&quot;</div><div class="line">	//            abiFilters &quot;armeabi&quot;, &quot;x86&quot;  // 默认就是全部的，加了配置才会生成选中的</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		buildTypes &#123;</div><div class="line">			release &#123;</div><div class="line">				minifyEnabled false</div><div class="line">				proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<p>  这里可能会出现错误:      </p>
-<ul>
-<li><code>Error: NDK integration is deprecated in the current plugin. Consider trying the new experimental plugin. For details, see http://tools.android.com/tech-docs/new-build-system/gradle-experimental. Set &quot;android.useDeprecatedNdk=true&quot; in gradle.properties to continue using the current NDK integration.</code><br>  解决方法就是在<code>gradle.properties</code>文件中添加<code>android:useDeprecatedNdk=true</code>就可以了。</li>
-<li>`Error:Execution failed for task ‘:app:compileDebugNdk’.<blockquote>
-<p>com.android.ide.common.process.ProcessException: org.gradle.process.internal.ExecException: Process ‘command ‘E:\android-ndk-r10\ndk-build.cmd’’ finished with non-zero exit value 2<code>解决方法就是在</code>jni<code>目录建一个任意名字的</code>.c`空文件就可以了。</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>执行Build<br>  然后就可以在<code>app/build/intermediates/ndk/debug/obj/local</code>下看到所有架构的<code>so</code>了。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/studio_ndk_build.png?raw=true" alt="image">    </p>
-</li>
+<h2 id="Android开发中的体现"><a href="#Android开发中的体现" class="headerlink" title="Android开发中的体现"></a>Android开发中的体现</h2><ul>
+<li>采用硬件加速，在清单文件中<code>application</code>节点添加<code>android:hardwareAccelerated=”true”</code>。不过这个需要在<code>android 3.0</code>才可以使用。<code>android4.0</code>这个选项是默认开启的。</li>
+<li><code>View</code>中设置缓存属性<code>setDrawingCache</code>为<code>true</code>.</li>
+<li>优化你的布局.</li>
+<li>动态加载<code>View</code>. 采用<code>ViewStub</code>避免一些不经常的视图长期握住引用.</li>
+<li>将<code>Acitivity</code>中的<code>Window</code>的背景图设置为空。<code>getWindow().setBackgroundDrawable(null);``android</code>的默认背景是不是为空。</li>
+<li>采用<code>&lt;merge&gt;</code>优化布局层数。 采用<code>&lt;include&gt;</code>来共享布局。</li>
+<li>利用<code>TraceView</code>查看跟踪函数调用。有的放矢的优化。</li>
+<li><code>cursor</code>的使用。不过要注意管理好<code>cursor</code>,不要每次打开关闭<code>cursor</code>.因为打开关闭<code>Cursor</code>非常耗时。 <code>Cursor.require</code>用于刷<code>cursor</code>.</li>
+<li>采用<code>SurfaceView</code>在子线程刷新<code>UI</code>, 避免手势的处理和绘制在同一<code>UI</code>线程（普通<code>View</code>都这样做）。</li>
+<li>采用<code>JNI</code>，将耗时间的处理放到<code>c/c++</code>层来处理。</li>
+<li>有些能用文件操作的，尽量采用文件操作，文件操作的速度比数据库的操作要快10倍左右。</li>
+<li>避免创建不必要的对象</li>
+<li>如果方法用不到成员变量，可以把方法申明为<code>static</code>，性能会提高到15%到20%</li>
+<li>避免使用<code>getter/setter</code>存取<code>field</code>，可以把<code>field</code>申明为<code>public</code>，直接访问</li>
+<li><code>static</code>的变量如果不需要修改，应该使用<code>static final</code>修饰符定义为常量</li>
+<li>使用增强<code>for</code>循环,比普通<code>for</code>循环效率高，但是也有缺点就是在遍历 集合过程中，不能对集合本身进行操作</li>
+<li>合理利用浮点数，浮点数比整型慢两倍；</li>
+<li>针对ListView的性能优化</li>
 </ul>
 <hr>
 <ul>
@@ -241,7 +241,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/AndroidStudio中进行ndk开发/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/性能优化/">展开全文 >></a>
         </p>
       
 
@@ -1922,8 +1922,8 @@ jlrField.set(instance, combined);
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
-		innerArchive: true,
-		showTags: false
+		innerArchive: false,
+		showTags: true
 	}
 </script>
 
@@ -1958,105 +1958,22 @@ jlrField.set(instance, combined);
       
       
     
-      
-      
-      
-    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
       
         
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
-      
-        
-      
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
       
         
     </ul>
   </div>
   <div class="tools-wrap">
-    
-    	<section class="tools-section tools-section-all" q-show="innerArchive">
-        <div class="search-wrap">
-          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
-          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
-          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
-        </div>
-        <div class="widget tagcloud search-tag">
-          <p class="search-tag-wording">tag:</p>
-          <label class="search-switch">
-            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
-          </label>
-          <ul class="article-tag-list" q-show="showTags">
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Android</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Github</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Lantern</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-            
-            <div class="clearfix"></div>
-          </ul>
-        </div>
-        <ul class="search-ul">
-          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
-            2、在根目录_config.yml里添加配置：
-<pre style="font-size: 12px;" q-show="jsonFail">
-  jsonContent:
-    meta: false
-    pages: false
-    posts:
-      title: true
-      date: true
-      path: true
-      text: true
-      raw: false
-      content: false
-      slug: false
-      updated: false
-      comments: false
-      link: false
-      permalink: false
-      excerpt: false
-      categories: false
-      tags: true
-</pre>
-          </p>
-          <li class="search-li" q-repeat="items" q-show="isShow">
-            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
-            <p class="search-time">
-              <i class="icon-calendar icon"></i>
-              <span q-text="date|dateformat"></span>
-            </p>
-            <p class="search-tag">
-              <i class="icon-price-tags icon"></i>
-              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-            </p>
-          </li>
-        </ul>
-    	</section>
     
 
     
