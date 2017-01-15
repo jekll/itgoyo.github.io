@@ -165,6 +165,88 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
+<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
+<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
+<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
+  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
+<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
+<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
+</ul>
+</li>
+<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
+<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
+<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
+<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Android应用发布" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -267,88 +349,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
-<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
-<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
-<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
-  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
-<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-</ul>
-</li>
-<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
-<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
-<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
-<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Android开发不申请权限来使用对应功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -419,111 +419,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Android开发不申请权限来使用对应功能/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android开发工具及类库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android开发工具及类库/">Android开发工具及类库</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android开发工具及类库/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android开发工具及类库"><a href="#Android开发工具及类库" class="headerlink" title="Android开发工具及类库"></a>Android开发工具及类库</h1><p>在项目开发过程中，总有一些必要的工具和类库。下面就简单介绍下我常用的一些(还在用<code>Eclipse</code>的请无视)。      </p>
-<ol>
-<li><p><a href="https://android.googlesource.com/platform/frameworks/volley" target="_blank" rel="external">volley</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/volley.png?raw=true" alt="image"><br>在<code>Google I/0 2013</code>中发布了<code>Volley</code>.<code>Volley</code>是<code>Android</code>平台上的网络通信库，能使网络通信更快，更简单，更健壮。<br>这是<code>Volley</code>名称的由来:<code>a burst or emission of many things or a large amount at once</code>.<code>Volley</code>特别适合数据量不大但是通信频繁的场景。<br><code>Github</code>上面已经有大神做了镜像，使用更方便有木有。<a href="https://github.com/mcxiaoke/android-volley">Volley On Github</a>                     </p>
-</li>
-<li><p><a href="https://code.google.com/p/google-gson/" target="_blank" rel="external">Gson</a><br><code>Json</code>转换神器。</p>
-</li>
-<li><p><a href="https://github.com/zzz40500/GsonFormat">GsonFormat</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/GsonFormat.gif?raw=true" alt="image"><br>既然用了<code>Gson</code>怎么能少了该神器呢？</p>
-</li>
-<li><p><a href="https://github.com/avast/android-butterknife-zelezny">android-butterknife-zelezny</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/zelezny_animated.gif?raw=true" alt="image"><br>使用<a href="https://github.com/JakeWharton/butterknife">butterknife</a>制作的<code>Android Studio/IDEA</code>插件。非常方便有木有。</p>
-</li>
-<li><p><a href="https://github.com/inmite/android-selector-chapek">android-selector-chapek</a><br><code>selector</code>写起来是不是很麻烦？以后让<code>UI</code>规范化命名，然后就没有然后了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_folder.png?raw=true" alt="image"><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_option.png?raw=true" alt="image"><br>接下来你就会在<code>drawable</code>目录发现对应的<code>selector</code>文件。           </p>
-</li>
-<li><p><a href="https://github.com/square/leakcanary">leakcanary</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/screenshot.png?raw=true" alt="image"><br>内存泄漏你怕不怕？         </p>
-</li>
-<li><p><a href="https://github.com/facebook/fresco">fresco</a><br>怎么能少了对图片的处理呢？<code>Fracebook</code>出品。更快、更强、更方便。       </p>
-</li>
-<li><p><a href="https://github.com/KeepSafe/android-resource-remover">android-resource-remover</a><br> 开发过程中可能会经常遇到需求的变更，时间长了，项目中的无用资源就会越来越多。 虽然在<code>Gradle</code>中支持相应的配置来去除无用资源: </p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line">       debug &#123;</div><div class="line">           minifyEnabled false</div><div class="line">           zipAlignEnabled false</div><div class="line">           shrinkResources false</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       release &#123;</div><div class="line">           zipAlignEnabled true</div><div class="line">           // remove unused resources</div><div class="line">           shrinkResources true</div><div class="line">           minifyEnabled true</div><div class="line">           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'</div><div class="line">           signingConfig signingConfigs.release</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<pre><code>但是这只是在打包的时候不会打进去无用的资源，但是这些资源还是会在工程中。
-那我们怎么能快速的移除掉这些无用资源呢？答案也很简单，就是使用`lint`检查出无用的资源后用工具删除，这个工具就是`android-resource-remover`。 
-因为它是一个`python`脚本，所以如果不懂`python`的话使用起来会比较麻烦，下面就介绍一下具体的使用方法:            
-- 下载并安装`Python 2.x`版本
-    去[Python](https://www.python.org/)下载后即可，这里要下载2.x版本，因为3.x版本对语法做了很多改动，可能会不兼容，下载完成后安装就可。安装完成后将安装路径加入到`Path`中。如`D:\Python;`。
-- 安装`android-resource-remover`     
-    在命令行输入下面的命令`pip install android-resource-remover`。 这里有些电脑可能会提示错误，是因为没有安装`pip`导致的，具体可以看[pip](https://pip.pypa.io/en/latest/installing.html)找到安装的方法。上面介绍了要下载`get-pip.py`后执行`python get-pip.py`就能安装了。
-- 将`D:\Python\Scripts`添加到`Path`中。
-- 将`lint`命令添加到`Path`中，`D:\android-sdk-windows\tools`.
-- 在`Studio`右侧的`Gradle`窗口中执行`lint`任务。 这样就会在`app/build/outputs`下生成`lint-results.xml`文件。下一步清理的时候需要使用`lint-results.xml`文件。               
-    ![Image](https://raw.githubusercontent.com/CharonChui/Pictures/master/lint.png?raw=true)    
-- 进入到`Android Studio`中的具体项目中执行`./gradlew clean`后再执行`./gradlew lint &amp;&amp; android-resource-remover --xml app/build/outputs/lint-results.xml`
-</code></pre><ol>
-<li><a href="https://github.com/facebook/stetho">stetho</a><br> <code>facebook</code>出品。快速查看布局、数据库、网络请求。实在不能再方便了。   </li>
-<li><a href="https://github.com/ReactiveX/RxJava">RxJava</a><br>用了后你会爱上它。</li>
-<li><a href="https://github.com/square/retrofit">Retrofilt</a><br><code>Square</code>出品。大神<code>JakeWharton</code>主导出品的网络请求框架。内部结合<code>OkHttp</code>。结合<code>RxJava</code>使用非常方便。   </li>
-<li><a href="https://github.com/googlesamples/android-architecture">android-architecture</a><br>放到这里可能不太合适，因为它并不是工具和类库，而是<code>Google</code>官方发布的<code>Android</code>架构示例。非常值得参考。  </li>
-<li><a href="https://github.com/pedrovgs/AndroidWiFiADB">AndroidWiFiADB</a><br>还在为数据线不够用而烦恼嘛?</li>
-</ol>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android开发工具及类库/">展开全文 >></a>
         </p>
       
 
@@ -691,6 +586,111 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Android开发中的MVP模式详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android开发工具及类库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android开发工具及类库/">Android开发工具及类库</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android开发工具及类库/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android开发工具及类库"><a href="#Android开发工具及类库" class="headerlink" title="Android开发工具及类库"></a>Android开发工具及类库</h1><p>在项目开发过程中，总有一些必要的工具和类库。下面就简单介绍下我常用的一些(还在用<code>Eclipse</code>的请无视)。      </p>
+<ol>
+<li><p><a href="https://android.googlesource.com/platform/frameworks/volley" target="_blank" rel="external">volley</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/volley.png?raw=true" alt="image"><br>在<code>Google I/0 2013</code>中发布了<code>Volley</code>.<code>Volley</code>是<code>Android</code>平台上的网络通信库，能使网络通信更快，更简单，更健壮。<br>这是<code>Volley</code>名称的由来:<code>a burst or emission of many things or a large amount at once</code>.<code>Volley</code>特别适合数据量不大但是通信频繁的场景。<br><code>Github</code>上面已经有大神做了镜像，使用更方便有木有。<a href="https://github.com/mcxiaoke/android-volley">Volley On Github</a>                     </p>
+</li>
+<li><p><a href="https://code.google.com/p/google-gson/" target="_blank" rel="external">Gson</a><br><code>Json</code>转换神器。</p>
+</li>
+<li><p><a href="https://github.com/zzz40500/GsonFormat">GsonFormat</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/GsonFormat.gif?raw=true" alt="image"><br>既然用了<code>Gson</code>怎么能少了该神器呢？</p>
+</li>
+<li><p><a href="https://github.com/avast/android-butterknife-zelezny">android-butterknife-zelezny</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/zelezny_animated.gif?raw=true" alt="image"><br>使用<a href="https://github.com/JakeWharton/butterknife">butterknife</a>制作的<code>Android Studio/IDEA</code>插件。非常方便有木有。</p>
+</li>
+<li><p><a href="https://github.com/inmite/android-selector-chapek">android-selector-chapek</a><br><code>selector</code>写起来是不是很麻烦？以后让<code>UI</code>规范化命名，然后就没有然后了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_folder.png?raw=true" alt="image"><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_option.png?raw=true" alt="image"><br>接下来你就会在<code>drawable</code>目录发现对应的<code>selector</code>文件。           </p>
+</li>
+<li><p><a href="https://github.com/square/leakcanary">leakcanary</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/screenshot.png?raw=true" alt="image"><br>内存泄漏你怕不怕？         </p>
+</li>
+<li><p><a href="https://github.com/facebook/fresco">fresco</a><br>怎么能少了对图片的处理呢？<code>Fracebook</code>出品。更快、更强、更方便。       </p>
+</li>
+<li><p><a href="https://github.com/KeepSafe/android-resource-remover">android-resource-remover</a><br> 开发过程中可能会经常遇到需求的变更，时间长了，项目中的无用资源就会越来越多。 虽然在<code>Gradle</code>中支持相应的配置来去除无用资源: </p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line">       debug &#123;</div><div class="line">           minifyEnabled false</div><div class="line">           zipAlignEnabled false</div><div class="line">           shrinkResources false</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       release &#123;</div><div class="line">           zipAlignEnabled true</div><div class="line">           // remove unused resources</div><div class="line">           shrinkResources true</div><div class="line">           minifyEnabled true</div><div class="line">           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'</div><div class="line">           signingConfig signingConfigs.release</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>但是这只是在打包的时候不会打进去无用的资源，但是这些资源还是会在工程中。
+那我们怎么能快速的移除掉这些无用资源呢？答案也很简单，就是使用`lint`检查出无用的资源后用工具删除，这个工具就是`android-resource-remover`。 
+因为它是一个`python`脚本，所以如果不懂`python`的话使用起来会比较麻烦，下面就介绍一下具体的使用方法:            
+- 下载并安装`Python 2.x`版本
+    去[Python](https://www.python.org/)下载后即可，这里要下载2.x版本，因为3.x版本对语法做了很多改动，可能会不兼容，下载完成后安装就可。安装完成后将安装路径加入到`Path`中。如`D:\Python;`。
+- 安装`android-resource-remover`     
+    在命令行输入下面的命令`pip install android-resource-remover`。 这里有些电脑可能会提示错误，是因为没有安装`pip`导致的，具体可以看[pip](https://pip.pypa.io/en/latest/installing.html)找到安装的方法。上面介绍了要下载`get-pip.py`后执行`python get-pip.py`就能安装了。
+- 将`D:\Python\Scripts`添加到`Path`中。
+- 将`lint`命令添加到`Path`中，`D:\android-sdk-windows\tools`.
+- 在`Studio`右侧的`Gradle`窗口中执行`lint`任务。 这样就会在`app/build/outputs`下生成`lint-results.xml`文件。下一步清理的时候需要使用`lint-results.xml`文件。               
+    ![Image](https://raw.githubusercontent.com/CharonChui/Pictures/master/lint.png?raw=true)    
+- 进入到`Android Studio`中的具体项目中执行`./gradlew clean`后再执行`./gradlew lint &amp;&amp; android-resource-remover --xml app/build/outputs/lint-results.xml`
+</code></pre><ol>
+<li><a href="https://github.com/facebook/stetho">stetho</a><br> <code>facebook</code>出品。快速查看布局、数据库、网络请求。实在不能再方便了。   </li>
+<li><a href="https://github.com/ReactiveX/RxJava">RxJava</a><br>用了后你会爱上它。</li>
+<li><a href="https://github.com/square/retrofit">Retrofilt</a><br><code>Square</code>出品。大神<code>JakeWharton</code>主导出品的网络请求框架。内部结合<code>OkHttp</code>。结合<code>RxJava</code>使用非常方便。   </li>
+<li><a href="https://github.com/googlesamples/android-architecture">android-architecture</a><br>放到这里可能不太合适，因为它并不是工具和类库，而是<code>Google</code>官方发布的<code>Android</code>架构示例。非常值得参考。  </li>
+<li><a href="https://github.com/pedrovgs/AndroidWiFiADB">AndroidWiFiADB</a><br>还在为数据线不够用而烦恼嘛?</li>
+</ol>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android开发工具及类库/">展开全文 >></a>
         </p>
       
 
@@ -885,6 +885,167 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/AsyncTask详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-BroadcastReceiver安全问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/BroadcastReceiver安全问题/">BroadcastReceiver安全问题</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/BroadcastReceiver安全问题/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="BroadcastReceiver安全问题"><a href="#BroadcastReceiver安全问题" class="headerlink" title="BroadcastReceiver安全问题"></a>BroadcastReceiver安全问题</h1><p><code>BroadcastReceiver</code>设计的初衷是从全局考虑可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言<code>BroadcastReceiver</code>是存在安全性问题的(恶意程序脚本不断的去发送你所接收的广播)</p>
+<ul>
+<li><p>保证发送的广播要发送给指定的对象<br>  当应用程序发送某个广播时系统会将发送的<code>Intent</code>与系统中所有注册的<code>BroadcastReceiver</code>的<code>IntentFilter</code>进行匹配，若匹配成功则执行相应的<code>onReceive</code>函数。可以通过类似<code>sendBroadcast(Intent, String)</code>的接口在发送广播时指定接收者必须具备的<code>permission</code>或通过<code>Intent.setPackage</code>设置广播仅对某个程序有效。</p>
+</li>
+<li><p>保证我接收到的广播室指定对象发送过来的<br>  当应用程序注册了某个广播时，即便设置了<code>IntentFilter</code>还是会接收到来自其他应用程序的广播进行匹配判断。对于动态注册的广播可以通过类似<code>registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)</code>的接口指定发送者必须具备的<code>permission</code>，对于静态注册的广播可以通过<code>android:exported=&quot;false&quot;</code>属性表示接收者对外部应用程序不可用，即不接受来自外部的广播。</p>
+</li>
+</ul>
+<p><code>android.support.v4.content.LocalBroadcastManager</code>工具类，可以实现在自己的进程内进行局部广播发送与注册，使用它比直接通过sendBroadcast(Intent)发送系统全局广播有以下几个好处：</p>
+<ul>
+<li>因广播数据在本应用范围内传播，你不用担心隐私数据泄露的问题。</li>
+<li>不用担心别的应用伪造广播，造成安全隐患。</li>
+<li>相比在系统内发送全局广播，它更高效。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> LocalBroadcastManager mLocalBroadcastManager;  </div><div class="line"> BroadcastReceiver mReceiver;  </div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	 IntentFilter filter = <span class="keyword">new</span> IntentFilter();  </div><div class="line">	 filter.addAction(<span class="string">"test"</span>);  </div><div class="line"></div><div class="line">	 mReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;  </div><div class="line">		<span class="meta">@Override</span>  </div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;  </div><div class="line">			<span class="keyword">if</span> (intent.getAction().equals(<span class="string">"test"</span>)) &#123;  </div><div class="line">				<span class="comment">//Do Something</span></div><div class="line">			&#125; </div><div class="line">		&#125;  </div><div class="line">	&#125;;  </div><div class="line">	mLocalBroadcastManager = LocalBroadcastManager.getInstance(<span class="keyword">this</span>);</div><div class="line">	mLocalBroadcastManager.registerReceiver(mReceiver, filter);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">   mLocalBroadcastManager.unregisterReceiver(mReceiver);</div><div class="line">   <span class="keyword">super</span>.onDestroy();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/BroadcastReceiver安全问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Github个人主页绑定域名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Github个人主页绑定域名/">Github个人主页绑定域名</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Github个人主页绑定域名/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Github个人主页绑定域名"><a href="#Github个人主页绑定域名" class="headerlink" title="Github个人主页绑定域名"></a>Github个人主页绑定域名</h1><p><code>Github</code>虽然很好，可毕竟是免费的，还是有不少限制的。写到这里，特意去看了下<code>Github</code>对免费用户究竟有什么限制。发现除了300M的空间限制（还是所谓软限制），没有其他限制。所以用它来作为博客平台，真是再理想不过了。</p>
+<h2 id="创建步骤"><a href="#创建步骤" class="headerlink" title="创建步骤"></a>创建步骤</h2><ol>
+<li><p>建立一个博客<code>repository</code><br> 建立一个命名为<code>username.github.io</code>的<code>repository</code>, <code>username</code>就是你在<code>Github</code>上的用户名或机构名</p>
+</li>
+<li><p>增加主页<br> <code>clone</code>该<code>repository</code>到本地，增加<code>index.html</code></p>
+</li>
+<li><p>提交<br> <code>commit</code>并且<code>push</code>该次修改。</p>
+</li>
+<li><p>OK<br> 打开浏览器输入 <code>username.github.io</code> 即可。注意提交之后可能需要一小段时间的延迟。</p>
+</li>
+</ol>
+<h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><ol>
+<li>在<code>repository</code>根目录新建<code>CNAME</code>文件, 内容为<code>xxx.com</code>(要绑定的域名),然后<code>commit</code>、<code>push</code>.</li>
+<li>在自己的域名管理页面中,进入域名解析.<br> <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/bindhost.jpg?raw=true" alt="image"><br> <strong>注意记录值 <code>username.github.io.</code> (最后面有一个.)</strong></li>
+</ol>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Github</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Github个人主页绑定域名/">展开全文 >></a>
         </p>
       
 
@@ -1182,167 +1343,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Gradle专题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Github个人主页绑定域名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Github个人主页绑定域名/">Github个人主页绑定域名</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Github个人主页绑定域名/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Github个人主页绑定域名"><a href="#Github个人主页绑定域名" class="headerlink" title="Github个人主页绑定域名"></a>Github个人主页绑定域名</h1><p><code>Github</code>虽然很好，可毕竟是免费的，还是有不少限制的。写到这里，特意去看了下<code>Github</code>对免费用户究竟有什么限制。发现除了300M的空间限制（还是所谓软限制），没有其他限制。所以用它来作为博客平台，真是再理想不过了。</p>
-<h2 id="创建步骤"><a href="#创建步骤" class="headerlink" title="创建步骤"></a>创建步骤</h2><ol>
-<li><p>建立一个博客<code>repository</code><br> 建立一个命名为<code>username.github.io</code>的<code>repository</code>, <code>username</code>就是你在<code>Github</code>上的用户名或机构名</p>
-</li>
-<li><p>增加主页<br> <code>clone</code>该<code>repository</code>到本地，增加<code>index.html</code></p>
-</li>
-<li><p>提交<br> <code>commit</code>并且<code>push</code>该次修改。</p>
-</li>
-<li><p>OK<br> 打开浏览器输入 <code>username.github.io</code> 即可。注意提交之后可能需要一小段时间的延迟。</p>
-</li>
-</ol>
-<h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><ol>
-<li>在<code>repository</code>根目录新建<code>CNAME</code>文件, 内容为<code>xxx.com</code>(要绑定的域名),然后<code>commit</code>、<code>push</code>.</li>
-<li>在自己的域名管理页面中,进入域名解析.<br> <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/bindhost.jpg?raw=true" alt="image"><br> <strong>注意记录值 <code>username.github.io.</code> (最后面有一个.)</strong></li>
-</ol>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Github</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Github个人主页绑定域名/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-BroadcastReceiver安全问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/BroadcastReceiver安全问题/">BroadcastReceiver安全问题</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/BroadcastReceiver安全问题/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="BroadcastReceiver安全问题"><a href="#BroadcastReceiver安全问题" class="headerlink" title="BroadcastReceiver安全问题"></a>BroadcastReceiver安全问题</h1><p><code>BroadcastReceiver</code>设计的初衷是从全局考虑可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言<code>BroadcastReceiver</code>是存在安全性问题的(恶意程序脚本不断的去发送你所接收的广播)</p>
-<ul>
-<li><p>保证发送的广播要发送给指定的对象<br>  当应用程序发送某个广播时系统会将发送的<code>Intent</code>与系统中所有注册的<code>BroadcastReceiver</code>的<code>IntentFilter</code>进行匹配，若匹配成功则执行相应的<code>onReceive</code>函数。可以通过类似<code>sendBroadcast(Intent, String)</code>的接口在发送广播时指定接收者必须具备的<code>permission</code>或通过<code>Intent.setPackage</code>设置广播仅对某个程序有效。</p>
-</li>
-<li><p>保证我接收到的广播室指定对象发送过来的<br>  当应用程序注册了某个广播时，即便设置了<code>IntentFilter</code>还是会接收到来自其他应用程序的广播进行匹配判断。对于动态注册的广播可以通过类似<code>registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)</code>的接口指定发送者必须具备的<code>permission</code>，对于静态注册的广播可以通过<code>android:exported=&quot;false&quot;</code>属性表示接收者对外部应用程序不可用，即不接受来自外部的广播。</p>
-</li>
-</ul>
-<p><code>android.support.v4.content.LocalBroadcastManager</code>工具类，可以实现在自己的进程内进行局部广播发送与注册，使用它比直接通过sendBroadcast(Intent)发送系统全局广播有以下几个好处：</p>
-<ul>
-<li>因广播数据在本应用范围内传播，你不用担心隐私数据泄露的问题。</li>
-<li>不用担心别的应用伪造广播，造成安全隐患。</li>
-<li>相比在系统内发送全局广播，它更高效。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> LocalBroadcastManager mLocalBroadcastManager;  </div><div class="line"> BroadcastReceiver mReceiver;  </div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	 IntentFilter filter = <span class="keyword">new</span> IntentFilter();  </div><div class="line">	 filter.addAction(<span class="string">"test"</span>);  </div><div class="line"></div><div class="line">	 mReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;  </div><div class="line">		<span class="meta">@Override</span>  </div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;  </div><div class="line">			<span class="keyword">if</span> (intent.getAction().equals(<span class="string">"test"</span>)) &#123;  </div><div class="line">				<span class="comment">//Do Something</span></div><div class="line">			&#125; </div><div class="line">		&#125;  </div><div class="line">	&#125;;  </div><div class="line">	mLocalBroadcastManager = LocalBroadcastManager.getInstance(<span class="keyword">this</span>);</div><div class="line">	mLocalBroadcastManager.registerReceiver(mReceiver, filter);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">   mLocalBroadcastManager.unregisterReceiver(mReceiver);</div><div class="line">   <span class="keyword">super</span>.onDestroy();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/BroadcastReceiver安全问题/">展开全文 >></a>
         </p>
       
 
