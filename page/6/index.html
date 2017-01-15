@@ -165,19 +165,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-发布library到Maven仓库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/发布library到Maven仓库/">发布library到Maven仓库</a>
+      <a class="article-title" href="/2015/01/01/性能优化/">性能优化</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/发布library到Maven仓库/" class="archive-article-date">
+        <a href="/2015/01/01/性能优化/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -185,77 +185,36 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="发布library到Maven仓库"><a href="#发布library到Maven仓库" class="headerlink" title="发布library到Maven仓库"></a>发布library到Maven仓库</h2><p>在<code>Android Studio</code>中想要使用一些第三方类库的时候非常方便，只需要在<code>build.gradle</code>中加入一行代码就可以了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile <span class="string">'com.google.code.gson:gson:2.3.1'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>刚从<code>Eclipse</code>转过来的时候感觉太方便了，也不用下<code>jar</code>包然后拷贝到<code>libs</code>目录了，重要的是以后升级起来灰常方便，改个数字就好了。<br>那究竟它里面是怎么运转的呢？其实<code>Android Studio</code>是从<code>Maven</code>仓库中下载所配置的<code>libraray</code>。<br>总的来说，<code>Android</code>只有两种存放<code>library</code>的服务器就是<code>jCenter</code>和<code>Maven Central</code>:</p>
+        <h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="代码优化原则"><a href="#代码优化原则" class="headerlink" title="代码优化原则:      "></a>代码优化原则:      </h2><ul>
+<li>时间换时间：<br>  如禁用电脑的一些开机启动项，通过减少这些没必要的启动项的时间从而节省开机时间<br>  如网站界面上数据的分批获取，AJAX技术</li>
+<li>时间换空间：<br>  如拷贝文件时new一个字节数组当缓冲器，即byte[] buffer = new byte[1024]。<br>  为什么只new一个1024个字节的数组呢，new一个更大的字节数组不是一下就把文件拷贝完了么？这么做就是为了牺牲时间节省有限的内存空间</li>
+<li>空间换时间：<br>  如用Windows系统自带的搜索文件的功能搜索文件时会很慢，但是我们牺牲电脑硬盘空间安装一个everything软件来搜索文件就特别快</li>
+<li>空间换空间：<br>  如虚拟内存</li>
+</ul>
+<h2 id="Android开发中的体现"><a href="#Android开发中的体现" class="headerlink" title="Android开发中的体现"></a>Android开发中的体现</h2><ul>
+<li>采用硬件加速，在清单文件中<code>application</code>节点添加<code>android:hardwareAccelerated=”true”</code>。不过这个需要在<code>android 3.0</code>才可以使用。<code>android4.0</code>这个选项是默认开启的。</li>
+<li><code>View</code>中设置缓存属性<code>setDrawingCache</code>为<code>true</code>.</li>
+<li>优化你的布局.</li>
+<li>动态加载<code>View</code>. 采用<code>ViewStub</code>避免一些不经常的视图长期握住引用.</li>
+<li>将<code>Acitivity</code>中的<code>Window</code>的背景图设置为空。<code>getWindow().setBackgroundDrawable(null);``android</code>的默认背景是不是为空。</li>
+<li>采用<code>&lt;merge&gt;</code>优化布局层数。 采用<code>&lt;include&gt;</code>来共享布局。</li>
+<li>利用<code>TraceView</code>查看跟踪函数调用。有的放矢的优化。</li>
+<li><code>cursor</code>的使用。不过要注意管理好<code>cursor</code>,不要每次打开关闭<code>cursor</code>.因为打开关闭<code>Cursor</code>非常耗时。 <code>Cursor.require</code>用于刷<code>cursor</code>.</li>
+<li>采用<code>SurfaceView</code>在子线程刷新<code>UI</code>, 避免手势的处理和绘制在同一<code>UI</code>线程（普通<code>View</code>都这样做）。</li>
+<li>采用<code>JNI</code>，将耗时间的处理放到<code>c/c++</code>层来处理。</li>
+<li>有些能用文件操作的，尽量采用文件操作，文件操作的速度比数据库的操作要快10倍左右。</li>
+<li>避免创建不必要的对象</li>
+<li>如果方法用不到成员变量，可以把方法申明为<code>static</code>，性能会提高到15%到20%</li>
+<li>避免使用<code>getter/setter</code>存取<code>field</code>，可以把<code>field</code>申明为<code>public</code>，直接访问</li>
+<li><code>static</code>的变量如果不需要修改，应该使用<code>static final</code>修饰符定义为常量</li>
+<li>使用增强<code>for</code>循环,比普通<code>for</code>循环效率高，但是也有缺点就是在遍历 集合过程中，不能对集合本身进行操作</li>
+<li>合理利用浮点数，浮点数比整型慢两倍；</li>
+<li>针对ListView的性能优化</li>
+</ul>
+<hr>
 <ul>
-<li><p><code>jCenter</code><br>  <code>jCenter</code>是由<a href="https://bintray.com/" target="_blank" rel="external">bintray</a>维护的<code>Maven</code>仓库。你可以在<a href="http://jcenter.bintray.com/" target="_blank" rel="external">这里</a>查看它所有的<code>library</code>。<br>  想要在项目中使用<code>jCenter</code>必须要在项目的<code>build.gradle</code>中像如下这样进行声明：    </p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">   allprojects &#123;</div><div class="line">	repositories &#123;</div><div class="line">		jcenter()</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>Maven Central</code><br>  <code>Maven Central</code>是由<a href="https://issues.sonatype.org" target="_blank" rel="external">sonatype</a>维护的<code>Maven</code>仓库。想要在项目中使用<code>Maven Central</code>需要在项目的<code>build.gradle</code>文件中像下面这样进行声明:     </p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">    allprojects &#123;</div><div class="line">        repositories &#123;</div><div class="line">            mavenCentral()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    ```	</div><div class="line">	虽然`jCenter`和`Maven Central`都是`Android`标准的`library maven`仓库，但是他俩是由不同提供者维护，并且存放到完全不同的服务器上，所以他俩之间毫无关系。     </div><div class="line">	除了这两个标准的服务器外，如果我们使用的`library`作者把该`library`放到自己的服务器上，我们还可以自己定义特有的`Maven`仓库服务器。例如`Twitter`的`Fabric.io`就是这种情况，它们在[https:<span class="comment">//maven.fabric.io/public](https://maven.fabric.io/public)上维护了一个自己的`Maven`仓库，如果你想使用`Fabric.io`上的`library`你必须要自己定义仓库的`url`:       </span></div><div class="line">	```java</div><div class="line">	repositories &#123;</div><div class="line">		maven &#123; url <span class="string">'https://maven.fabric.io/public'</span> &#125;</div><div class="line">	&#125;</div><div class="line">	然后才能正常使用</div><div class="line">	dependencies &#123;</div><div class="line">		compile <span class="string">'com.crashlytics.sdk.android:crashlytics:2.2.4@aar'</span></div><div class="line">	&#125;</div><div class="line">	```	</div><div class="line"></div><div class="line">	上传到自建服务器需要定义仓库的`url`，所以会比上传到标准的`maven`仓库使用起来要更麻烦。</div><div class="line"></div><div class="line">	至于上传到`jCenter`还是`Maven Central`上面就要看开发者个人的爱好了，当然在这两个上面都上传是最方便的。在`Android Studio`开始的几个版本中，它将`Maven central` 作为默认仓库。新建项目之后`build.gradle`中会自动生成`Maven central`仓库的配置。</div><div class="line">	但是`Maven Central`最大的问题就是上传`library`非常困难，同时还会由安全方面的原因，所以后来`Android Studio`将默认仓库替换成`jCenter`。所以最近的几个版本中创建项目之后,`build.gradle`中会默认定义`jCenter`而不是`Maven Central`。     </div><div class="line"></div><div class="line">`jCenter`相对`Maven Central`来说更好的几个主要原因:    </div><div class="line"></div><div class="line">- `jCenter`通过`CDN`发送`library`，开发者会由更快的下载体验。</div><div class="line">- `jCenter`作为世界最大的`Java`仓库，所以它上面的`library`会更多。</div><div class="line">- `jCenter`上传`library`更简单，不需要像在`Maven Central`上那么复杂。</div><div class="line">- `jCenter`的用户界面更友好。</div><div class="line">- `jCenter`的`bintray`网站上可以通过一键实现将`library`上传到`Maven Central`上。</div><div class="line"></div><div class="line">所以我们后面要讲的就是如何上传`library`到`bintray`的`jCenter`中然后再一键上传到`Maven Central`上。    </div><div class="line"></div><div class="line">说之前先通过`picasso`为例认识一下几个主要的部分:      </div><div class="line">我们在使用`picasso`时，它会告诉我们按照如下使用： </div><div class="line">```java</div><div class="line">compile <span class="string">'com.squareup.picasso:picasso:2.5.2'</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>或者<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;com.squareup.picasso&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;picasso&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;2.5.2&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
-<p>这两种方法分别对应了<code>jCenter</code>和<code>Maven Central</code>中的使用方法.<code>jCenter</code>中<code>com.squareup.picasso</code>就是<code>grounId</code>，通常我们以开发者的报名后面紧跟<code>library</code>的名字来命名<code>groupId</code>, <code>picasso</code>是<code>artifactId</code>,<code>artifactId</code>也就是<code>library</code>真实的名称。,后面的<code>2.5.2</code>就是当前的<code>version</code>.</p>
-<p>看到这里应该清楚其实就是<code>Android Studio</code>从<code>Maven</code>服务器上去下载我们所配置的<code>library</code>然后与我们项目一起进行编译。从<code>Maven</code>仓库上下载的是该<code>library</code>的<code>jar</code>或者<code>aar</code>文件。</p>
-<p>仓库中存储的有两种文件类型的<code>library</code>：<code>jar</code>和<code>aar</code>。<code>jar</code>包大家都知道。那什么是<code>aar</code>呢？<code>aar</code>是在<code>jar</code>的基础上进行开发的，这是因为<code>Androd Library</code>需要植入一些特有的文件，例如资源文件、<code>assets</code>、<code>jni</code>、清单文件等。而这些都不是<code>jar</code>的标准，因为<code>aar</code>就是在<code>jar</code>包的基础上新增了对其他文件的封装。当然他和<code>jar</code>包一样，在本质上都是<code>zip</code>包，下面我们看一下<code>aar</code>的目录结构:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- /AndroidManifest.xml</div><div class="line">- /classes.jar</div><div class="line">- /res/</div><div class="line">- /R.txt</div><div class="line">- /assets/</div><div class="line">- /libs<span class="comment">/*.jar</span></div><div class="line">- /jni/&lt;abi&gt;/*.so</div><div class="line">- /proguard.txt</div><div class="line">- /lint.jar</div></pre></td></tr></table></figure></p>
-<p>讲到这里已经清楚了<code>groupId</code>、<code>artifactId</code>以及<code>aar</code>了，那接下来我们就讲一下具体的发布流程了:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/public_jcenter.png?raw=true" alt="image">   </p>
-<h2 id="在Bintray上创建一个包"><a href="#在Bintray上创建一个包" class="headerlink" title="在Bintray上创建一个包"></a>在Bintray上创建一个包</h2><ul>
-<li>登陆<a href="https://bintray.com/" target="_blank" rel="external">bintray</a>。</li>
-<li>选择<code>Maven</code>后进入。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/bintray.png?raw=true" alt="image"></li>
-<li>添加新包。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/and_new_package.png?raw=true" alt="image"></li>
-<li><p>填写包信息<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/add_package_information.png?raw=true" alt="image"></p>
-<p>  包名这里对于单词之间要用<code>-</code>分割。</p>
-</li>
-<li>然后会提示已经上传。<br>到这里我们已经在<code>bintray</code>上创建了一个<code>Maven</code>仓库，接下来要做的就是上传<code>library</code>。</li>
-</ul>
-<h2 id="在Sonatype上传件一个Maven-Central账户。"><a href="#在Sonatype上传件一个Maven-Central账户。" class="headerlink" title="在Sonatype上传件一个Maven Central账户。"></a>在Sonatype上传件一个<code>Maven Central</code>账户。</h2><ul>
-<li>注册Sonatype账号<br>  在<a href="https://issues.sonatype.org/secure/Dashboard.jspa" target="_blank" rel="external">Sonatype</a>上注册账号。<br>  注册完登陆后需要在<code>JIRA</code>中创建一个<code>issue</code>，这样他就会允许你上传匹配<code>Maven Central</code>提供的<code>GROUP_ID</code>的<code>library</code>。    <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/create_issue.png?raw=true" alt="image"><br>  Project: Community Support - Open Source Project Repository Hosting<br>  Issue Type: New Project<br>  Summary: 你的 library名称的概要，比如The Cheese Library。<br>  Group Id: 输入根GROUP_ID，比如， com.charonchui。一旦批准之后，每个以com.charon开始的library都允许被上传到仓库，比如com.charonchui.xxx。<br>  Project URL: 输入任意一个你想贡献的library的URL，比如， <a href="https://github.com/CharonChui/CyberLink4Android">https://github.com/CharonChui/CyberLink4Android</a>。<br>  SCM URL: 版本控制的URL，比如 <a href="https://github.com/CharonChui/CyberLink4Android.git">https://github.com/CharonChui/CyberLink4Android.git</a>。<br>  其他的都不用管，写完之后创建就可以了。 然后就是开始等，大约一周左右就会获准将自己的<code>library</code>分享到<code>Maven Central</code>。</li>
-<li><p>下面就是<code>Bintray</code>中的账户选项中填写<code>Sonatype</code>用户名。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/add_account.png?raw=true" alt="image"></p>
-</li>
-<li><p>开启自动注册功能，为了能让我们通过<code>jcenter</code>上传的<code>libraray</code>自动发布到<code>Maven Central</code>中  </p>
-<ul>
-<li><p>使用下面的命令生成一个key。如果是windows用户需要使用cygwin。否则不能执行<br>  <code>gpg --gen-key</code><br>   后面会一步步的进行提示，按照提示输入相应内容就好。</p>
-<p>   创建完成后可以使用<code>gpg --list-keys</code>命令来查看创建key的信息.<br>   接下来需要将生成的key上传到keyserver上才能发挥作用。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/list_key.png?raw=true" alt="image"></p>
-<p>  如上图所示将<code>key</code>上传到<code>keyserver</code>让它发挥作用，运行如下命令，将下面的PUBLIC_KEY_ID替换成上面2048R/后面的数字，如我的是B861C367<br>  <code>gpg --keyserver hkp://pool.sks-keyservers.net --send-keys PUBLIC_KEY_ID</code></p>
-</li>
-<li><p>运行以下命令        </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gpg -a --export yourmail<span class="meta">@email</span>.com &gt; public_key_sender.asc</div><div class="line">   gpg -a --export-secret-key yourmail<span class="meta">@email</span>.com &gt; private_key_sender.asc</div></pre></td></tr></table></figure>
-<p>运行完上面的两个命令后，会在当前目录分别生成public_key_sender.asc以及private_key_sender.ask两个文件，下面我们就打开这两个文件的内容，填写到Bintray的<code>Edit Profile</code>页面中的<code>GPG</code>注册部分。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/GPG.png?raw=true" alt="image"></p>
-</li>
-<li>开启自动注册。<br>  在<code>Edit Your Profile</code>页面找到<code>Repositories</code>后，选择<code>maven</code>后的<code>edit</code>。然后将GPG sign uploaded files using Bintray’s public/private key pair.打上勾就可以了。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/maven_edit.png?raw=true" alt="image"><br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/maven_gpg.png?raw=true" alt="image"></li>
-</ul>
-</li>
-</ul>
-<h2 id="接下来就是如何将Android-Studio中的Library-Module进行上传"><a href="#接下来就是如何将Android-Studio中的Library-Module进行上传" class="headerlink" title="接下来就是如何将Android Studio中的Library Module进行上传"></a>接下来就是如何将<code>Android Studio</code>中的<code>Library Module</code>进行上传</h2><p>首先是修改项目的<code>build.gradle</code>文件。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span></div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        <span class="comment">// 注意gradle版本要再1.1.2以上，之前的版本存在问题。如果在工程中/gradle/wrapper/gradle-wrapper.properties重看到当前的gradle版本为2.4，下面的配置版本就要改为1.3.0</span></div><div class="line">        classpath <span class="string">'com.android.tools.build:gradle:1.2.3'</span></div><div class="line">        <span class="comment">// 下面的部分就为新添加的。</span></div><div class="line">        <span class="comment">// 用于上传项目到bintray</span></div><div class="line">        classpath <span class="string">'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'</span></div><div class="line">        <span class="comment">// 用于生成javaDoc和jar，如果gradle版本为2.4及以上，下面的版本就要改为1.3，具体可参考https://github.com/dcendents/android-maven-gradle-plugin</span></div><div class="line">        classpath <span class="string">'com.github.dcendents:android-maven-plugin:1.2'</span></div><div class="line">        <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></div><div class="line">        <span class="comment">// in the individual module build.gradle files</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">allprojects &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>修改<code>local.properties</code>文件，在里面配置<code>apikey</code>、用户名以及密码，以便<code>bintray</code>进行验证。之所以要把这些东西配置到该文件中是因为这些信息都比较敏感，不能分享到别处，包括版本控制里面。而在创建项目的时候<code>local.properties</code>已经被添加到<code>.gitignore</code>中了，所以这些数据不会被上传：<br>需要添加如下三行代码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">bintray.user=YOUR_BINTRAY_USERNAME  <span class="comment">// 这里一定要用小写，不要用CharonChui不然会报错的，因为他会根据该用户名去找指定package，如果是大写他就找不到了。</span></div><div class="line">bintray.apikey=YOUR_BINTRAY_API_KEY</div><div class="line">bintray.gpg.password=YOUR_GPG_PASSWORD</div></pre></td></tr></table></figure></p>
-<p><code>Api key</code>可以在<code>Binatry</code>官网上面的<code>Edit Profile</code>页面下的<code>API Key</code>中获取。<br>最后要做的就是修改<code>library module</code>中的<code>build.gradle</code>文件。<br>下面这是最初的状态：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">apply plugin: <span class="string">'com.android.library'</span></div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion <span class="number">22</span></div><div class="line">    buildToolsVersion <span class="string">"22.0.1"</span></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion <span class="number">8</span></div><div class="line">        targetSdkVersion <span class="number">22</span></div><div class="line">        versionCode <span class="number">1</span></div><div class="line">        versionName <span class="string">"1.0"</span></div><div class="line">    &#125;</div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            <span class="function">minifyEnabled <span class="keyword">false</span></span></div><div class="line">            proguardFiles <span class="title">getDefaultProguardFile</span><span class="params">(<span class="string">'proguard-android.txt'</span>)</span>, 'proguard-rules.pro'</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    <span class="function">compile <span class="title">fileTree</span><span class="params">(dir: <span class="string">'libs'</span>, include: [<span class="string">'*.jar'</span>])</span></span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>下面就是修改之后的文件:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div></pre></td><td class="code"><pre><div class="line">apply plugin: <span class="string">'com.android.library'</span></div><div class="line">apply plugin: <span class="string">'com.github.dcendents.android-maven'</span></div><div class="line">apply plugin: <span class="string">"com.jfrog.bintray"</span></div><div class="line"></div><div class="line"><span class="comment">// This is the library version used when deploying the artifact</span></div><div class="line">version = <span class="string">"1.0.0"</span></div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion <span class="number">22</span></div><div class="line">    buildToolsVersion <span class="string">"22.0.1"</span></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion <span class="number">8</span></div><div class="line">        targetSdkVersion <span class="number">22</span></div><div class="line">        versionCode <span class="number">1</span></div><div class="line">        versionName <span class="string">"1.0"</span></div><div class="line">    &#125;</div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            <span class="function">minifyEnabled <span class="keyword">false</span></span></div><div class="line">            proguardFiles <span class="title">getDefaultProguardFile</span><span class="params">(<span class="string">'proguard-android.txt'</span>)</span>, 'proguard-rules.pro'</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    <span class="function">compile <span class="title">fileTree</span><span class="params">(dir: <span class="string">'libs'</span>, include: [<span class="string">'*.jar'</span>])</span></span></div><div class="line">&#125;</div><div class="line"></div><div class="line">def siteUrl = <span class="string">'https://github.com/CharonChui/CyberLink4Android'</span>      <span class="comment">// Homepage URL of the library</span></div><div class="line">def gitUrl = <span class="string">'https://github.com/CharonChui/CyberLink4Android.git'</span>   <span class="comment">// Git repository URL</span></div><div class="line">group = <span class="string">"com.charonchui.cyberlink"</span>                      <span class="comment">// Maven Group ID for the artifact</span></div><div class="line"></div><div class="line">install &#123;</div><div class="line">    repositories.mavenInstaller &#123;</div><div class="line">        <span class="comment">// This generates POM.xml with proper parameters</span></div><div class="line">        pom &#123;</div><div class="line">            project &#123;</div><div class="line">                packaging <span class="string">'aar'</span></div><div class="line"></div><div class="line">                <span class="comment">// Add your description here</span></div><div class="line">                name <span class="string">'cyberlink-android'</span></div><div class="line">                description = <span class="string">'CyberLink for Android is a development package for UPnP™ developers on Android development.'</span></div><div class="line">                url siteUrl</div><div class="line"></div><div class="line">                <span class="comment">// Set your license</span></div><div class="line">                licenses &#123;</div><div class="line">                    license &#123;</div><div class="line">                        name <span class="string">'The Apache Software License, Version 2.0'</span></div><div class="line">                        url <span class="string">'http://www.apache.org/licenses/LICENSE-2.0.txt'</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                developers &#123;</div><div class="line">                    developer &#123;</div><div class="line">                        id <span class="string">'CharonChui'</span></div><div class="line">                        name <span class="string">'Charon Chui'</span></div><div class="line">                        email <span class="string">'charon.chui@gmail.com'</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                scm &#123;</div><div class="line">                    connection gitUrl</div><div class="line">                    developerConnection gitUrl</div><div class="line">                    url siteUrl</div><div class="line"></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">task <span class="title">sourcesJar</span><span class="params">(type: Jar)</span> </span>&#123;</div><div class="line">    from android.sourceSets.main.java.srcDirs</div><div class="line">    classifier = <span class="string">'sources'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">task <span class="title">javadoc</span><span class="params">(type: Javadoc)</span> </span>&#123;</div><div class="line">    source = android.sourceSets.main.java.srcDirs</div><div class="line">    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">task <span class="title">javadocJar</span><span class="params">(type: Jar, dependsOn: javadoc)</span> </span>&#123;</div><div class="line">    classifier = <span class="string">'javadoc'</span></div><div class="line">    from javadoc.destinationDir</div><div class="line">&#125;</div><div class="line">artifacts &#123;</div><div class="line">    archives javadocJar</div><div class="line">    archives sourcesJar</div><div class="line">&#125;</div><div class="line"></div><div class="line">Properties properties = <span class="keyword">new</span> Properties()</div><div class="line">properties.load(project.rootProject.file(<span class="string">'local.properties'</span>).newDataInputStream())</div><div class="line"></div><div class="line"><span class="comment">// https://github.com/bintray/gradle-bintray-plugin</span></div><div class="line">bintray &#123;</div><div class="line">    user = properties.getProperty(<span class="string">"bintray.user"</span>)</div><div class="line">    key = properties.getProperty(<span class="string">"bintray.apikey"</span>)</div><div class="line"></div><div class="line">    configurations = [<span class="string">'archives'</span>]</div><div class="line">    pkg &#123;</div><div class="line">        repo = <span class="string">"maven"</span></div><div class="line">        <span class="comment">// it is the name that appears in bintray when logged</span></div><div class="line">        name = <span class="string">"cyberlink-android"</span></div><div class="line">        websiteUrl = siteUrl</div><div class="line">        vcsUrl = gitUrl</div><div class="line">        licenses = [<span class="string">"Apache-2.0"</span>]</div><div class="line">        publish = <span class="keyword">true</span></div><div class="line">        version &#123;</div><div class="line">            gpg &#123;</div><div class="line">                sign = <span class="keyword">true</span> <span class="comment">//Determines whether to GPG sign the files. The default is false</span></div><div class="line">                passphrase = properties.getProperty(<span class="string">"bintray.gpg.password"</span>) <span class="comment">//Optional. The passphrase for GPG signing'</span></div><div class="line">            &#125;</div><div class="line"><span class="comment">//            mavenCentralSync &#123;</span></div><div class="line"><span class="comment">//                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.</span></div><div class="line"><span class="comment">//                user = properties.getProperty("bintray.oss.user") //OSS user token</span></div><div class="line"><span class="comment">//                password = properties.getProperty("bintray.oss.password") //OSS user password</span></div><div class="line"><span class="comment">//                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.</span></div><div class="line"><span class="comment">//            &#125;</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>到这一步就可以开始上传到<code>bintray</code>了，接下来开启<code>Android Studio</code>的<code>Terminal</code>中。</p>
-<ul>
-<li>检查代码的正确性，以及编译<code>library</code>文件(<code>aar</code>,<code>pom</code>等)。执行如下命令:<br>  <code>./gradlew install</code>如果提示权限不足就用<code>chmod 777 gradlew</code>改下权限就好了，windows下直接运行<code>gradlew install</code><br>  正确的话会提示<code>BUILD SUCCESSFUL</code></li>
-<li>上传编译的文件到<code>bintray</code>，使用如下命令:<br>  <code>./gradlew bintrayUpload</code><br>  成功的话会提示<code>SUCCESSFUL</code><br>接下来到<code>bintray</code>上检查一下你得<code>package</code>你会在版本区域发现新上传的版本。点击进去就能发现我们上传的<code>library</code>文件。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/publish_version.png?raw=true" alt="image"></li>
-</ul>
-<p>点击该版本进入后可以看到所有的文件目录。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/version_list.png?raw=true" alt="image"></p>
-<p>到这里你的<code>library</code>就已经上传了，任何人都可以使用，但是别高兴的太早，因为现在只是上传到了你自己的私人<code>Maven</code>仓库，而不是<code>jCenter</code>上，如果别人使用你<code>library</code>，他必须要先定义仓库的<code>url</code>， 如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">repositories &#123;</div><div class="line">    maven &#123;</div><div class="line">        url <span class="string">'https://dl.bintray.com/charonchui/maven/'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">...</div><div class="line">  </div><div class="line">dependencies &#123;</div><div class="line">    compile <span class="string">'com.charonchui.cyberlink:cyberlink-android:1.0.0'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这样终究是不方便的，因为别人还要单独的去配置你仓库的<code>url</code>那么接下来就是怎么将<code>bintray</code>上我们的仓库上传到<code>jCenter</code>中呢？<br>把<code>library</code>同步到<code>jCenter</code>上非常容易。只需要访问<code>bintray</code>，然后点击<code>Add to jCeter</code>然后在新出来的页面直接点击<code>Send</code>即可。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/add_to_jcenter.png?raw=true" alt="image"><br>现在我们就需要等待<code>bintray</code>团队审核我们的请求，一般会在两三个小时左右，如果审核通过，会收到一封邮件通知。通过这一步之后任何开发者都可以不用配置仓库<code>url</code>直接使用了。<br>想检查一下自己的<code>library</code>是否在<code>jCenter</code>上存在，可以直接访问<a href="http://jcenter.bintray.com" target="_blank" rel="external">http://jcenter.bintray.com</a>,然后根据你的<code>groupId</code>直接进入相应的目录查看即可。这里要说一下，这个链接到<code>jCenter</code>是一个只需要做一次的操作，如果以后对你的<code>package</code>做了修改，或者发布新版本等，这些改变会自动同步到<code>jCenter</code>上。同时，如果你要像删除某一个<code>package</code>，但是在<code>jCenter</code>仓库中的<code>library</code>不会被删除。它会一直存在，没法直接删除，因此如果你想要完全删除的时候，最好在移除<code>package</code>之前先在网页上把删除每个版本。<br>如何通过后也可以在<code>bintray</code>上面看到，这里已经不显示<code>Add to jCenter</code>按钮了，他会直接显示出来<code>jCenter</code>.<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/already_add_to_jcenter.png?raw=true" alt="image"></p>
-<p>到这里你就可以在项目中直接使用:　　　　　<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile <span class="string">'com.charonchui.cyberlink:cyberlink-android:1.0.0'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>但是，我悲剧了。提示失败了，为什么呢？　<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/library_name_error.png?raw=true" alt="image">　　　　　　　　　　　　　　　　　<br>原因就出来<code>library</code>这个<code>module name</code>这里，因为我这里的<code>module</code>那么是<code>library</code>所以它上传之后的路径就是<code>library</code>而不是<code>cyberlink-android</code>:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/libray_name_error_path.png?raw=true" alt="image">　　<br>所以通过这里能看出来它是使用当前<code>module</code>的名字的。我们只能通过如下方式去使用:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile <span class="string">'com.charonchui.cyberlink:library:1.0.0'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这样就能正常使用了。 如果有些人感觉这样不好，就想要<code>com.charonchui.cyberlink:cyberlink-android:1.0.0</code>的方式，那就将<code>Android Studio</code>中<code>library</code>的名字修改为<code>cyberlink-android</code>后重新上传发布吧。</p>
-<h2 id="最后一步-上传library到Maven-Central"><a href="#最后一步-上传library到Maven-Central" class="headerlink" title="最后一步:上传library到Maven Central      "></a>最后一步:上传library到Maven Central      </h2><p>并不是所有的开发者都使用<code>jCenter</code>。仍然会有一些人在使用<code>Maven Central</code>。因为此我们仍然需要将<code>library</code>上传到<code>Maven Central</code>上。要从<code>jCenter</code>中上传到<code>Maven Central</code>之前需要先完成以下两部分:      </p>
-<ul>
-<li><code>Bintray</code>上的<code>pacage</code>已经链接到<code>jCenter</code>.</li>
-<li><code>Maven Central</code>上的仓库已经认证通过.</li>
-</ul>
-<p>如果确认已经完成上面的授权后，上传<code>library</code>到<code>Maven Central</code>就非常简单了，只需要在<code>package</code>的详情页面点击<code>Maven Central</code>的链接。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/publish_to_maven_central.png?raw=true" alt="image"><br>直接进入下一个页面:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/send_to_maven.png?raw=true" alt="image"><br>然后再出来的页面输入<code>Maven Central</code>对应的用户名和密码点击<code>Sync</code>就可以了。上传到<code>Maven Central</code>的<code>library</code>是非常严格的，比如<code>+</code>号是不能在<code>library</code>版本的依赖定义中使用的。<br>完成之后，你可以在 <a href="https://oss.sonatype.org/content/repositories/releases/" target="_blank" rel="external">Maven Central Repository</a>中找到你的<code>library</code>。</p>
-<p>总结下在使用过程中遇到的错误: </p>
-<ul>
-<li><p>Maven gradle插件与gradle版本要对应好，如下，不要不对应。</p>
-  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// Top-level build file where you can add configuration options common to all sub-projects/modules.</div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath 'com.android.tools.build:gradle:1.3.0'</div><div class="line">        // 用于上传项目到bintray</div><div class="line">        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'</div><div class="line">        // 用于生成javaDoc和jar</div><div class="line">        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'</div><div class="line">        // NOTE: Do not place your application dependencies here; they belong</div><div class="line">        // in the individual module build.gradle files</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">allprojects &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>windows</code>下执行<code>gradlew install</code>编译<code>javadoc</code>时会提示<code>GBK</code>编码错误，这时候需要修改编译时的编码，具体放狗搜下，当时我改在<code>mac</code>上用了，就没解决。</p>
-</li>
-<li>编译生成<code>javadoc</code>时提示很多找不到类，不能使用<code>&lt;br/&gt;</code>等错误，这里建议在写注释的时候一定要规范，不要使用汉字，而且不要使用<code>&lt;br/&gt;</code>，<code>&lt;p&gt;</code>等。</li>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
 </ul>
 
       
@@ -280,7 +239,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/发布library到Maven仓库/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/性能优化/">展开全文 >></a>
         </p>
       
 
@@ -678,343 +637,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-通过Hardware Layer提高动画性能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/通过Hardware Layer提高动画性能/">通过Hardware Layer提高动画性能</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/通过Hardware Layer提高动画性能/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="通过Hardware-Layer提高动画性能"><a href="#通过Hardware-Layer提高动画性能" class="headerlink" title="通过Hardware Layer提高动画性能"></a>通过Hardware Layer提高动画性能</h1><p>项目中越来越多的动画，越来越多的效果导致了应用性能越来越低。该如何提升。   </p>
-<p>###简介 </p>
-<p>在<code>View</code>播放动画的过程中每一帧都需要被重绘。如果使用<code>view layers</code>，就不用每帧都去重绘，因为<code>View</code>渲染一旦离开屏幕缓冲区就可以被重用。</p>
-<p>而且，<code>hardware layers</code>会在<code>GPU</code>上缓存，这样就会让一些动画过程中的操作变得更快。通过<code>hardware layers</code>可以快速的渲染一些简单的转变(位移、选中、缩放、颜色渐变)。由于很多动画都是这些动作的结合，所以<code>hardware layers</code>可以显著的提高动画性能。</p>
-<p>在<code>View</code>当中提供了三种类型的<code>Layer type</code>:    </p>
-<ul>
-<li><p>LAYER_TYPE_HARDWARE</p>
-<blockquote>
-<p>Indicates that the view has a hardware layer. A hardware layer is backed by a hardware specific texture (generally Frame Buffer Objects or FBO on OpenGL hardware) and causes the view to be rendered using Android’s hardware rendering pipeline, but only if hardware acceleration is turned on for the view hierarchy. When hardware acceleration is turned off, hardware layers behave exactly as software layers.</p>
-<p>A hardware layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
-<p>A hardware layer can be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a hardware layer can be used to render the view tree only once.</p>
-<p>A hardware layer can also be used to increase the rendering quality when rotation transformations are applied on a view. It can also be used to prevent potential clipping issues when applying 3D transforms on a view.    </p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li><p>LAYER_TYPE_SOFTWARE</p>
-<blockquote>
-<p>Indicates that the view has a software layer. A software layer is backed by a bitmap and causes the view to be rendered using Android’s software rendering pipeline, even if hardware acceleration is enabled.</p>
-<p>Software layers have various usages:</p>
-<p>When the application is not using hardware acceleration, a software layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
-<p>When the application is using hardware acceleration, a software layer is useful to render drawing primitives not supported by the hardware accelerated pipeline. It can also be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a software layer can be used to render the view tree only once.</p>
-<p>Software layers should be avoided when the affected view tree updates often. Every update will require to re-render the software layer, which can potentially be slow (particularly when hardware acceleration is turned on since the layer will have to be uploaded into a hardware texture after every update.)</p>
-</blockquote>
-</li>
-<li><p>LAYER_TYPE_NONE</p>
-<blockquote>
-<p>Indicates that the view does not have a layer.<br>  默认值。</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>首先使用的前提是在清单文件中开启了硬件加速。否则将无法使用<code>hardware layer</code>。这一点在上面的文档中也有说明。</p>
-<p><code>API</code>也是非常简单的，直接使用<code>View.setLayerType()</code>就好。使用时应该只是暂时的设置<code>Hardware Layer</code>，因为它们无法自动释放。<br>基本的使用步骤：    </p>
-<ul>
-<li>对每个想要在动画过程中进行缓存的<code>view</code>调用<code>View.setLayerType(View.LAYER_TYPE_HARDWARE, null)</code>方法。</li>
-<li>执行动画。</li>
-<li>在动画执行结束后调用<code>View.setLayerType(View.LAYER_TYPE_NONE, null)</code>方法来进行清除。</li>
-</ul>
-<p>示例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    mView.setLayerType(View.LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
-<p>但是如果在<code>4.0.x</code>的版本中使用上面的代码会本亏，必须要把<code>setLayerType</code>放到<code>Runnable</code>中。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    <span class="comment">//This will work successfully</span></div><div class="line">    post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</div><div class="line">            setLayerType(LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
-<p>如果你基于<code>minSdkVersion 16</code>以上并且使用<code>ViewPropertyAnimator</code>时，你可以使用<code>withLayer()</code>方法替代如上的操作:     </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mView.animate().translationX(<span class="number">150</span>).withLayer().start();</div></pre></td></tr></table></figure>
-<p>或者在<code>api 14</code>以上时使用<code>ViewCompat.animate().withLayer()</code><br>这样做，你的动画就会变得更流畅！</p>
-<p>###注意事项  </p>
-<p>你应该知道，事情没那么简单。<br><code>Hardware layers</code>有着惊人的提升动画性能的能力。然而，如果滥用，它的危害更大。<strong>不要盲目的使用<code>layers</code></strong></p>
-<ul>
-<li><p>首先，在有些情况下，<code>hardware layers</code>除了<code>view</code>渲染外还会执行更多的工作。缓存<code>layer</code>将会需要时间，因为首选第一步就需要两个过程: 先将这些<code>view</code>渲染到<code>GPU</code>的一个<code>layer</code>中然后<code>GPU</code>再渲染该<code>layer</code>到<code>Window</code>上。如果要渲染的<code>View</code>非常简单(例如一个纯色值),那么这样在初始化的时候就会增加<code>Hardware Layer</code>不必要的开销。</p>
-</li>
-<li><p>其次，对所有的缓存来讲，都有一个缓存失效的可能性。任何时候如果在动画过程中调用<code>view.invalidate()</code>，那么<code>layer</code>就必须要重新渲染。经常的废弃<code>hardware layers</code>会比没有<code>layers</code>的情况下更糟糕，因为如同上面讲到的<code>hardware layers</code>在设置缓存时会有额外的开销。如果你需要经常的重新缓存<code>layer</code>，那就会有极大的损害。    </p>
-<p>  这个问题也是非常容易出现的，因为动画经常有多个移动的部分。假如现在有一个三个部分移动的动画:     </p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Parent ViewGroup</div><div class="line">—-&gt; <span class="function">Child <span class="title">View1</span> <span class="params">(往左移动)</span></span></div><div class="line">—-&gt; Child <span class="title">View2</span> <span class="params">(往右移动)</span></div><div class="line">—-&gt; Child <span class="title">View3</span> <span class="params">(往上移动)</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<pre><code>如果你只在父布局`ViewGroup`上设置一个`layer`，那就将经常的缓存失效，因为`ViewGroup`会随着子`View`不断地改变。然而对每个单独的子`Views`而言，他们只是在位移。这种情况下，最好是对每个子`View上`设置`Hardware Layer`（而不是在父布局上）。
-
-***再次重申，通常是对多个子`View上`适当的设置`Hardware Layer`，这样他们就不会在动画运行时失效。***
-
-在手机开发者选项中的*显示硬件层更新（Show hardware layers updates）*功能是追踪这个问题的开发利器。当`View`渲染`Hardware Layer`的时候闪烁绿色，它应该在动画开始的时候闪烁一次（也就是`Layer`渲染初始化的时候），然而，如果你的`View`在整个动画期间都是绿色，那就是遇到失效的问题了。
-</code></pre><ul>
-<li>最后，<code>hardware layers</code>使用<code>GPU</code>内存，你当然不想出现内存泄漏的问题。所以你应该在必要的时候再去使用<code>hardware layers</code>，就想播放动画时。  </li>
-</ul>
-<p>这里也没有硬性规则。<code>Android</code>渲染系统是非常复杂的。就像所有性能问题一样，测试才是关键。通过使用“显示硬件层更新”开发者选项来确定<code>layers</code>是在帮你还是害你。</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/通过Hardware Layer提高动画性能/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-视频解码之软解与硬解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/视频解码之软解与硬解/">视频解码之软解与硬解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/视频解码之软解与硬解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="视频解码之软解与硬解"><a href="#视频解码之软解与硬解" class="headerlink" title="视频解码之软解与硬解"></a>视频解码之软解与硬解</h1><p><strong>硬解</strong>：从字面意思上理解就是用硬件来进行解码，通过显卡的视频加速功能对高清视频进行解码，很明显就是一个专门的电路板(这样好理解…)来进行视频的解码，是依靠显卡<code>GPU</code>的。                    </p>
-<p><strong>软解</strong>：字面上理解就是用软件进行解码，这样理解也对，但是实际最总还是要硬件来支持的，这个硬件就是<code>CPU</code>。</p>
-<p>既然有这两种不同的解码方式，我们在开发中该如何进行选择？哪个更好？                     </p>
-<ul>
-<li><p>硬解优缺点：<br>  显卡核心GPU拥有独特的计算方法，解码效率非常高，而且充当解码核心的模块成本并不高。这样不但能够减轻CPU的负担，还有着低功耗、发热少等特点。但是由于硬解码起步比较晚，<br>  软件和驱动对其的支持度低。硬解码内置有什么样的模块就能够解码什么样的视频，面对网络上杂乱无章的视频编码格式，不可能做到完全兼容同。此外，硬解码的滤镜、字母、画质增强方面都做的十分不足。</p>
-<p>  优点：低功耗、发热少、效率高。<br>  缺点：视频兼容性差、支持度低。                </p>
-</li>
-<li><p>软解优缺点：<br>  软解码技术的解码过程中，需要对大量的视频信息进行运算，对CPU性能的要求非常高。尤其是对高清晰度大码率的视频来说，巨大的运算量就会造成转换效率低、发热量大等问题。<br>  但是由于软解码的过程中不需要复杂的硬件支持，兼容性非常高。即使是新出的视频编码格式，只要安装好相应的解码器文件，就能顺利播放。而且软解码拥有丰富的滤镜、字幕、画面处理优化等效果，<br>  如果<code>CPU</code>足够强悍的话，能够实现更加出色的画面效果。</p>
-<p>  优点：  兼容强、全解码、效果好<br>  缺点：  对<code>CPU</code>要求高、效率低、发热大                 </p>
-</li>
-</ul>
-<p>关于软解与硬解究竟哪个更好的问题一直是争论的热点，其实我倒是感觉没有好坏之分，各自有各自的优缺点和使用条件，根据需要去选择才是最合适的。<br>播放码率比较大的视频，硬解可能流畅的播放，但是软解可能会出现演示、画面和声音卡顿不同步的问题。但是硬解播放出的视频大多都不允许在解码之后进行软件后处理，比如进行一些降噪锐化之类的后期滤镜，<br>这样可能会让人感觉画质不太好的。当然上面的这种情况也是和<code>CPU</code>及<code>GPU</code>能力的不同而不同的。 总的来说，还是各有春秋，适合你的才是最好的。 </p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/视频解码之软解与硬解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/视频播放相关内容总结/">视频播放相关内容总结</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/视频播放相关内容总结/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="视频播放相关内容总结"><a href="#视频播放相关内容总结" class="headerlink" title="视频播放相关内容总结"></a>视频播放相关内容总结</h1><h2 id="多媒体常识："><a href="#多媒体常识：" class="headerlink" title="多媒体常识："></a>多媒体常识：</h2><ul>
-<li><p>什么是多媒体             </p>
-<p>  多媒体是计算机和视频技术的结合，实际上它是两个媒体；声音和图像，或者用现在的术语：音响和电视</p>
-</li>
-<li><p>常用的视频格式</p>
-<p>  Android系统默认：mp4、3gp<br>  常用格式：ts、3gpp、3g2、3gpp2、avi、mkv、flv、divx、f4v、rm、rmvb、rv、wmv、asf、mov、mpg、v8、ram、mpeg、<br>  swf、m2v、asx、ra、ram、ndivx、xvid等     </p>
-</li>
-<li><p>常用音频格式：</p>
-<p>  Android系统：mp3、ogg；<br>  常用格式：wma、mid、m4a、xmf、aac、mpa、midi、ar等</p>
-</li>
-<li><p>常用图片格式：PNG、GIF、BMP、jpg</p>
-</li>
-<li><p>国内各个视频网站采用的解码框架：</p>
-<ul>
-<li>优酷、搜狐、奇艺、pps、暴风影音土豆、56网都是用的ffmpeg.       </li>
-<li>pptv已经使用p2p技术<br>  点对点技术（peer-to-peer， 简称P2P）又称对等互联网络技术，是一种网络新技术，依赖网络中参与者的计算能力和带宽，<br>  而不是把依赖都聚集在较少的几台服务器上。P2P网络通常用于通过Ad Hoc连接来连接节点。这类网络可以用于多种用途，<br>  各种档案分享软件已经得到了广泛的使用。P2P技术也被使用在类似VoIP等实时媒体业务的数据通信中。</li>
-</ul>
-</li>
-</ul>
-<p>目前常用的开发框架：</p>
-<ul>
-<li><p>VLC框架：<br>  VLC是一个开源项目，基于ffmpeg框架的自定义播放器。其中LibVLC是VLC的核心部分，就相当于MediaPlayer类<br>  VLC一个最主要的部分，它可以播放各种类型的媒体文件和流媒体文件，并且可以创造媒体流并保存成各种格式的媒体文件<br>  VLC是一种跨平台的媒体播放器和流媒体服务器，最初为videolan的客户端，它是一种非常简便的多媒体播放器，<br>  它可以用来播放各种各样的音视频的格式文件(MPEG-1、MPEG-2、MPEG- 4、DivX、WMV、mp3、OGG、Vorbis、AC3、AAC等等)流媒体协议<br>  最具特色的功能是可以边下载边观看Divx媒体文件，并可以播放不完全的AVI文件。并且支持界面的更改。<br>  缺点：有C/C++代码，还有Java代码，代码太庞大             </p>
-</li>
-<li><p>ffmpeg框架：<br>  优点：轻量级框架，易于维护<br>  FFmpeg是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案<br>  FFMPEG几乎为你把所有的繁重工作都做了，比如解码、编码、复用和解复用。<br>  这使得多媒体应用程序变得容易编写。它是一个简单的，用C编写的，快速的并且能够解码几乎所有你能用到的格式，当然也包括编码多种格式。<br>  FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，支持AVI、MPEG、OGG、Matroska、ASF等90多种解码<br>  FFmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中libavcodec用于存放各个encode/decode模块<br>  libavformat用于存放muxer/demuxer模块，libavutil用于存放内存操作等辅助性模块</p>
-</li>
-<li><p>vitamio框架：<br>  vitamio也是基于ffmpeg开源框架<br>  VPlayer是vitamio的一个产品，vitamio和VPlayer是同一个团队开发的，VPlayer能播放的vitamio也能播放         </p>
-</li>
-</ul>
-<p>##Surface简介</p>
-<ul>
-<li><code>Surface</code>就是“表面”的意思。在<code>SDK</code>的文档中，对<code>Surface</code>的描述是这样的：“<code>Handle onto a raw buffer that is being managed by the screen compositor</code>”，<br>  翻译成中文就是“由屏幕显示内容合成器<code>(screen compositor)</code>所管理的原生缓冲器的句柄”，    这句话包括下面两个意思：<ul>
-<li>通过Surface（因为Surface是句柄）就可以获得原生缓冲器以及其中的内容。就像在C语言中，可以通过一个文件的句柄，就可以获得文件的内容一样；</li>
-<li>原生缓冲器（rawbuffer）是用于保存当前窗口的像素数据的。</li>
-</ul>
-</li>
-<li>简单的说<code>Surface</code>对应了一块屏幕缓冲区，每个<code>Window</code>对应一个<code>Surface</code>，任何<code>View</code>都是画在<code>Surface</code>上的，传统的<code>view</code>共享一块屏幕缓冲区，所有的绘制必须在<code>UI</code>线程中进行</li>
-<li>我们不能直接操作Surface实例，要通过SurfaceHolder，在SurfaceView中可以通过getHolder()方法获取到SurfaceHolder实例。</li>
-<li><code>Surface</code>是一个用来画图形的地方，但是我们知道画图都是在一个<code>Canvas</code>对象上面进行的，<em><code>Surface</code>中的<code>Canvas</code>成员，是专门用于提供画图的地方，就像黑板一样，其中的原始缓冲区是用来保存数据的地方，<br>  <code>Surface</code>本身的作用类似一个句柄，得到了这个句柄就可以得到其中的<code>Canvas</code>、原始缓冲区以及其他方面的内容，所以简单的说<code>Surface</code>是用来管理数据的(句柄)</em>。</li>
-</ul>
-<p>##SurfaceView简介      </p>
-<ul>
-<li><p>简单的说<code>SurfaceView</code>就是一个有<code>Surface</code>的<code>View</code>里面内嵌了一个专门用于绘制的<code>Surface</code>,<code>SurfaceView</code>控制这个<code>Surface</code>的格式和尺寸以及绘制位置.<code>SurfaceView</code>是一个<code>View</code>也许不够严谨，<br>  然而从定义中 <code>public class SurfaceView extends View</code>显示<code>SurfaceView</code>确实是派生自<code>View</code>，但是<code>SurfaceView</code>却有着自己的<code>Surface</code>，源码：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">if</span> (mWindow == <span class="keyword">null</span>) &#123;  </div><div class="line">mWindow = <span class="keyword">new</span> MyWindow(<span class="keyword">this</span>);  </div><div class="line">mLayout.type = mWindowType;  </div><div class="line">mLayout.gravity = Gravity.LEFT|Gravity.TOP;  </div><div class="line">mSession.addWithoutInputChannel(mWindow, mWindow.mSeq, mLayout,  </div><div class="line">mVisible ? VISIBLE : GONE, mContentInsets);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>  很明显，每个<code>SurfaceView</code>创建的时候都会创建一个<code>MyWindow</code>，<code>new MyWindow(this)</code>中的<code>this</code>正是<code>SurfaceView</code>自身，因此将<code>SurfaceView</code>和<code>window</code>绑定在一起，而前面提到过每个<code>window</code>对应一个<code>Surface</code>，<br>  所以<code>SurfaceView</code>也就内嵌了一个自己的<code>Surface</code>，可以认为<code>SurfaceView</code>是来控制<code>Surface</code>的位置和尺寸。传统<code>View</code>及其派生类的更新只能在<code>UI</code>线程，然而<code>UI</code>线程还同时处理其他交互逻辑，<br>  这就无法保证<code>view</code>更新的速度和帧率了，而<code>SurfaceView</code>可以用独立的线程来进行绘制，因此可以提供更高的帧率，例如游戏，摄像头取景等场景就比较适合用<code>SurfaceView</code>来实现。</p>
-</li>
-<li><p><code>Surface</code>是纵深排序<code>(Z-ordered)</code>的，这表明它总在自己所在窗口的后面。</p>
-</li>
-<li><code>Surfaceview</code>提供了一个可见区域，只有在这个可见区域内的<code>Surface</code>部分内容才可见，可见区域外的部分不可见，所以可以认为<strong><code>SurfaceView</code>就是展示<code>Surface</code>中数据的地方</strong>,<code>Surface</code>就是管理数据的地方，<br>  <code>SurfaceView</code>就是展示数据的地方，只有通过<code>SurfaceView</code>才能展现<code>Surface</code>中的数据。<br>  <img src="https://github.com/CharonChui/Pictures/master/SurfaceView.png?raw=true" alt="image">   </li>
-<li><code>Surface</code>的排版显示受到视图层级关系的影响，它的兄弟视图结点会在顶端显示。这意味者<code>Surface</code>的内容会被它的兄弟视图遮挡，这一特性可以用来放置遮盖物<code>(overlays)</code>(例如，文本和按钮等控件)。<br>  注意，如果<code>Surface</code>上面有透明控件，那么它的每次变化都会引起框架重新计算它和顶层控件的透明效果，这会影响性能。surfaceview变得可见时，surface被创建；surfaceview隐藏前，surface被销毁。<br>  这样能节省资源。如果你要查看 surface被创建和销毁的时机，可以重载surfaceCreated(SurfaceHolder)和 surfaceDestroyed(SurfaceHolder)。<br>  <strong><code>SurfaceView</code>的核心在于提供了两个线程：<code>UI</code>线程和渲染线程</strong>,两个线程通过“双缓冲”机制来达到高效的界面适时更新。</li>
-</ul>
-<p>##SurfaceHolder简介</p>
-<p>显示一个<code>Surface</code>的抽象接口，使你可以控制<code>Surface</code>的大小和格式以及在<code>Surface</code>上编辑像素，和监视<code>Surace</code>的改变。这个接口通常通过<code>SurfaceView</code>类实现。<br>简单的说就是我们无法直接操作<code>Surface</code>只能通过<code>SurfaceHolder</code>这个接口来获取和操作<code>Surface</code>。<br>SurfaceHolder<code>中提供了一些</code>lockCanvas()`：获取一个Canvas对象，并锁定之。所得到的Canvas对象，其实就是Surface中一个成员。加锁的目的其实就是为了在绘制的过程中，<br>Surface中的数据不会被改变。lockCanvas是为了防止同一时刻多个线程对同一canvas写入。</p>
-<p><em>从设计模式的角度来看,<code>Surface、SurfaceView、SurfaceHolder</code>实质上就是<code>MVC(Model-View-Controller)</code>，<code>Model</code>就是模型或者说是数据模型，更简单的可以理解成数据，在这里也就是<code>Surface</code>，<br><code>View</code>就是视图，代表用户交互界面，这里就是<code>SurfaceView</code>,<code>SurfaceHolder</code>就是<code>Controller.</code></em></p>
-<p>##MediaController</p>
-<ul>
-<li><code>MediaController</code>继承<code>FrameLayout</code>，通过<code>MediaPlayerControl</code>接口与<code>VideoView</code>进行结合控制，内部是通过<code>PopupWindow</code>将整个控制栏界面显示到界面上，<br>  而该<code>PopupWindow</code>所显示在的位置就是通过<code>setAnchorView()</code>设置进来的<code>Anchor</code>一般可以使当前的<code>VideoView</code>或者是整个<code>Activity</code>的根布局。这里要分为小屏和全屏两种情况来进行设置。<br>  如果当前的<code>MediaController</code>只是播放前下面的控制栏部分(进度条、快进、快退、暂停等)这样我们可以通过对VideoView设置点击事件，控制它的显示和隐藏。<br>  如果<code>MediaController</code>为整个屏幕包括了控制栏部分、上端的信息显示部分、以及左右栏的功能部分、这时候就可以通过对<code>MediaController</code>本身设置点击事件来控制显示和隐藏。         </li>
-</ul>
-<p><code>Controller</code>可以用<code>PopupWindow</code>来实现,具体有两种方式：     </p>
-<pre><code>- 整个控制栏(上面的信息部分、下面的控制部分以及左右边)都在`Controller`中，`setAnchorView()`的时候就会让`Controller`中的`PopupWindow`显示出来(一直显示，但是这个`PopupWindow`是透明的)，
-    真正的显示与隐藏是控制在`PopupWindow`中的`View`部分的显示与隐藏来实现。开始的时候我是想用这种方式，当时我想的是播放就播放、控制就控制，分离开来多好，但是没想到，
-    一旦有`PopupWindow`显示出来后，Activity是接收不到任何`Touch`事件的，所有的重试界面等都要放到`Controller`中实现(手势处理等)。但是也有好处，就是不管显示还是隐藏都可以去处理手势.
-
-- `PopupWindow`不是全屏的，只包含下面真正的控制部分(快进、快退、暂停等,不包含上面的信息部分和左右边),而且也不是开始就显示，显示隐藏是通过控制`PopupWindow`的显示与隐藏来进行的。
-    而对于信息部分、以及左右边都是在`Activity`的布局当中，我们通过接口回调得到`PopupWindow`的显示与隐藏来控制这些布局的显示与隐藏即可。
-    这样的话我们就需要将手势等全部放到`Activity`中去处理，但是也有一个问题，就是如果`Controller`正在显示的话`Activity`是接收不到`Touch`事件的，就无法处理手势，只能是让`Controller`消失后才能处理手势。
-</code></pre><hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-热修复实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1332,6 +954,343 @@ jlrField.set(instance, combined);
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/自定义View详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/视频播放相关内容总结/">视频播放相关内容总结</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/视频播放相关内容总结/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="视频播放相关内容总结"><a href="#视频播放相关内容总结" class="headerlink" title="视频播放相关内容总结"></a>视频播放相关内容总结</h1><h2 id="多媒体常识："><a href="#多媒体常识：" class="headerlink" title="多媒体常识："></a>多媒体常识：</h2><ul>
+<li><p>什么是多媒体             </p>
+<p>  多媒体是计算机和视频技术的结合，实际上它是两个媒体；声音和图像，或者用现在的术语：音响和电视</p>
+</li>
+<li><p>常用的视频格式</p>
+<p>  Android系统默认：mp4、3gp<br>  常用格式：ts、3gpp、3g2、3gpp2、avi、mkv、flv、divx、f4v、rm、rmvb、rv、wmv、asf、mov、mpg、v8、ram、mpeg、<br>  swf、m2v、asx、ra、ram、ndivx、xvid等     </p>
+</li>
+<li><p>常用音频格式：</p>
+<p>  Android系统：mp3、ogg；<br>  常用格式：wma、mid、m4a、xmf、aac、mpa、midi、ar等</p>
+</li>
+<li><p>常用图片格式：PNG、GIF、BMP、jpg</p>
+</li>
+<li><p>国内各个视频网站采用的解码框架：</p>
+<ul>
+<li>优酷、搜狐、奇艺、pps、暴风影音土豆、56网都是用的ffmpeg.       </li>
+<li>pptv已经使用p2p技术<br>  点对点技术（peer-to-peer， 简称P2P）又称对等互联网络技术，是一种网络新技术，依赖网络中参与者的计算能力和带宽，<br>  而不是把依赖都聚集在较少的几台服务器上。P2P网络通常用于通过Ad Hoc连接来连接节点。这类网络可以用于多种用途，<br>  各种档案分享软件已经得到了广泛的使用。P2P技术也被使用在类似VoIP等实时媒体业务的数据通信中。</li>
+</ul>
+</li>
+</ul>
+<p>目前常用的开发框架：</p>
+<ul>
+<li><p>VLC框架：<br>  VLC是一个开源项目，基于ffmpeg框架的自定义播放器。其中LibVLC是VLC的核心部分，就相当于MediaPlayer类<br>  VLC一个最主要的部分，它可以播放各种类型的媒体文件和流媒体文件，并且可以创造媒体流并保存成各种格式的媒体文件<br>  VLC是一种跨平台的媒体播放器和流媒体服务器，最初为videolan的客户端，它是一种非常简便的多媒体播放器，<br>  它可以用来播放各种各样的音视频的格式文件(MPEG-1、MPEG-2、MPEG- 4、DivX、WMV、mp3、OGG、Vorbis、AC3、AAC等等)流媒体协议<br>  最具特色的功能是可以边下载边观看Divx媒体文件，并可以播放不完全的AVI文件。并且支持界面的更改。<br>  缺点：有C/C++代码，还有Java代码，代码太庞大             </p>
+</li>
+<li><p>ffmpeg框架：<br>  优点：轻量级框架，易于维护<br>  FFmpeg是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案<br>  FFMPEG几乎为你把所有的繁重工作都做了，比如解码、编码、复用和解复用。<br>  这使得多媒体应用程序变得容易编写。它是一个简单的，用C编写的，快速的并且能够解码几乎所有你能用到的格式，当然也包括编码多种格式。<br>  FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，支持AVI、MPEG、OGG、Matroska、ASF等90多种解码<br>  FFmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中libavcodec用于存放各个encode/decode模块<br>  libavformat用于存放muxer/demuxer模块，libavutil用于存放内存操作等辅助性模块</p>
+</li>
+<li><p>vitamio框架：<br>  vitamio也是基于ffmpeg开源框架<br>  VPlayer是vitamio的一个产品，vitamio和VPlayer是同一个团队开发的，VPlayer能播放的vitamio也能播放         </p>
+</li>
+</ul>
+<p>##Surface简介</p>
+<ul>
+<li><code>Surface</code>就是“表面”的意思。在<code>SDK</code>的文档中，对<code>Surface</code>的描述是这样的：“<code>Handle onto a raw buffer that is being managed by the screen compositor</code>”，<br>  翻译成中文就是“由屏幕显示内容合成器<code>(screen compositor)</code>所管理的原生缓冲器的句柄”，    这句话包括下面两个意思：<ul>
+<li>通过Surface（因为Surface是句柄）就可以获得原生缓冲器以及其中的内容。就像在C语言中，可以通过一个文件的句柄，就可以获得文件的内容一样；</li>
+<li>原生缓冲器（rawbuffer）是用于保存当前窗口的像素数据的。</li>
+</ul>
+</li>
+<li>简单的说<code>Surface</code>对应了一块屏幕缓冲区，每个<code>Window</code>对应一个<code>Surface</code>，任何<code>View</code>都是画在<code>Surface</code>上的，传统的<code>view</code>共享一块屏幕缓冲区，所有的绘制必须在<code>UI</code>线程中进行</li>
+<li>我们不能直接操作Surface实例，要通过SurfaceHolder，在SurfaceView中可以通过getHolder()方法获取到SurfaceHolder实例。</li>
+<li><code>Surface</code>是一个用来画图形的地方，但是我们知道画图都是在一个<code>Canvas</code>对象上面进行的，<em><code>Surface</code>中的<code>Canvas</code>成员，是专门用于提供画图的地方，就像黑板一样，其中的原始缓冲区是用来保存数据的地方，<br>  <code>Surface</code>本身的作用类似一个句柄，得到了这个句柄就可以得到其中的<code>Canvas</code>、原始缓冲区以及其他方面的内容，所以简单的说<code>Surface</code>是用来管理数据的(句柄)</em>。</li>
+</ul>
+<p>##SurfaceView简介      </p>
+<ul>
+<li><p>简单的说<code>SurfaceView</code>就是一个有<code>Surface</code>的<code>View</code>里面内嵌了一个专门用于绘制的<code>Surface</code>,<code>SurfaceView</code>控制这个<code>Surface</code>的格式和尺寸以及绘制位置.<code>SurfaceView</code>是一个<code>View</code>也许不够严谨，<br>  然而从定义中 <code>public class SurfaceView extends View</code>显示<code>SurfaceView</code>确实是派生自<code>View</code>，但是<code>SurfaceView</code>却有着自己的<code>Surface</code>，源码：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">if</span> (mWindow == <span class="keyword">null</span>) &#123;  </div><div class="line">mWindow = <span class="keyword">new</span> MyWindow(<span class="keyword">this</span>);  </div><div class="line">mLayout.type = mWindowType;  </div><div class="line">mLayout.gravity = Gravity.LEFT|Gravity.TOP;  </div><div class="line">mSession.addWithoutInputChannel(mWindow, mWindow.mSeq, mLayout,  </div><div class="line">mVisible ? VISIBLE : GONE, mContentInsets);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>  很明显，每个<code>SurfaceView</code>创建的时候都会创建一个<code>MyWindow</code>，<code>new MyWindow(this)</code>中的<code>this</code>正是<code>SurfaceView</code>自身，因此将<code>SurfaceView</code>和<code>window</code>绑定在一起，而前面提到过每个<code>window</code>对应一个<code>Surface</code>，<br>  所以<code>SurfaceView</code>也就内嵌了一个自己的<code>Surface</code>，可以认为<code>SurfaceView</code>是来控制<code>Surface</code>的位置和尺寸。传统<code>View</code>及其派生类的更新只能在<code>UI</code>线程，然而<code>UI</code>线程还同时处理其他交互逻辑，<br>  这就无法保证<code>view</code>更新的速度和帧率了，而<code>SurfaceView</code>可以用独立的线程来进行绘制，因此可以提供更高的帧率，例如游戏，摄像头取景等场景就比较适合用<code>SurfaceView</code>来实现。</p>
+</li>
+<li><p><code>Surface</code>是纵深排序<code>(Z-ordered)</code>的，这表明它总在自己所在窗口的后面。</p>
+</li>
+<li><code>Surfaceview</code>提供了一个可见区域，只有在这个可见区域内的<code>Surface</code>部分内容才可见，可见区域外的部分不可见，所以可以认为<strong><code>SurfaceView</code>就是展示<code>Surface</code>中数据的地方</strong>,<code>Surface</code>就是管理数据的地方，<br>  <code>SurfaceView</code>就是展示数据的地方，只有通过<code>SurfaceView</code>才能展现<code>Surface</code>中的数据。<br>  <img src="https://github.com/CharonChui/Pictures/master/SurfaceView.png?raw=true" alt="image">   </li>
+<li><code>Surface</code>的排版显示受到视图层级关系的影响，它的兄弟视图结点会在顶端显示。这意味者<code>Surface</code>的内容会被它的兄弟视图遮挡，这一特性可以用来放置遮盖物<code>(overlays)</code>(例如，文本和按钮等控件)。<br>  注意，如果<code>Surface</code>上面有透明控件，那么它的每次变化都会引起框架重新计算它和顶层控件的透明效果，这会影响性能。surfaceview变得可见时，surface被创建；surfaceview隐藏前，surface被销毁。<br>  这样能节省资源。如果你要查看 surface被创建和销毁的时机，可以重载surfaceCreated(SurfaceHolder)和 surfaceDestroyed(SurfaceHolder)。<br>  <strong><code>SurfaceView</code>的核心在于提供了两个线程：<code>UI</code>线程和渲染线程</strong>,两个线程通过“双缓冲”机制来达到高效的界面适时更新。</li>
+</ul>
+<p>##SurfaceHolder简介</p>
+<p>显示一个<code>Surface</code>的抽象接口，使你可以控制<code>Surface</code>的大小和格式以及在<code>Surface</code>上编辑像素，和监视<code>Surace</code>的改变。这个接口通常通过<code>SurfaceView</code>类实现。<br>简单的说就是我们无法直接操作<code>Surface</code>只能通过<code>SurfaceHolder</code>这个接口来获取和操作<code>Surface</code>。<br>SurfaceHolder<code>中提供了一些</code>lockCanvas()`：获取一个Canvas对象，并锁定之。所得到的Canvas对象，其实就是Surface中一个成员。加锁的目的其实就是为了在绘制的过程中，<br>Surface中的数据不会被改变。lockCanvas是为了防止同一时刻多个线程对同一canvas写入。</p>
+<p><em>从设计模式的角度来看,<code>Surface、SurfaceView、SurfaceHolder</code>实质上就是<code>MVC(Model-View-Controller)</code>，<code>Model</code>就是模型或者说是数据模型，更简单的可以理解成数据，在这里也就是<code>Surface</code>，<br><code>View</code>就是视图，代表用户交互界面，这里就是<code>SurfaceView</code>,<code>SurfaceHolder</code>就是<code>Controller.</code></em></p>
+<p>##MediaController</p>
+<ul>
+<li><code>MediaController</code>继承<code>FrameLayout</code>，通过<code>MediaPlayerControl</code>接口与<code>VideoView</code>进行结合控制，内部是通过<code>PopupWindow</code>将整个控制栏界面显示到界面上，<br>  而该<code>PopupWindow</code>所显示在的位置就是通过<code>setAnchorView()</code>设置进来的<code>Anchor</code>一般可以使当前的<code>VideoView</code>或者是整个<code>Activity</code>的根布局。这里要分为小屏和全屏两种情况来进行设置。<br>  如果当前的<code>MediaController</code>只是播放前下面的控制栏部分(进度条、快进、快退、暂停等)这样我们可以通过对VideoView设置点击事件，控制它的显示和隐藏。<br>  如果<code>MediaController</code>为整个屏幕包括了控制栏部分、上端的信息显示部分、以及左右栏的功能部分、这时候就可以通过对<code>MediaController</code>本身设置点击事件来控制显示和隐藏。         </li>
+</ul>
+<p><code>Controller</code>可以用<code>PopupWindow</code>来实现,具体有两种方式：     </p>
+<pre><code>- 整个控制栏(上面的信息部分、下面的控制部分以及左右边)都在`Controller`中，`setAnchorView()`的时候就会让`Controller`中的`PopupWindow`显示出来(一直显示，但是这个`PopupWindow`是透明的)，
+    真正的显示与隐藏是控制在`PopupWindow`中的`View`部分的显示与隐藏来实现。开始的时候我是想用这种方式，当时我想的是播放就播放、控制就控制，分离开来多好，但是没想到，
+    一旦有`PopupWindow`显示出来后，Activity是接收不到任何`Touch`事件的，所有的重试界面等都要放到`Controller`中实现(手势处理等)。但是也有好处，就是不管显示还是隐藏都可以去处理手势.
+
+- `PopupWindow`不是全屏的，只包含下面真正的控制部分(快进、快退、暂停等,不包含上面的信息部分和左右边),而且也不是开始就显示，显示隐藏是通过控制`PopupWindow`的显示与隐藏来进行的。
+    而对于信息部分、以及左右边都是在`Activity`的布局当中，我们通过接口回调得到`PopupWindow`的显示与隐藏来控制这些布局的显示与隐藏即可。
+    这样的话我们就需要将手势等全部放到`Activity`中去处理，但是也有一个问题，就是如果`Controller`正在显示的话`Activity`是接收不到`Touch`事件的，就无法处理手势，只能是让`Controller`消失后才能处理手势。
+</code></pre><hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-视频解码之软解与硬解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/视频解码之软解与硬解/">视频解码之软解与硬解</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/视频解码之软解与硬解/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="视频解码之软解与硬解"><a href="#视频解码之软解与硬解" class="headerlink" title="视频解码之软解与硬解"></a>视频解码之软解与硬解</h1><p><strong>硬解</strong>：从字面意思上理解就是用硬件来进行解码，通过显卡的视频加速功能对高清视频进行解码，很明显就是一个专门的电路板(这样好理解…)来进行视频的解码，是依靠显卡<code>GPU</code>的。                    </p>
+<p><strong>软解</strong>：字面上理解就是用软件进行解码，这样理解也对，但是实际最总还是要硬件来支持的，这个硬件就是<code>CPU</code>。</p>
+<p>既然有这两种不同的解码方式，我们在开发中该如何进行选择？哪个更好？                     </p>
+<ul>
+<li><p>硬解优缺点：<br>  显卡核心GPU拥有独特的计算方法，解码效率非常高，而且充当解码核心的模块成本并不高。这样不但能够减轻CPU的负担，还有着低功耗、发热少等特点。但是由于硬解码起步比较晚，<br>  软件和驱动对其的支持度低。硬解码内置有什么样的模块就能够解码什么样的视频，面对网络上杂乱无章的视频编码格式，不可能做到完全兼容同。此外，硬解码的滤镜、字母、画质增强方面都做的十分不足。</p>
+<p>  优点：低功耗、发热少、效率高。<br>  缺点：视频兼容性差、支持度低。                </p>
+</li>
+<li><p>软解优缺点：<br>  软解码技术的解码过程中，需要对大量的视频信息进行运算，对CPU性能的要求非常高。尤其是对高清晰度大码率的视频来说，巨大的运算量就会造成转换效率低、发热量大等问题。<br>  但是由于软解码的过程中不需要复杂的硬件支持，兼容性非常高。即使是新出的视频编码格式，只要安装好相应的解码器文件，就能顺利播放。而且软解码拥有丰富的滤镜、字幕、画面处理优化等效果，<br>  如果<code>CPU</code>足够强悍的话，能够实现更加出色的画面效果。</p>
+<p>  优点：  兼容强、全解码、效果好<br>  缺点：  对<code>CPU</code>要求高、效率低、发热大                 </p>
+</li>
+</ul>
+<p>关于软解与硬解究竟哪个更好的问题一直是争论的热点，其实我倒是感觉没有好坏之分，各自有各自的优缺点和使用条件，根据需要去选择才是最合适的。<br>播放码率比较大的视频，硬解可能流畅的播放，但是软解可能会出现演示、画面和声音卡顿不同步的问题。但是硬解播放出的视频大多都不允许在解码之后进行软件后处理，比如进行一些降噪锐化之类的后期滤镜，<br>这样可能会让人感觉画质不太好的。当然上面的这种情况也是和<code>CPU</code>及<code>GPU</code>能力的不同而不同的。 总的来说，还是各有春秋，适合你的才是最好的。 </p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/视频解码之软解与硬解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-通过Hardware Layer提高动画性能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/通过Hardware Layer提高动画性能/">通过Hardware Layer提高动画性能</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/通过Hardware Layer提高动画性能/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="通过Hardware-Layer提高动画性能"><a href="#通过Hardware-Layer提高动画性能" class="headerlink" title="通过Hardware Layer提高动画性能"></a>通过Hardware Layer提高动画性能</h1><p>项目中越来越多的动画，越来越多的效果导致了应用性能越来越低。该如何提升。   </p>
+<p>###简介 </p>
+<p>在<code>View</code>播放动画的过程中每一帧都需要被重绘。如果使用<code>view layers</code>，就不用每帧都去重绘，因为<code>View</code>渲染一旦离开屏幕缓冲区就可以被重用。</p>
+<p>而且，<code>hardware layers</code>会在<code>GPU</code>上缓存，这样就会让一些动画过程中的操作变得更快。通过<code>hardware layers</code>可以快速的渲染一些简单的转变(位移、选中、缩放、颜色渐变)。由于很多动画都是这些动作的结合，所以<code>hardware layers</code>可以显著的提高动画性能。</p>
+<p>在<code>View</code>当中提供了三种类型的<code>Layer type</code>:    </p>
+<ul>
+<li><p>LAYER_TYPE_HARDWARE</p>
+<blockquote>
+<p>Indicates that the view has a hardware layer. A hardware layer is backed by a hardware specific texture (generally Frame Buffer Objects or FBO on OpenGL hardware) and causes the view to be rendered using Android’s hardware rendering pipeline, but only if hardware acceleration is turned on for the view hierarchy. When hardware acceleration is turned off, hardware layers behave exactly as software layers.</p>
+<p>A hardware layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
+<p>A hardware layer can be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a hardware layer can be used to render the view tree only once.</p>
+<p>A hardware layer can also be used to increase the rendering quality when rotation transformations are applied on a view. It can also be used to prevent potential clipping issues when applying 3D transforms on a view.    </p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>LAYER_TYPE_SOFTWARE</p>
+<blockquote>
+<p>Indicates that the view has a software layer. A software layer is backed by a bitmap and causes the view to be rendered using Android’s software rendering pipeline, even if hardware acceleration is enabled.</p>
+<p>Software layers have various usages:</p>
+<p>When the application is not using hardware acceleration, a software layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
+<p>When the application is using hardware acceleration, a software layer is useful to render drawing primitives not supported by the hardware accelerated pipeline. It can also be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a software layer can be used to render the view tree only once.</p>
+<p>Software layers should be avoided when the affected view tree updates often. Every update will require to re-render the software layer, which can potentially be slow (particularly when hardware acceleration is turned on since the layer will have to be uploaded into a hardware texture after every update.)</p>
+</blockquote>
+</li>
+<li><p>LAYER_TYPE_NONE</p>
+<blockquote>
+<p>Indicates that the view does not have a layer.<br>  默认值。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>首先使用的前提是在清单文件中开启了硬件加速。否则将无法使用<code>hardware layer</code>。这一点在上面的文档中也有说明。</p>
+<p><code>API</code>也是非常简单的，直接使用<code>View.setLayerType()</code>就好。使用时应该只是暂时的设置<code>Hardware Layer</code>，因为它们无法自动释放。<br>基本的使用步骤：    </p>
+<ul>
+<li>对每个想要在动画过程中进行缓存的<code>view</code>调用<code>View.setLayerType(View.LAYER_TYPE_HARDWARE, null)</code>方法。</li>
+<li>执行动画。</li>
+<li>在动画执行结束后调用<code>View.setLayerType(View.LAYER_TYPE_NONE, null)</code>方法来进行清除。</li>
+</ul>
+<p>示例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    mView.setLayerType(View.LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
+<p>但是如果在<code>4.0.x</code>的版本中使用上面的代码会本亏，必须要把<code>setLayerType</code>放到<code>Runnable</code>中。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    <span class="comment">//This will work successfully</span></div><div class="line">    post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</div><div class="line">            setLayerType(LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
+<p>如果你基于<code>minSdkVersion 16</code>以上并且使用<code>ViewPropertyAnimator</code>时，你可以使用<code>withLayer()</code>方法替代如上的操作:     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mView.animate().translationX(<span class="number">150</span>).withLayer().start();</div></pre></td></tr></table></figure>
+<p>或者在<code>api 14</code>以上时使用<code>ViewCompat.animate().withLayer()</code><br>这样做，你的动画就会变得更流畅！</p>
+<p>###注意事项  </p>
+<p>你应该知道，事情没那么简单。<br><code>Hardware layers</code>有着惊人的提升动画性能的能力。然而，如果滥用，它的危害更大。<strong>不要盲目的使用<code>layers</code></strong></p>
+<ul>
+<li><p>首先，在有些情况下，<code>hardware layers</code>除了<code>view</code>渲染外还会执行更多的工作。缓存<code>layer</code>将会需要时间，因为首选第一步就需要两个过程: 先将这些<code>view</code>渲染到<code>GPU</code>的一个<code>layer</code>中然后<code>GPU</code>再渲染该<code>layer</code>到<code>Window</code>上。如果要渲染的<code>View</code>非常简单(例如一个纯色值),那么这样在初始化的时候就会增加<code>Hardware Layer</code>不必要的开销。</p>
+</li>
+<li><p>其次，对所有的缓存来讲，都有一个缓存失效的可能性。任何时候如果在动画过程中调用<code>view.invalidate()</code>，那么<code>layer</code>就必须要重新渲染。经常的废弃<code>hardware layers</code>会比没有<code>layers</code>的情况下更糟糕，因为如同上面讲到的<code>hardware layers</code>在设置缓存时会有额外的开销。如果你需要经常的重新缓存<code>layer</code>，那就会有极大的损害。    </p>
+<p>  这个问题也是非常容易出现的，因为动画经常有多个移动的部分。假如现在有一个三个部分移动的动画:     </p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Parent ViewGroup</div><div class="line">—-&gt; <span class="function">Child <span class="title">View1</span> <span class="params">(往左移动)</span></span></div><div class="line">—-&gt; Child <span class="title">View2</span> <span class="params">(往右移动)</span></div><div class="line">—-&gt; Child <span class="title">View3</span> <span class="params">(往上移动)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>如果你只在父布局`ViewGroup`上设置一个`layer`，那就将经常的缓存失效，因为`ViewGroup`会随着子`View`不断地改变。然而对每个单独的子`Views`而言，他们只是在位移。这种情况下，最好是对每个子`View上`设置`Hardware Layer`（而不是在父布局上）。
+
+***再次重申，通常是对多个子`View上`适当的设置`Hardware Layer`，这样他们就不会在动画运行时失效。***
+
+在手机开发者选项中的*显示硬件层更新（Show hardware layers updates）*功能是追踪这个问题的开发利器。当`View`渲染`Hardware Layer`的时候闪烁绿色，它应该在动画开始的时候闪烁一次（也就是`Layer`渲染初始化的时候），然而，如果你的`View`在整个动画期间都是绿色，那就是遇到失效的问题了。
+</code></pre><ul>
+<li>最后，<code>hardware layers</code>使用<code>GPU</code>内存，你当然不想出现内存泄漏的问题。所以你应该在必要的时候再去使用<code>hardware layers</code>，就想播放动画时。  </li>
+</ul>
+<p>这里也没有硬性规则。<code>Android</code>渲染系统是非常复杂的。就像所有性能问题一样，测试才是关键。通过使用“显示硬件层更新”开发者选项来确定<code>layers</code>是在帮你还是害你。</p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/通过Hardware Layer提高动画性能/">展开全文 >></a>
         </p>
       
 
