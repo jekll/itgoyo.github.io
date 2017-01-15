@@ -1033,6 +1033,134 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-通过Hardware Layer提高动画性能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/通过Hardware Layer提高动画性能/">通过Hardware Layer提高动画性能</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/通过Hardware Layer提高动画性能/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="通过Hardware-Layer提高动画性能"><a href="#通过Hardware-Layer提高动画性能" class="headerlink" title="通过Hardware Layer提高动画性能"></a>通过Hardware Layer提高动画性能</h1><p>项目中越来越多的动画，越来越多的效果导致了应用性能越来越低。该如何提升。   </p>
+<p>###简介 </p>
+<p>在<code>View</code>播放动画的过程中每一帧都需要被重绘。如果使用<code>view layers</code>，就不用每帧都去重绘，因为<code>View</code>渲染一旦离开屏幕缓冲区就可以被重用。</p>
+<p>而且，<code>hardware layers</code>会在<code>GPU</code>上缓存，这样就会让一些动画过程中的操作变得更快。通过<code>hardware layers</code>可以快速的渲染一些简单的转变(位移、选中、缩放、颜色渐变)。由于很多动画都是这些动作的结合，所以<code>hardware layers</code>可以显著的提高动画性能。</p>
+<p>在<code>View</code>当中提供了三种类型的<code>Layer type</code>:    </p>
+<ul>
+<li><p>LAYER_TYPE_HARDWARE</p>
+<blockquote>
+<p>Indicates that the view has a hardware layer. A hardware layer is backed by a hardware specific texture (generally Frame Buffer Objects or FBO on OpenGL hardware) and causes the view to be rendered using Android’s hardware rendering pipeline, but only if hardware acceleration is turned on for the view hierarchy. When hardware acceleration is turned off, hardware layers behave exactly as software layers.</p>
+<p>A hardware layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
+<p>A hardware layer can be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a hardware layer can be used to render the view tree only once.</p>
+<p>A hardware layer can also be used to increase the rendering quality when rotation transformations are applied on a view. It can also be used to prevent potential clipping issues when applying 3D transforms on a view.    </p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>LAYER_TYPE_SOFTWARE</p>
+<blockquote>
+<p>Indicates that the view has a software layer. A software layer is backed by a bitmap and causes the view to be rendered using Android’s software rendering pipeline, even if hardware acceleration is enabled.</p>
+<p>Software layers have various usages:</p>
+<p>When the application is not using hardware acceleration, a software layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
+<p>When the application is using hardware acceleration, a software layer is useful to render drawing primitives not supported by the hardware accelerated pipeline. It can also be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a software layer can be used to render the view tree only once.</p>
+<p>Software layers should be avoided when the affected view tree updates often. Every update will require to re-render the software layer, which can potentially be slow (particularly when hardware acceleration is turned on since the layer will have to be uploaded into a hardware texture after every update.)</p>
+</blockquote>
+</li>
+<li><p>LAYER_TYPE_NONE</p>
+<blockquote>
+<p>Indicates that the view does not have a layer.<br>  默认值。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>首先使用的前提是在清单文件中开启了硬件加速。否则将无法使用<code>hardware layer</code>。这一点在上面的文档中也有说明。</p>
+<p><code>API</code>也是非常简单的，直接使用<code>View.setLayerType()</code>就好。使用时应该只是暂时的设置<code>Hardware Layer</code>，因为它们无法自动释放。<br>基本的使用步骤：    </p>
+<ul>
+<li>对每个想要在动画过程中进行缓存的<code>view</code>调用<code>View.setLayerType(View.LAYER_TYPE_HARDWARE, null)</code>方法。</li>
+<li>执行动画。</li>
+<li>在动画执行结束后调用<code>View.setLayerType(View.LAYER_TYPE_NONE, null)</code>方法来进行清除。</li>
+</ul>
+<p>示例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    mView.setLayerType(View.LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
+<p>但是如果在<code>4.0.x</code>的版本中使用上面的代码会本亏，必须要把<code>setLayerType</code>放到<code>Runnable</code>中。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    <span class="comment">//This will work successfully</span></div><div class="line">    post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</div><div class="line">            setLayerType(LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
+<p>如果你基于<code>minSdkVersion 16</code>以上并且使用<code>ViewPropertyAnimator</code>时，你可以使用<code>withLayer()</code>方法替代如上的操作:     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mView.animate().translationX(<span class="number">150</span>).withLayer().start();</div></pre></td></tr></table></figure>
+<p>或者在<code>api 14</code>以上时使用<code>ViewCompat.animate().withLayer()</code><br>这样做，你的动画就会变得更流畅！</p>
+<p>###注意事项  </p>
+<p>你应该知道，事情没那么简单。<br><code>Hardware layers</code>有着惊人的提升动画性能的能力。然而，如果滥用，它的危害更大。<strong>不要盲目的使用<code>layers</code></strong></p>
+<ul>
+<li><p>首先，在有些情况下，<code>hardware layers</code>除了<code>view</code>渲染外还会执行更多的工作。缓存<code>layer</code>将会需要时间，因为首选第一步就需要两个过程: 先将这些<code>view</code>渲染到<code>GPU</code>的一个<code>layer</code>中然后<code>GPU</code>再渲染该<code>layer</code>到<code>Window</code>上。如果要渲染的<code>View</code>非常简单(例如一个纯色值),那么这样在初始化的时候就会增加<code>Hardware Layer</code>不必要的开销。</p>
+</li>
+<li><p>其次，对所有的缓存来讲，都有一个缓存失效的可能性。任何时候如果在动画过程中调用<code>view.invalidate()</code>，那么<code>layer</code>就必须要重新渲染。经常的废弃<code>hardware layers</code>会比没有<code>layers</code>的情况下更糟糕，因为如同上面讲到的<code>hardware layers</code>在设置缓存时会有额外的开销。如果你需要经常的重新缓存<code>layer</code>，那就会有极大的损害。    </p>
+<p>  这个问题也是非常容易出现的，因为动画经常有多个移动的部分。假如现在有一个三个部分移动的动画:     </p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Parent ViewGroup</div><div class="line">—-&gt; <span class="function">Child <span class="title">View1</span> <span class="params">(往左移动)</span></span></div><div class="line">—-&gt; Child <span class="title">View2</span> <span class="params">(往右移动)</span></div><div class="line">—-&gt; Child <span class="title">View3</span> <span class="params">(往上移动)</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>如果你只在父布局`ViewGroup`上设置一个`layer`，那就将经常的缓存失效，因为`ViewGroup`会随着子`View`不断地改变。然而对每个单独的子`Views`而言，他们只是在位移。这种情况下，最好是对每个子`View上`设置`Hardware Layer`（而不是在父布局上）。
+
+***再次重申，通常是对多个子`View上`适当的设置`Hardware Layer`，这样他们就不会在动画运行时失效。***
+
+在手机开发者选项中的*显示硬件层更新（Show hardware layers updates）*功能是追踪这个问题的开发利器。当`View`渲染`Hardware Layer`的时候闪烁绿色，它应该在动画开始的时候闪烁一次（也就是`Layer`渲染初始化的时候），然而，如果你的`View`在整个动画期间都是绿色，那就是遇到失效的问题了。
+</code></pre><ul>
+<li>最后，<code>hardware layers</code>使用<code>GPU</code>内存，你当然不想出现内存泄漏的问题。所以你应该在必要的时候再去使用<code>hardware layers</code>，就想播放动画时。  </li>
+</ul>
+<p>这里也没有硬性规则。<code>Android</code>渲染系统是非常复杂的。就像所有性能问题一样，测试才是关键。通过使用“显示硬件层更新”开发者选项来确定<code>layers</code>是在帮你还是害你。</p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/通过Hardware Layer提高动画性能/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-热修复实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1204,134 +1332,6 @@ jlrField.set(instance, combined);
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/热修复实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-通过Hardware Layer提高动画性能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/通过Hardware Layer提高动画性能/">通过Hardware Layer提高动画性能</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/通过Hardware Layer提高动画性能/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="通过Hardware-Layer提高动画性能"><a href="#通过Hardware-Layer提高动画性能" class="headerlink" title="通过Hardware Layer提高动画性能"></a>通过Hardware Layer提高动画性能</h1><p>项目中越来越多的动画，越来越多的效果导致了应用性能越来越低。该如何提升。   </p>
-<p>###简介 </p>
-<p>在<code>View</code>播放动画的过程中每一帧都需要被重绘。如果使用<code>view layers</code>，就不用每帧都去重绘，因为<code>View</code>渲染一旦离开屏幕缓冲区就可以被重用。</p>
-<p>而且，<code>hardware layers</code>会在<code>GPU</code>上缓存，这样就会让一些动画过程中的操作变得更快。通过<code>hardware layers</code>可以快速的渲染一些简单的转变(位移、选中、缩放、颜色渐变)。由于很多动画都是这些动作的结合，所以<code>hardware layers</code>可以显著的提高动画性能。</p>
-<p>在<code>View</code>当中提供了三种类型的<code>Layer type</code>:    </p>
-<ul>
-<li><p>LAYER_TYPE_HARDWARE</p>
-<blockquote>
-<p>Indicates that the view has a hardware layer. A hardware layer is backed by a hardware specific texture (generally Frame Buffer Objects or FBO on OpenGL hardware) and causes the view to be rendered using Android’s hardware rendering pipeline, but only if hardware acceleration is turned on for the view hierarchy. When hardware acceleration is turned off, hardware layers behave exactly as software layers.</p>
-<p>A hardware layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
-<p>A hardware layer can be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a hardware layer can be used to render the view tree only once.</p>
-<p>A hardware layer can also be used to increase the rendering quality when rotation transformations are applied on a view. It can also be used to prevent potential clipping issues when applying 3D transforms on a view.    </p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li><p>LAYER_TYPE_SOFTWARE</p>
-<blockquote>
-<p>Indicates that the view has a software layer. A software layer is backed by a bitmap and causes the view to be rendered using Android’s software rendering pipeline, even if hardware acceleration is enabled.</p>
-<p>Software layers have various usages:</p>
-<p>When the application is not using hardware acceleration, a software layer is useful to apply a specific color filter and/or blending mode and/or translucency to a view and all its children.</p>
-<p>When the application is using hardware acceleration, a software layer is useful to render drawing primitives not supported by the hardware accelerated pipeline. It can also be used to cache a complex view tree into a texture and reduce the complexity of drawing operations. For instance, when animating a complex view tree with a translation, a software layer can be used to render the view tree only once.</p>
-<p>Software layers should be avoided when the affected view tree updates often. Every update will require to re-render the software layer, which can potentially be slow (particularly when hardware acceleration is turned on since the layer will have to be uploaded into a hardware texture after every update.)</p>
-</blockquote>
-</li>
-<li><p>LAYER_TYPE_NONE</p>
-<blockquote>
-<p>Indicates that the view does not have a layer.<br>  默认值。</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>首先使用的前提是在清单文件中开启了硬件加速。否则将无法使用<code>hardware layer</code>。这一点在上面的文档中也有说明。</p>
-<p><code>API</code>也是非常简单的，直接使用<code>View.setLayerType()</code>就好。使用时应该只是暂时的设置<code>Hardware Layer</code>，因为它们无法自动释放。<br>基本的使用步骤：    </p>
-<ul>
-<li>对每个想要在动画过程中进行缓存的<code>view</code>调用<code>View.setLayerType(View.LAYER_TYPE_HARDWARE, null)</code>方法。</li>
-<li>执行动画。</li>
-<li>在动画执行结束后调用<code>View.setLayerType(View.LAYER_TYPE_NONE, null)</code>方法来进行清除。</li>
-</ul>
-<p>示例:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    mView.setLayerType(View.LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
-<p>但是如果在<code>4.0.x</code>的版本中使用上面的代码会本亏，必须要把<code>setLayerType</code>放到<code>Runnable</code>中。如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mView.setLayerType(View.LAYER_TYPE_HARDWARE, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">animator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">    <span class="comment">//This will work successfully</span></div><div class="line">    post(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span> <span class="params">()</span> </span>&#123;</div><div class="line">            setLayerType(LAYER_TYPE_NONE, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">animator.start();</div></pre></td></tr></table></figure></p>
-<p>如果你基于<code>minSdkVersion 16</code>以上并且使用<code>ViewPropertyAnimator</code>时，你可以使用<code>withLayer()</code>方法替代如上的操作:     </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mView.animate().translationX(<span class="number">150</span>).withLayer().start();</div></pre></td></tr></table></figure>
-<p>或者在<code>api 14</code>以上时使用<code>ViewCompat.animate().withLayer()</code><br>这样做，你的动画就会变得更流畅！</p>
-<p>###注意事项  </p>
-<p>你应该知道，事情没那么简单。<br><code>Hardware layers</code>有着惊人的提升动画性能的能力。然而，如果滥用，它的危害更大。<strong>不要盲目的使用<code>layers</code></strong></p>
-<ul>
-<li><p>首先，在有些情况下，<code>hardware layers</code>除了<code>view</code>渲染外还会执行更多的工作。缓存<code>layer</code>将会需要时间，因为首选第一步就需要两个过程: 先将这些<code>view</code>渲染到<code>GPU</code>的一个<code>layer</code>中然后<code>GPU</code>再渲染该<code>layer</code>到<code>Window</code>上。如果要渲染的<code>View</code>非常简单(例如一个纯色值),那么这样在初始化的时候就会增加<code>Hardware Layer</code>不必要的开销。</p>
-</li>
-<li><p>其次，对所有的缓存来讲，都有一个缓存失效的可能性。任何时候如果在动画过程中调用<code>view.invalidate()</code>，那么<code>layer</code>就必须要重新渲染。经常的废弃<code>hardware layers</code>会比没有<code>layers</code>的情况下更糟糕，因为如同上面讲到的<code>hardware layers</code>在设置缓存时会有额外的开销。如果你需要经常的重新缓存<code>layer</code>，那就会有极大的损害。    </p>
-<p>  这个问题也是非常容易出现的，因为动画经常有多个移动的部分。假如现在有一个三个部分移动的动画:     </p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Parent ViewGroup</div><div class="line">—-&gt; <span class="function">Child <span class="title">View1</span> <span class="params">(往左移动)</span></span></div><div class="line">—-&gt; Child <span class="title">View2</span> <span class="params">(往右移动)</span></div><div class="line">—-&gt; Child <span class="title">View3</span> <span class="params">(往上移动)</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<pre><code>如果你只在父布局`ViewGroup`上设置一个`layer`，那就将经常的缓存失效，因为`ViewGroup`会随着子`View`不断地改变。然而对每个单独的子`Views`而言，他们只是在位移。这种情况下，最好是对每个子`View上`设置`Hardware Layer`（而不是在父布局上）。
-
-***再次重申，通常是对多个子`View上`适当的设置`Hardware Layer`，这样他们就不会在动画运行时失效。***
-
-在手机开发者选项中的*显示硬件层更新（Show hardware layers updates）*功能是追踪这个问题的开发利器。当`View`渲染`Hardware Layer`的时候闪烁绿色，它应该在动画开始的时候闪烁一次（也就是`Layer`渲染初始化的时候），然而，如果你的`View`在整个动画期间都是绿色，那就是遇到失效的问题了。
-</code></pre><ul>
-<li>最后，<code>hardware layers</code>使用<code>GPU</code>内存，你当然不想出现内存泄漏的问题。所以你应该在必要的时候再去使用<code>hardware layers</code>，就想播放动画时。  </li>
-</ul>
-<p>这里也没有硬性规则。<code>Android</code>渲染系统是非常复杂的。就像所有性能问题一样，测试才是关键。通过使用“显示硬件层更新”开发者选项来确定<code>layers</code>是在帮你还是害你。</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/通过Hardware Layer提高动画性能/">展开全文 >></a>
         </p>
       
 
