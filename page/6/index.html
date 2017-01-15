@@ -165,19 +165,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-屏幕适配之百分比方案详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/屏幕适配之百分比方案详解/">屏幕适配之百分比方案详解</a>
+      <a class="article-title" href="/2015/01/01/性能优化/">性能优化</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/屏幕适配之百分比方案详解/" class="archive-article-date">
+        <a href="/2015/01/01/性能优化/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -185,76 +185,35 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="屏幕适配之百分比方案详解"><a href="#屏幕适配之百分比方案详解" class="headerlink" title="屏幕适配之百分比方案详解"></a>屏幕适配之百分比方案详解</h1><p><code>Android</code>设备碎片化十分严重，在开发过程中的适配工作也非常很繁琐，有关屏幕适配的介绍请看之前的文章<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80/%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D.md">屏幕适配</a>。</p>
-<p>最近看到<code>DrawerLayout</code>，<code>support v4</code>中提供的类，想到对<code>google</code>提供的这些支持库，自己一点都不熟悉，想着看看<code>Google</code>提供的支持库都有什么内容。结果看着看着在最后忽然看到了<code>Percent Support Library</code>。寻思怎么还百分比呢？仔细一看介绍，我擦，真是太有用了。</p>
-<blockquote>
-<p>###Percent Support Library<br>The Percent package provides APIs to support adding and managing percentage based dimensions in your app.</p>
-<p>The Percent Support library adds support for the PercentLayoutHelper.PercentLayoutParams interface and various classes, such as PercentFrameLayout and PercentRelativeLayout.</p>
-<p>After you download the Android Support Libraries, this library is located in the <sdk>/extras/android/support/percent directory. For more information on how to set up your project, follow the instructions in Adding libraries with resources.</sdk></p>
-<p>The Gradle build script dependency identifier for this library is as follows:<br><code>com.android.support:percent:23.3.0</code></p>
-</blockquote>
-<p>看到了吗？ 说提供了<code>PercentFrameLayout</code>和<code>PercentRelativeLayout</code>来支持百分比了。这样不就完美的解决了适配的问题嘛。啥也不说了，立马配置<code>cradle</code>来瞧瞧。   </p>
-<blockquote>
-<p>Subclass of FrameLayout that supports percentage based dimensions and margins. You can specify dimension or a margin of child by using attributes with “Percent” suffix. </p>
-</blockquote>
-<p>上代码:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">android.support.percent.PercentFrameLayout</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">        <span class="attr">android:src</span>=<span class="string">"@mipmap/ic_launcher"</span></div><div class="line">        <span class="attr">app:layout_widthPercent</span>=<span class="string">"50%"</span></div><div class="line">        <span class="attr">app:layout_heightPercent</span>=<span class="string">"50%"</span></div><div class="line">        <span class="attr">app:layout_marginTopPercent</span>=<span class="string">"25%"</span></div><div class="line">        <span class="attr">app:layout_marginLeftPercent</span>=<span class="string">"25%"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">android.support.percent.PercentFrameLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>效果如下:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/percent_frame.png?raw=true" alt="image"><br>完美.   </p>
-<p>支持的属性:    </p>
-<ul>
-<li><code>layout_widthPercent</code></li>
-<li><code>layout_heightPercent</code></li>
-<li><code>layout_marginPercent</code></li>
-<li><code>layout_marginLeftPercent</code></li>
-<li><code>layout_marginTopPercent</code></li>
-<li><code>layout_marginRightPercent</code></li>
-<li><code>layout_marginBottomPercent</code></li>
-<li><code>layout_marginStartPercent</code></li>
-<li><code>layout_marginEndPercent</code></li>
-<li><code>layout_aspectRatio</code></li>
+        <h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="代码优化原则"><a href="#代码优化原则" class="headerlink" title="代码优化原则:      "></a>代码优化原则:      </h2><ul>
+<li>时间换时间：<br>  如禁用电脑的一些开机启动项，通过减少这些没必要的启动项的时间从而节省开机时间<br>  如网站界面上数据的分批获取，AJAX技术</li>
+<li>时间换空间：<br>  如拷贝文件时new一个字节数组当缓冲器，即byte[] buffer = new byte[1024]。<br>  为什么只new一个1024个字节的数组呢，new一个更大的字节数组不是一下就把文件拷贝完了么？这么做就是为了牺牲时间节省有限的内存空间</li>
+<li>空间换时间：<br>  如用Windows系统自带的搜索文件的功能搜索文件时会很慢，但是我们牺牲电脑硬盘空间安装一个everything软件来搜索文件就特别快</li>
+<li>空间换空间：<br>  如虚拟内存</li>
 </ul>
-<blockquote>
-<p>It is not necessary to specify layout_width/height if you specify layout_widthPercent. However, if you want the view to be able to take up more space than what percentage value permits, you can add layout_width/height=”wrap_content”. In that case if the percentage size is too small for the View’s content, it will be resized using wrap_content rule.</p>
-</blockquote>
-<p>如果指定了<code>layout_widthPercent</code>就不用指定<code>layout_width/height</code>属性了。(<code>Studio</code>可能会提示错误，设置忽略就好)。然而，如果你想要该<code>View</code>能够占用比设置的百分比值更大的空间时，你可以指定<code>layout_widht/height=“wrap_content”</code>。在这种情况下，如果设置的百分比值在显示内容时太小时，将会使用<code>wrap_content</code>的值重新计算。</p>
-<p>就是这个意思:如果指定的百分比太小怕显示不开的话，也可以给它指定<code>wrap_content</code>属性，这样当显示不开的时候就会使用<code>wrap_content</code>的值。<br>如下:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">android.support.percent.PercentFrameLayout</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:src</span>=<span class="string">"@mipmap/ic_launcher"</span></div><div class="line">        <span class="attr">android:text</span>=<span class="string">"顶顶顶顶顶大大大"</span></div><div class="line">        <span class="attr">android:textSize</span>=<span class="string">"30dp"</span></div><div class="line">        <span class="attr">android:singleLine</span>=<span class="string">"true"</span></div><div class="line">        <span class="attr">app:layout_widthPercent</span>=<span class="string">"30%"</span></div><div class="line">        <span class="attr">app:layout_heightPercent</span>=<span class="string">"5%"</span></div><div class="line">        <span class="attr">app:layout_marginTopPercent</span>=<span class="string">"25%"</span></div><div class="line">        <span class="attr">app:layout_marginLeftPercent</span>=<span class="string">"25%"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">android.support.percent.PercentFrameLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>效果:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/percent_wrap.png?raw=true" alt="image">    </p>
-<p>加入<code>wrap_content</code>后一点效果也没有啊，还是显示不全啊，和没加<code>wrap_content</code>一样，- -!</p>
-<p>你也可以通过只设置<code>width</code>或者<code>height</code>和<code>layout_aspectRatio</code>这种比例值的方式来让第另一个值自动计算。例如，如果你想要使用<code>16:9</code>的比例，你可以使用:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">android:layout_width="300dp"</div><div class="line">app:layout_aspectRatio="178%"</div></pre></td></tr></table></figure></p>
-<p>这样将会在宽固定为<code>300dp</code>的基础上以16:9(1.78:1)来计算高度。</p>
-<p><code>PercentRelativeLayout</code>的使用都是一样的，这里就不贴了。   </p>
-<p>那它是怎么实现的呢？其实就是内部给通过属性换算，把本布局的宽高和百分比去计算每个<code>view</code>的大小和位置。但是还有为什么上面设置的<code>wrap_content</code>无效呢？是我理解错了吗？</p>
-<p>带着这两个疑问我们来看下源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PercentFrameLayout</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PercentLayoutHelper mHelper = <span class="keyword">new</span> PercentLayoutHelper(<span class="keyword">this</span>);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context, attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PercentFrameLayout</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> LayoutParams <span class="title">generateDefaultLayoutParams</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> LayoutParams <span class="title">generateLayoutParams</span><span class="params">(AttributeSet attrs)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LayoutParams(getContext(), attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line">        mHelper.adjustChildren(widthMeasureSpec, heightMeasureSpec);</div><div class="line">        <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">        <span class="comment">// 从名字上就能看出来下面就是处理如果指定百分比过小不足显示内容时，就去使用`wrap_content`的逻辑</span></div><div class="line">        <span class="keyword">if</span> (mHelper.handleMeasuredStateTooSmall()) &#123;</div><div class="line">            <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onLayout(changed, left, top, right, bottom);</div><div class="line">        mHelper.restoreOriginalParams();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LayoutParams</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span>.<span class="title">LayoutParams</span></span></div><div class="line">            <span class="keyword">implements</span> <span class="title">PercentLayoutHelper</span>.<span class="title">PercentLayoutParams</span> &#123;</div><div class="line"></div><div class="line">        <span class="keyword">private</span> PercentLayoutHelper.PercentLayoutInfo mPercentLayoutInfo;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(Context c, AttributeSet attrs)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(c, attrs);</div><div class="line">            <span class="comment">// PercentLayoutInfo中去解析自定义属性的值</span></div><div class="line">            mPercentLayoutInfo = PercentLayoutHelper.getPercentLayoutInfo(c, attrs);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(width, height);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height, <span class="keyword">int</span> gravity)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(width, height, gravity);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(ViewGroup.LayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(source);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(MarginLayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(source);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(FrameLayout.LayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>((MarginLayoutParams) source);</div><div class="line">            gravity = source.gravity;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LayoutParams</span><span class="params">(LayoutParams source)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>((FrameLayout.LayoutParams) source);</div><div class="line">            mPercentLayoutInfo = source.mPercentLayoutInfo;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> PercentLayoutHelper.<span class="function">PercentLayoutInfo <span class="title">getPercentLayoutInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">if</span> (mPercentLayoutInfo == <span class="keyword">null</span>) &#123;</div><div class="line">                mPercentLayoutInfo = <span class="keyword">new</span> PercentLayoutHelper.PercentLayoutInfo();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">return</span> mPercentLayoutInfo;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setBaseAttributes</span><span class="params">(TypedArray a, <span class="keyword">int</span> widthAttr, <span class="keyword">int</span> heightAttr)</span> </span>&#123;</div><div class="line">            PercentLayoutHelper.fetchWidthAndHeight(<span class="keyword">this</span>, a, widthAttr, heightAttr);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>源码不长，主要是三个部分:    </p>
-<ul>
-<li>重写<code>onMeasure</code>，根据百分比转换成对应的尺寸</li>
-<li>重写<code>onLayout</code></li>
-<li>自定义<code>LayoutParams</code>，在<code>FrameLayout.LayoutParams</code>的基础上多实现了一个接口。包含了<code>PercentLayoutHelper.PercentLayoutInfo</code>属性，而文档中对<code>PercentLayoutInfo</code>的介绍是<code>Container for information about percentage dimensions and margins. It acts as an extension for LayoutParams.</code></li>
-</ul>
-<p>我们也先一步步的来分析，首先看下<code>mHelper.adjustChildren(widthMeasureSpec, heightMeasureSpec);</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Iterates over children and changes their width and height to one calculated from percentage</div><div class="line"> * values.</div><div class="line"> * <span class="doctag">@param</span> widthMeasureSpec Width MeasureSpec of the parent ViewGroup.</div><div class="line"> * <span class="doctag">@param</span> heightMeasureSpec Height MeasureSpec of the parent ViewGroup.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">adjustChildren</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"adjustChildren: "</span> + mHost + <span class="string">" widthMeasureSpec: "</span></div><div class="line">                + View.MeasureSpec.toString(widthMeasureSpec) + <span class="string">" heightMeasureSpec: "</span></div><div class="line">                + View.MeasureSpec.toString(heightMeasureSpec));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> widthHint = View.MeasureSpec.getSize(widthMeasureSpec);</div><div class="line">    <span class="keyword">int</span> heightHint = View.MeasureSpec.getSize(heightMeasureSpec);</div><div class="line">    <span class="comment">// mHost是由构造函数传递过来的，就是PercentFrameLayout自身。</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, N = mHost.getChildCount(); i &lt; N; i++) &#123;</div><div class="line">        View view = mHost.getChildAt(i);</div><div class="line">        ViewGroup.LayoutParams params = view.getLayoutParams();</div><div class="line">        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">            Log.d(TAG, <span class="string">"should adjust "</span> + view + <span class="string">" "</span> + params);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (params <span class="keyword">instanceof</span> PercentLayoutParams) &#123;</div><div class="line">            <span class="comment">// 通过PercentLayoutParams. getPercentLayoutInfo()方法得到PercentLayoutInfo，至于PercentLayoutInfo类在上面也说过了。</span></div><div class="line">            PercentLayoutInfo info =</div><div class="line">                    ((PercentLayoutParams) params).getPercentLayoutInfo();</div><div class="line">            <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">                Log.d(TAG, <span class="string">"using "</span> + info);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (params <span class="keyword">instanceof</span> ViewGroup.MarginLayoutParams) &#123;</div><div class="line">                    <span class="comment">// PercentFrameLayout.LayoutParams继承自FrameLayout.LayoutParams，而FrameLayout.LayoutParams又继承自ViewGroup.MarginLayoutParams</span></div><div class="line">                    info.fillMarginLayoutParams(view, (ViewGroup.MarginLayoutParams) params,</div><div class="line">                            widthHint, heightHint);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    info.fillLayoutParams(params, widthHint, heightHint);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>所以上面代码的意思就是通过对每个子<code>View</code>调用<code>getLayoutParams</code>方法，然后从该<code>LayoutParams</code>中获取到它的<code>PercentLayoutInfo</code>属性，然后再调用<code>PercentLayoutInfo.fillMarginLayoutParams()</code>方法。</p>
-<p>那我们继续看一下<code>PercentLayoutInfo.fillMarginLayoutParams()</code>方法的实现，该方法是根据百分比去设置尺寸和margin:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Fills &#123;<span class="doctag">@code</span> ViewGroup.MarginLayoutParams&#125; dimensions and margins based on percentage</div><div class="line"> * values.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillMarginLayoutParams</span><span class="params">(View view, ViewGroup.MarginLayoutParams params,</span></span></div><div class="line">        <span class="keyword">int</span> widthHint, <span class="keyword">int</span> heightHint) &#123;</div><div class="line">    <span class="comment">// 根据百分比值设置View的尺寸</span></div><div class="line">    fillLayoutParams(params, widthHint, heightHint);</div><div class="line"></div><div class="line">    <span class="comment">// 从注释中就能知道，fillLayoutParams是计算尺寸，那下面这部分就是处理margin了</span></div><div class="line">    <span class="comment">// mPreservedParams来记录原始的margin值</span></div><div class="line">    <span class="comment">// Preserve the original margins, so we can restore them after the measure step.</span></div><div class="line">    mPreservedParams.leftMargin = params.leftMargin;</div><div class="line">    mPreservedParams.topMargin = params.topMargin;</div><div class="line">    mPreservedParams.rightMargin = params.rightMargin;</div><div class="line">    mPreservedParams.bottomMargin = params.bottomMargin;</div><div class="line">    MarginLayoutParamsCompat.setMarginStart(mPreservedParams,</div><div class="line">            MarginLayoutParamsCompat.getMarginStart(params));</div><div class="line">    MarginLayoutParamsCompat.setMarginEnd(mPreservedParams,</div><div class="line">            MarginLayoutParamsCompat.getMarginEnd(params));</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (leftMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.leftMargin = (<span class="keyword">int</span>) (widthHint * leftMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (topMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.topMargin = (<span class="keyword">int</span>) (heightHint * topMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (rightMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.rightMargin = (<span class="keyword">int</span>) (widthHint * rightMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (bottomMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.bottomMargin = (<span class="keyword">int</span>) (heightHint * bottomMarginPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">boolean</span> shouldResolveLayoutDirection = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">if</span> (startMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        MarginLayoutParamsCompat.setMarginStart(params,</div><div class="line">                (<span class="keyword">int</span>) (widthHint * startMarginPercent));</div><div class="line">        shouldResolveLayoutDirection = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (endMarginPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        MarginLayoutParamsCompat.setMarginEnd(params,</div><div class="line">                (<span class="keyword">int</span>) (widthHint * endMarginPercent));</div><div class="line">        shouldResolveLayoutDirection = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (shouldResolveLayoutDirection &amp;&amp; (view != <span class="keyword">null</span>)) &#123;</div><div class="line">        <span class="comment">// Force the resolve pass so that start / end margins are propagated to the</span></div><div class="line">        <span class="comment">// matching left / right fields</span></div><div class="line">        MarginLayoutParamsCompat.resolveLayoutDirection(params,</div><div class="line">                ViewCompat.getLayoutDirection(view));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"after fillMarginLayoutParams: ("</span> + params.width + <span class="string">", "</span> + params.height</div><div class="line">                + <span class="string">")"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>再看一下<code>PercentLayoutInfo.fillLayoutParams()</code>的实现，该方法是通过百分比设置<code>View</code>的尺寸:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Fills &#123;<span class="doctag">@code</span> ViewGroup.LayoutParams&#125; dimensions based on percentage values.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fillLayoutParams</span><span class="params">(ViewGroup.LayoutParams params, <span class="keyword">int</span> widthHint,</span></span></div><div class="line">        <span class="keyword">int</span> heightHint) &#123;</div><div class="line">    <span class="comment">// mPreservedParams来记录原始的宽高值</span></div><div class="line">    <span class="comment">// Preserve the original layout params, so we can restore them after the measure step.</span></div><div class="line">    mPreservedParams.width = params.width;</div><div class="line">    mPreservedParams.height = params.height;</div><div class="line"></div><div class="line">    <span class="comment">// We assume that width/height set to 0 means that value was unset. This might not</span></div><div class="line">    <span class="comment">// necessarily be true, as the user might explicitly set it to 0. However, we use this</span></div><div class="line">    <span class="comment">// information only for the aspect ratio. If the user set the aspect ratio attribute,</span></div><div class="line">    <span class="comment">// it means they accept or soon discover that it will be disregarded.</span></div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> widthNotSet =</div><div class="line">            (mPreservedParams.mIsWidthComputedFromAspectRatio</div><div class="line">                    || mPreservedParams.width == <span class="number">0</span>) &amp;&amp; (widthPercent &lt; <span class="number">0</span>);</div><div class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> heightNotSet =</div><div class="line">            (mPreservedParams.mIsHeightComputedFromAspectRatio</div><div class="line">                    || mPreservedParams.height == <span class="number">0</span>) &amp;&amp; (heightPercent &lt; <span class="number">0</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 如果指定了百分比属性，就用宽高值和百分比去算出具体的宽高</span></div><div class="line">    <span class="keyword">if</span> (widthPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 看到了吗？是根据父`View	`的宽高来乘以百分比，不是根据整个屏幕的宽高，这样可能会有问题，要是ListView这种的高度没法算了</span></div><div class="line">        params.width = (<span class="keyword">int</span>) (widthHint * widthPercent);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (heightPercent &gt;= <span class="number">0</span>) &#123;</div><div class="line">        params.height = (<span class="keyword">int</span>) (heightHint * heightPercent);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 如果指定了宽高的比例值，就用比例值去算出宽高，从这里能看出`aspectRatio`的优先级比百分比要高。他可以覆盖百分比之前设置的值。</span></div><div class="line">    <span class="keyword">if</span> (aspectRatio &gt;= <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (widthNotSet) &#123;</div><div class="line">            params.width = (<span class="keyword">int</span>) (params.height * aspectRatio);</div><div class="line">            <span class="comment">// Keep track that we've filled the width based on the height and aspect ratio.</span></div><div class="line">            mPreservedParams.mIsWidthComputedFromAspectRatio = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (heightNotSet) &#123;</div><div class="line">            params.height = (<span class="keyword">int</span>) (params.width / aspectRatio);</div><div class="line">            <span class="comment">// Keep track that we've filled the height based on the width and aspect ratio.</span></div><div class="line">            mPreservedParams.mIsHeightComputedFromAspectRatio = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"after fillLayoutParams: ("</span> + params.width + <span class="string">", "</span> + params.height + <span class="string">")"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">```    </div><div class="line"></div><div class="line">到这里`onMeasure`中通过百分比值设置宽高以及`margin`的部分就看完了，那我们接着看一下关于百分比值过小时对`wrap_content`的处理:     </div><div class="line">```<span class="function">java</span></div><div class="line"><span class="title">if</span> <span class="params">(mHelper.handleMeasuredStateTooSmall()</span>) &#123;</div><div class="line">    <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>看一下<code>PercentLayoutHelper.handleMeasuredStateTooSmall()</code>方法的实现:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Iterates over children and checks if any of them would like to get more space than it</div><div class="line"> * received through the percentage dimension.</div><div class="line"> *</div><div class="line"> * If you are building a layout that supports percentage dimensions you are encouraged to take</div><div class="line"> * advantage of this method. The developer should be able to specify that a child should be</div><div class="line"> * remeasured by adding normal dimension attribute with &#123;<span class="doctag">@code</span> wrap_content&#125; value. For example</div><div class="line"> * he might specify child's attributes as &#123;<span class="doctag">@code</span> app:layout_widthPercent="60%p"&#125; and</div><div class="line"> * &#123;<span class="doctag">@code</span> android:layout_width="wrap_content"&#125;. In this case if the child receives too little</div><div class="line"> * space, it will be remeasured with width set to &#123;<span class="doctag">@code</span> WRAP_CONTENT&#125;.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> True if the measure phase needs to be rerun because one of the children would like</div><div class="line"> * to receive more space.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMeasuredStateTooSmall</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> needsSecondMeasure = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, N = mHost.getChildCount(); i &lt; N; i++) &#123;</div><div class="line">        View view = mHost.getChildAt(i);</div><div class="line">        ViewGroup.LayoutParams params = view.getLayoutParams();</div><div class="line">        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">            Log.d(TAG, <span class="string">"should handle measured state too small "</span> + view + <span class="string">" "</span> + params);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (params <span class="keyword">instanceof</span> PercentLayoutParams) &#123;</div><div class="line">            PercentLayoutInfo info =</div><div class="line">                    ((PercentLayoutParams) params).getPercentLayoutInfo();</div><div class="line">            <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// shouldHandleMeasuredWidthTooSmall方法来进行判断</span></div><div class="line">                <span class="keyword">if</span> (shouldHandleMeasuredWidthTooSmall(view, info)) &#123;</div><div class="line">                    needsSecondMeasure = <span class="keyword">true</span>;</div><div class="line">                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (shouldHandleMeasuredHeightTooSmall(view, info)) &#123;</div><div class="line">                    needsSecondMeasure = <span class="keyword">true</span>;</div><div class="line">                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">        Log.d(TAG, <span class="string">"should trigger second measure pass: "</span> + needsSecondMeasure);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> needsSecondMeasure;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>那继续看一下<code>shouldHandleMeasuredWidthTooSmall()</code>方法:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">shouldHandleMeasuredWidthTooSmall</span><span class="params">(View view, PercentLayoutInfo info)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> state = ViewCompat.getMeasuredWidthAndState(view) &amp; ViewCompat.MEASURED_STATE_MASK;</div><div class="line">    <span class="keyword">return</span> state == ViewCompat.MEASURED_STATE_TOO_SMALL &amp;&amp; info.widthPercent &gt;= <span class="number">0</span> &amp;&amp;</div><div class="line">            info.mPreservedParams.width == ViewGroup.LayoutParams.WRAP_CONTENT;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>继续看<code>ViewCompat.getMeasuredWidthAndState()</code>的源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMeasuredWidthAndState</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> IMPL.getMeasuredWidthAndState(view);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>继续往下看，这个<code>IMPL</code>是什么呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> ViewCompatImpl IMPL;</div><div class="line"><span class="keyword">static</span> &#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> version = android.os.Build.VERSION.SDK_INT;</div><div class="line">    <span class="keyword">if</span> (version &gt;= <span class="number">23</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> MarshmallowViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">21</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> LollipopViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">19</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> KitKatViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">17</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> JbMr1ViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">16</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> JBViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">15</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> ICSMr1ViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">14</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> ICSViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">11</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> HCViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">9</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> GBViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (version &gt;= <span class="number">7</span>) &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> EclairMr1ViewCompatImpl();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        IMPL = <span class="keyword">new</span> BaseViewCompatImpl();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>继续看，<code>IMPL.getMeasuredWidthAndState()</code>，方法其实最终就是使用的<code>BaseViewCompatImpl.getMeasuredWidthAndState()</code>方法，接着看它的的源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMeasuredWidthAndState</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> view.getMeasuredWidth();</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<p>最后就是调用了<code>getMeasuredWidth()</code>方法。  没毛病- -!</p>
-<p><code>onMeasure</code>的到这里就分析完了。<br>那接着来看一下<code>onLayout</code>方法,<code>onLayout</code>方法直接调用了<code>PercentLayoutHelper.restoreOriginalParams</code>，:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Iterates over children and restores their original dimensions that were changed for</div><div class="line"> * percentage values. Calling this method only makes sense if you previously called</div><div class="line"> * &#123;<span class="doctag">@link</span> PercentLayoutHelper#adjustChildren(int, int)&#125;.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreOriginalParams</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, N = mHost.getChildCount(); i &lt; N; i++) &#123;</div><div class="line">        View view = mHost.getChildAt(i);</div><div class="line">        ViewGroup.LayoutParams params = view.getLayoutParams();</div><div class="line">        <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">            Log.d(TAG, <span class="string">"should restore "</span> + view + <span class="string">" "</span> + params);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (params <span class="keyword">instanceof</span> PercentLayoutParams) &#123;</div><div class="line">            PercentLayoutInfo info =</div><div class="line">                    ((PercentLayoutParams) params).getPercentLayoutInfo();</div><div class="line">            <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</div><div class="line">                Log.d(TAG, <span class="string">"using "</span> + info);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (info != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (params <span class="keyword">instanceof</span> ViewGroup.MarginLayoutParams) &#123;</div><div class="line">                    info.restoreMarginLayoutParams((ViewGroup.MarginLayoutParams) params);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    info.restoreLayoutParams(params);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>调用了<code>PercentLayoutInfo.restoreMarginLayoutParams()</code>方法，我们看下它的源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Restores original dimensions and margins after they were changed for percentage based</div><div class="line"> * values. Calling this method only makes sense if you previously called</div><div class="line"> * &#123;<span class="doctag">@link</span> PercentLayoutHelper.PercentLayoutInfo#fillMarginLayoutParams&#125;.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreMarginLayoutParams</span><span class="params">(ViewGroup.MarginLayoutParams params)</span> </span>&#123;</div><div class="line">    restoreLayoutParams(params);</div><div class="line">    <span class="comment">// mPreservedParams的值在之前ad</span></div><div class="line">    params.leftMargin = mPreservedParams.leftMargin;</div><div class="line">    params.topMargin = mPreservedParams.topMargin;</div><div class="line">    params.rightMargin = mPreservedParams.rightMargin;</div><div class="line">    params.bottomMargin = mPreservedParams.bottomMargin;</div><div class="line">    MarginLayoutParamsCompat.setMarginStart(params,</div><div class="line">            MarginLayoutParamsCompat.getMarginStart(mPreservedParams));</div><div class="line">    MarginLayoutParamsCompat.setMarginEnd(params,</div><div class="line">            MarginLayoutParamsCompat.getMarginEnd(mPreservedParams));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>意思是说，再他们被以百分比为基础的数据更改之后恢复成原始的尺寸和margin。<br>然后继续看一下<code>restoreLayoutParams()</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* Restores original dimensions after they were changed for percentage based values. Calling</div><div class="line">* this method only makes sense if you previously called</div><div class="line">* &#123;<span class="doctag">@link</span> PercentLayoutHelper.PercentLayoutInfo#fillLayoutParams&#125;.</div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">restoreLayoutParams</span><span class="params">(ViewGroup.LayoutParams params)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!mPreservedParams.mIsWidthComputedFromAspectRatio) &#123;</div><div class="line">        <span class="comment">// Only restore the width if we didn't compute it based on the height and</span></div><div class="line">        <span class="comment">// aspect ratio in the fill pass.</span></div><div class="line">        params.width = mPreservedParams.width;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!mPreservedParams.mIsHeightComputedFromAspectRatio) &#123;</div><div class="line">        <span class="comment">// Only restore the height if we didn't compute it based on the width and</span></div><div class="line">        <span class="comment">// aspect ratio in the fill pass.</span></div><div class="line">        params.height = mPreservedParams.height;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// Reset the tracking flags.</span></div><div class="line">    mPreservedParams.mIsWidthComputedFromAspectRatio = <span class="keyword">false</span>;</div><div class="line">    mPreservedParams.mIsHeightComputedFromAspectRatio = <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>好了到这里也分析完了<code>onLayout</code>的方法，大意就是在<code>onMeasure</code>之前先将原始的宽高和<code>margin</code>都备份一下，然后在<code>onMeasure</code>中根据百分比去设置对应的宽高和<code>margin</code>，等到设置完之后在<code>onLayout</code>方法中再去将这些值恢复到之前备份的起始数据。说实话我没看明白为什么要这样做？</p>
-<p>通过上面的代码分析我们知道对布局影响力的优先顺序: <code>app:layout_aspectRatio &gt; app:layout_heightPercent &gt; android:layout_height</code>如果我们同时都设置这三个参数值的话，最终会用<code>app:layout_aspectRatio</code>的值。</p>
-<p>遗留问题:     </p>
-<ul>
-<li>为什么在<code>onLayout</code>方法中去恢复数据，这有什么作用？</li>
-<li>看代码在处理如果指定的百分比过小但又指定<code>wrap_content</code>时，会重新根据<code>wrap_content</code>去重新计算的逻辑没有错，但是为什么我在上面测试的时候确没效果？</li>
-<li>在上面分析代码时看到<code>fillLayoutParams</code>中是根据父<code>View</code>的宽高来乘以百分比，不是根据整个屏幕的宽高，这样可能会有问题，要是ListView这种的高度没法算了。</li>
+<h2 id="Android开发中的体现"><a href="#Android开发中的体现" class="headerlink" title="Android开发中的体现"></a>Android开发中的体现</h2><ul>
+<li>采用硬件加速，在清单文件中<code>application</code>节点添加<code>android:hardwareAccelerated=”true”</code>。不过这个需要在<code>android 3.0</code>才可以使用。<code>android4.0</code>这个选项是默认开启的。</li>
+<li><code>View</code>中设置缓存属性<code>setDrawingCache</code>为<code>true</code>.</li>
+<li>优化你的布局.</li>
+<li>动态加载<code>View</code>. 采用<code>ViewStub</code>避免一些不经常的视图长期握住引用.</li>
+<li>将<code>Acitivity</code>中的<code>Window</code>的背景图设置为空。<code>getWindow().setBackgroundDrawable(null);``android</code>的默认背景是不是为空。</li>
+<li>采用<code>&lt;merge&gt;</code>优化布局层数。 采用<code>&lt;include&gt;</code>来共享布局。</li>
+<li>利用<code>TraceView</code>查看跟踪函数调用。有的放矢的优化。</li>
+<li><code>cursor</code>的使用。不过要注意管理好<code>cursor</code>,不要每次打开关闭<code>cursor</code>.因为打开关闭<code>Cursor</code>非常耗时。 <code>Cursor.require</code>用于刷<code>cursor</code>.</li>
+<li>采用<code>SurfaceView</code>在子线程刷新<code>UI</code>, 避免手势的处理和绘制在同一<code>UI</code>线程（普通<code>View</code>都这样做）。</li>
+<li>采用<code>JNI</code>，将耗时间的处理放到<code>c/c++</code>层来处理。</li>
+<li>有些能用文件操作的，尽量采用文件操作，文件操作的速度比数据库的操作要快10倍左右。</li>
+<li>避免创建不必要的对象</li>
+<li>如果方法用不到成员变量，可以把方法申明为<code>static</code>，性能会提高到15%到20%</li>
+<li>避免使用<code>getter/setter</code>存取<code>field</code>，可以把<code>field</code>申明为<code>public</code>，直接访问</li>
+<li><code>static</code>的变量如果不需要修改，应该使用<code>static final</code>修饰符定义为常量</li>
+<li>使用增强<code>for</code>循环,比普通<code>for</code>循环效率高，但是也有缺点就是在遍历 集合过程中，不能对集合本身进行操作</li>
+<li>合理利用浮点数，浮点数比整型慢两倍；</li>
+<li>针对ListView的性能优化</li>
 </ul>
 <hr>
 <ul>
-<li>邮箱 ：charon.chui@gmail.com  </li>
+<li>邮箱 ：itgoyo@gmail.com  </li>
 <li>Good Luck! </li>
 </ul>
 
@@ -280,7 +239,101 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/屏幕适配之百分比方案详解/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/性能优化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android卸载反馈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android卸载反馈/">Android卸载反馈</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android卸载反馈/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android卸载反馈"><a href="#Android卸载反馈" class="headerlink" title="Android卸载反馈"></a>Android卸载反馈</h1><p>最初记得是在360安全卫士中出现的，在手机上卸载他的应用之后浏览器就会弹出一个反馈页面，让用户进行反馈，感觉这种功能对于产品改进特别有帮助。<br>但是仔细一想该怎么去实现却犯愁了，最开始想这也简单啊，不就是监听下自身被卸载就可以了，应该系统会有卸载的广播，可惜没有。甚至其他的一些<br>方法也是不行的，因为你程序都被卸载了，你的代码怎么会执行呢？皮之不存，毛将焉附。那360是怎样实现的呢？说句真心话360做的产品还是非常有创新<br>的，虽然有些时候他会损坏用户的利益，不过但从技术方面，着实让人信服。</p>
+<p>既然<code>Java</code>实现不了，那就得考虑下其他的了，自然最先想到的就是<code>JNI</code>了，可惜<code>C</code>的部分不懂，上网搜了很多资料和介绍，找得到可以通过一下方式实现:   </p>
+<ul>
+<li><p>通过<code>c</code>中的<code>fork</code>方法来复制一个子进程。复制出来的子进程在父进程被销毁后，仍然可以存在。<br>  <code>pid_t fpid = fork()</code>被调用前，就一个进程执行该段代码，这条语句执行之后，就会有两个进程执行该代码，两个进程执行没有固定先后顺序，只要看<br>  系统调度策略，<code>fork()</code>函数的特别之处在于调用一次会返回两次结果：   </p>
+<pre><code>- 返回值大于0，当前是父进程。
+- 返回0，当前是子进程。
+- 返回小于0的负值。(出错了，可能是内存不足或者是进程数已经达到系统最大值)
+</code></pre></li>
+<li><p><code>fork</code>出子进程后让子进程一直去监听<code>/data/data/packageName</code>是否存在，如果不存在了，那就说明程序被卸载了，但是这样一直去轮训判断肯定会浪费<br>  系统资源的，当然也会更加费电，对用户来讲肯定是有损害的。所以这种技术最好也不好用，不然大家的手机以后还能了得。万恶的产品。</p>
+</li>
+<li><p>得到程序被卸载之后弹出浏览器打开指定反馈页面。这就要用到<code>am</code>命令了，最早知道这个命令是在开发<code>TV</code>版的时候，遥控器找不到了，程序安装后无法<br> 打开了，用该命令就不怕了，哈哈。但是在<code>c</code>中怎么执行<code>am</code>命令呢？这就要用到<code>execlp()</code>函数，该函数就是<code>c</code>中执行系统命令的函数。</p>
+</li>
+</ul>
+<p>好了，主要的内容上面都分析完了，下面上代码。</p>
+<ul>
+<li><p><code>Java</code>层定义<code>natvie</code>方法。   </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"@@@"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		String packageDir = <span class="string">"/data/data/"</span> + getPackageName();</div><div class="line">		initUninstallFeedback(packageDir, Build.VERSION.SDK_INT);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">initUninstallFeedback</span><span class="params">(String packagePath, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.loadLibrary(<span class="string">"uninstall_feedback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建jni目录，增加<code>Android.mk</code>以及<code>uninstall_feedback.c</code>文件。<br><code>Android.mk</code>的内容:</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := uninstall_feedback</div><div class="line">LOCAL_SRC_FILES := uninstall_feedback.c</div><div class="line"></div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</div><div class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<p><code>uninstall_feedback.c</code>的实现: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将Java中的String转换成c中的char字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Jstring2CStr</span><span class="params">(JNIEnv* env, jstring jstr)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span>* rtn = <span class="literal">NULL</span>;</div><div class="line">	jclass clsstring = (*env)-&gt;FindClass(env, <span class="string">"java/lang/String"</span>); <span class="comment">//String</span></div><div class="line">	jstring strencode = (*env)-&gt;NewStringUTF(env, <span class="string">"GB2312"</span>); <span class="comment">// 得到一个java字符串 "GB2312"</span></div><div class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, clsstring, <span class="string">"getBytes"</span>,</div><div class="line">			<span class="string">"(Ljava/lang/String;)[B"</span>); <span class="comment">//[ String.getBytes("gb2312");</span></div><div class="line">	jbyteArray barr = (jbyteArray)(*env)-&gt;CallObjectMethod(env, jstr, mid,</div><div class="line">			strencode); <span class="comment">// String .getByte("GB2312");</span></div><div class="line">	jsize alen = (*env)-&gt;GetArrayLength(env, barr); <span class="comment">// byte数组的长度</span></div><div class="line">	jbyte* ba = (*env)-&gt;GetByteArrayElements(env, barr, JNI_FALSE);</div><div class="line">	<span class="keyword">if</span> (alen &gt; <span class="number">0</span>) &#123;</div><div class="line">		rtn = (<span class="keyword">char</span>*) <span class="built_in">malloc</span>(alen + <span class="number">1</span>); <span class="comment">//""</span></div><div class="line">		<span class="built_in">memcpy</span>(rtn, ba, alen);</div><div class="line">		rtn[alen] = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	(*env)-&gt;ReleaseByteArrayElements(env, barr, ba, <span class="number">0</span>); <span class="comment">//</span></div><div class="line">	<span class="keyword">return</span> rtn;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Java_com_charon_uninstallfeedback_MainActivity_initUninstallFeedback</span><span class="params">(</span></span></div><div class="line">		JNIEnv* env, jobject thiz, jstring packageDir, jint sdkVersion) &#123;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> * pd = Jstring2CStr(env, packageDir);</div><div class="line"></div><div class="line">	<span class="comment">//fork子进程，以执行轮询任务</span></div><div class="line">	<span class="keyword">pid_t</span> pid = fork();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// fork失败了</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// 可以一直采用一直判断文件是否存在的方式去判断，但是这样效率稍低，下面使用监听的方式，死循环，每个一秒判断一次，这样太浪费资源了。</span></div><div class="line">		<span class="keyword">int</span> check = <span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span> (check) &#123;</div><div class="line">			FILE* file = fopen(pd, <span class="string">"rt"</span>);</div><div class="line">			<span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (sdkVersion &gt;= <span class="number">17</span>) &#123;</div><div class="line">					<span class="comment">// Android4.2系统之后支持多用户操作，所以得指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"--user"</span>, <span class="string">"0"</span>, <span class="string">"-a"</span>,</div><div class="line">							<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// Android4.2以前的版本无需指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"-a"</span>,</div><div class="line">						<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125;</div><div class="line">				check = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">			&#125;</div><div class="line">			sleep(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>编译so文件。<code>Windows</code>下要用<code>cygwin</code>来操作。<br>上面的介绍是在<code>Eclipse</code>中进行的，用<code>ndk-build</code>命令来编译<code>so</code>。具体请看之前写的<code>JNI基础</code>这篇文章。</li>
+</ul>
+<p>有关如何在<code>Android Stuido</code>中进行<code>ndk</code>开发请看另一篇文章。</p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android卸载反馈/">展开全文 >></a>
         </p>
       
 
@@ -584,19 +637,19 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Android应用发布" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android应用发布/">Android应用发布</a>
+      <a class="article-title" href="/2015/01/01/视频播放相关内容总结/">视频播放相关内容总结</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/Android应用发布/" class="archive-article-date">
+        <a href="/2015/01/01/视频播放相关内容总结/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -604,43 +657,72 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Android应用发布"><a href="#Android应用发布" class="headerlink" title="Android应用发布"></a>Android应用发布</h1><p>需要身份证扫描件、手持身份证正面照、图标(96x96、512x512)、应用截图(一般480x800,6张)进行每个网站的开发者注册(需要审核，有的比较慢，尽量提前审核)</p>
+        <h1 id="视频播放相关内容总结"><a href="#视频播放相关内容总结" class="headerlink" title="视频播放相关内容总结"></a>视频播放相关内容总结</h1><h2 id="多媒体常识："><a href="#多媒体常识：" class="headerlink" title="多媒体常识："></a>多媒体常识：</h2><ul>
+<li><p>什么是多媒体             </p>
+<p>  多媒体是计算机和视频技术的结合，实际上它是两个媒体；声音和图像，或者用现在的术语：音响和电视</p>
+</li>
+<li><p>常用的视频格式</p>
+<p>  Android系统默认：mp4、3gp<br>  常用格式：ts、3gpp、3g2、3gpp2、avi、mkv、flv、divx、f4v、rm、rmvb、rv、wmv、asf、mov、mpg、v8、ram、mpeg、<br>  swf、m2v、asx、ra、ram、ndivx、xvid等     </p>
+</li>
+<li><p>常用音频格式：</p>
+<p>  Android系统：mp3、ogg；<br>  常用格式：wma、mid、m4a、xmf、aac、mpa、midi、ar等</p>
+</li>
+<li><p>常用图片格式：PNG、GIF、BMP、jpg</p>
+</li>
+<li><p>国内各个视频网站采用的解码框架：</p>
 <ul>
-<li><strong><a href="https://play.google.com/apps/publish" target="_blank" rel="external">GooglePlay</a>自动审核，速度很快，但是要上缴25刀</strong></li>
-<li><strong><a href="http://open.qq.com/?from=tap" target="_blank" rel="external">腾讯开发平台</a>史上最好，没有之一、快、大，腾讯帝国根深蒂固</strong></li>
-<li><strong><a href="http://app.taobao.com" target="_blank" rel="external">淘宝手机助手</a>很快，每次他都是首发…，但是需要jpg格式的截图和图标，十八罗汉速度非凡</strong></li>
-<li><strong><a href="http://open.app.360.cn/" target="_blank" rel="external">360应用开发平台</a>实力不容小视,但是对广告审核很严，感觉不是很好</strong>    </li>
-<li><strong><a href="http://developer.baidu.com/" target="_blank" rel="external">百度开发者中心(关联安卓及91)</a>这个不多说了，都是泪，各种麻烦、各种慢、各种不合理，众里寻他千百度，他想几度就几度</strong>      </li>
-<li><strong><a href="http://dev.apk.hiapk.com/login" target="_blank" rel="external">安卓市场</a>特别慢，百度上了，他各种理由不给上。</strong>     </li>
-<li><strong><a href="http://market.sj.91.com/Users/Login.aspx?ReturnUrl=%2fDefault.aspx" target="_blank" rel="external">91</a>慢，不说了，三家市场不如别人一家</strong>     </li>
-<li><strong><a href="http://developer.wandoujia.com" target="_blank" rel="external">豌豆荚开发者中心</a>还不错,账号用了手机号</strong>      </li>
-<li><strong><a href="http://dev.anzhi.com/" target="_blank" rel="external">安智市场</a>账号不是邮箱，而是账号名,不支持广告</strong></li>
-<li><strong><a href="http://dev.gfan.com/" target="_blank" rel="external">机锋</a>必须用机锋的广告，太霸道了</strong>        </li>
-<li><strong><a href="http://dev.mumayi.com/index/" target="_blank" rel="external">木蚂蚁</a>需要在有米广告中加入木蚂蚁的渠道号</strong></li>
-<li><strong><a href="http://developer.xiaomi.com" target="_blank" rel="external">小米</a></strong></li>
-<li><strong><a href="http://dev.eoemarket.com/" target="_blank" rel="external">优亿市场</a>账号是用户名不是邮箱</strong></li>
-<li><strong><a href="http://dev.10086.cn/" target="_blank" rel="external">10086</a>密码最后一位是*</strong></li>
-<li><strong><a href="http://developer.meizu.com" target="_blank" rel="external">魅族</a>风格独特要做适配</strong></li>
-<li><strong><a href="http://www.anzhuoapk.com" target="_blank" rel="external">易用汇</a></strong></li>
-<li><strong><a href="http://open.189.cn/" target="_blank" rel="external">天翼开发平台</a></strong></li>
-<li><strong><a href="http://www.eomarket.com/developer" target="_blank" rel="external">易优市场</a></strong></li>
-<li><strong><a href="apk.angeeks.com">安极市场</a></strong></li>
-<li><strong><a href="http://dev.3g.cn/" target="_blank" rel="external">3G安卓市场</a></strong></li>
-<li><strong><a href="http://www.nduoa.com/developer" target="_blank" rel="external">N多市场</a></strong></li>
-<li><strong><a href="http://dev.liqucn.com/index.php?m=member&amp;c=index&amp;a=login" target="_blank" rel="external">安卓星空</a></strong></li>
-<li><strong><a href="http://admin.app.sohu.com/platform/index" target="_blank" rel="external">搜狐应用市场</a>账号为搜狐邮箱</strong></li>
-<li><strong><a href="http://dev.wo.com.cn/index.action" target="_blank" rel="external">沃商城</a></strong></li>
+<li>优酷、搜狐、奇艺、pps、暴风影音土豆、56网都是用的ffmpeg.       </li>
+<li>pptv已经使用p2p技术<br>  点对点技术（peer-to-peer， 简称P2P）又称对等互联网络技术，是一种网络新技术，依赖网络中参与者的计算能力和带宽，<br>  而不是把依赖都聚集在较少的几台服务器上。P2P网络通常用于通过Ad Hoc连接来连接节点。这类网络可以用于多种用途，<br>  各种档案分享软件已经得到了广泛的使用。P2P技术也被使用在类似VoIP等实时媒体业务的数据通信中。</li>
 </ul>
-<p>做死系列</p>
+</li>
+</ul>
+<p>目前常用的开发框架：</p>
 <ul>
-<li><strong><a href="http://dev.appchina.com/" target="_blank" rel="external">应用汇</a>貌似已经不收录个人应用，也不说明一下，等你提交后就说不收录该类内容</strong></li>
-<li><strong><a href="http://dev.51vapp.com/" target="_blank" rel="external">网讯安卓应用市场</a>(要软件著作权，不然通过不了)</strong></li>
-<li><strong><a href="http://developer.lenovomm.com" target="_blank" rel="external">联想</a>很难发布，他会把你定位成劣质应用，好吧，劣质公司，你看你吧ThinkPad弄成什么样了</strong></li>
-<li><strong><a href="http://developer.huawei.com/" target="_blank" rel="external">华为</a>不收录个人应用</strong></li>
-<li><strong><a href="http://m.163.com/android/" target="_blank" rel="external">网易</a>灰常垃圾，等你全部弄好后还要加他QQ让他审核，完了他会告诉你我们不接受个人应用，不做死就不会死</strong></li>
-<li><strong><a href="http://play.jd.com/download/" target="_blank" rel="external">京东</a>不好好卖东西，整个应用市场，又没人管理</strong></li>
+<li><p>VLC框架：<br>  VLC是一个开源项目，基于ffmpeg框架的自定义播放器。其中LibVLC是VLC的核心部分，就相当于MediaPlayer类<br>  VLC一个最主要的部分，它可以播放各种类型的媒体文件和流媒体文件，并且可以创造媒体流并保存成各种格式的媒体文件<br>  VLC是一种跨平台的媒体播放器和流媒体服务器，最初为videolan的客户端，它是一种非常简便的多媒体播放器，<br>  它可以用来播放各种各样的音视频的格式文件(MPEG-1、MPEG-2、MPEG- 4、DivX、WMV、mp3、OGG、Vorbis、AC3、AAC等等)流媒体协议<br>  最具特色的功能是可以边下载边观看Divx媒体文件，并可以播放不完全的AVI文件。并且支持界面的更改。<br>  缺点：有C/C++代码，还有Java代码，代码太庞大             </p>
+</li>
+<li><p>ffmpeg框架：<br>  优点：轻量级框架，易于维护<br>  FFmpeg是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案<br>  FFMPEG几乎为你把所有的繁重工作都做了，比如解码、编码、复用和解复用。<br>  这使得多媒体应用程序变得容易编写。它是一个简单的，用C编写的，快速的并且能够解码几乎所有你能用到的格式，当然也包括编码多种格式。<br>  FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，支持AVI、MPEG、OGG、Matroska、ASF等90多种解码<br>  FFmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中libavcodec用于存放各个encode/decode模块<br>  libavformat用于存放muxer/demuxer模块，libavutil用于存放内存操作等辅助性模块</p>
+</li>
+<li><p>vitamio框架：<br>  vitamio也是基于ffmpeg开源框架<br>  VPlayer是vitamio的一个产品，vitamio和VPlayer是同一个团队开发的，VPlayer能播放的vitamio也能播放         </p>
+</li>
 </ul>
-<hr>
+<p>##Surface简介</p>
+<ul>
+<li><code>Surface</code>就是“表面”的意思。在<code>SDK</code>的文档中，对<code>Surface</code>的描述是这样的：“<code>Handle onto a raw buffer that is being managed by the screen compositor</code>”，<br>  翻译成中文就是“由屏幕显示内容合成器<code>(screen compositor)</code>所管理的原生缓冲器的句柄”，    这句话包括下面两个意思：<ul>
+<li>通过Surface（因为Surface是句柄）就可以获得原生缓冲器以及其中的内容。就像在C语言中，可以通过一个文件的句柄，就可以获得文件的内容一样；</li>
+<li>原生缓冲器（rawbuffer）是用于保存当前窗口的像素数据的。</li>
+</ul>
+</li>
+<li>简单的说<code>Surface</code>对应了一块屏幕缓冲区，每个<code>Window</code>对应一个<code>Surface</code>，任何<code>View</code>都是画在<code>Surface</code>上的，传统的<code>view</code>共享一块屏幕缓冲区，所有的绘制必须在<code>UI</code>线程中进行</li>
+<li>我们不能直接操作Surface实例，要通过SurfaceHolder，在SurfaceView中可以通过getHolder()方法获取到SurfaceHolder实例。</li>
+<li><code>Surface</code>是一个用来画图形的地方，但是我们知道画图都是在一个<code>Canvas</code>对象上面进行的，<em><code>Surface</code>中的<code>Canvas</code>成员，是专门用于提供画图的地方，就像黑板一样，其中的原始缓冲区是用来保存数据的地方，<br>  <code>Surface</code>本身的作用类似一个句柄，得到了这个句柄就可以得到其中的<code>Canvas</code>、原始缓冲区以及其他方面的内容，所以简单的说<code>Surface</code>是用来管理数据的(句柄)</em>。</li>
+</ul>
+<p>##SurfaceView简介      </p>
+<ul>
+<li><p>简单的说<code>SurfaceView</code>就是一个有<code>Surface</code>的<code>View</code>里面内嵌了一个专门用于绘制的<code>Surface</code>,<code>SurfaceView</code>控制这个<code>Surface</code>的格式和尺寸以及绘制位置.<code>SurfaceView</code>是一个<code>View</code>也许不够严谨，<br>  然而从定义中 <code>public class SurfaceView extends View</code>显示<code>SurfaceView</code>确实是派生自<code>View</code>，但是<code>SurfaceView</code>却有着自己的<code>Surface</code>，源码：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">if</span> (mWindow == <span class="keyword">null</span>) &#123;  </div><div class="line">mWindow = <span class="keyword">new</span> MyWindow(<span class="keyword">this</span>);  </div><div class="line">mLayout.type = mWindowType;  </div><div class="line">mLayout.gravity = Gravity.LEFT|Gravity.TOP;  </div><div class="line">mSession.addWithoutInputChannel(mWindow, mWindow.mSeq, mLayout,  </div><div class="line">mVisible ? VISIBLE : GONE, mContentInsets);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>  很明显，每个<code>SurfaceView</code>创建的时候都会创建一个<code>MyWindow</code>，<code>new MyWindow(this)</code>中的<code>this</code>正是<code>SurfaceView</code>自身，因此将<code>SurfaceView</code>和<code>window</code>绑定在一起，而前面提到过每个<code>window</code>对应一个<code>Surface</code>，<br>  所以<code>SurfaceView</code>也就内嵌了一个自己的<code>Surface</code>，可以认为<code>SurfaceView</code>是来控制<code>Surface</code>的位置和尺寸。传统<code>View</code>及其派生类的更新只能在<code>UI</code>线程，然而<code>UI</code>线程还同时处理其他交互逻辑，<br>  这就无法保证<code>view</code>更新的速度和帧率了，而<code>SurfaceView</code>可以用独立的线程来进行绘制，因此可以提供更高的帧率，例如游戏，摄像头取景等场景就比较适合用<code>SurfaceView</code>来实现。</p>
+</li>
+<li><p><code>Surface</code>是纵深排序<code>(Z-ordered)</code>的，这表明它总在自己所在窗口的后面。</p>
+</li>
+<li><code>Surfaceview</code>提供了一个可见区域，只有在这个可见区域内的<code>Surface</code>部分内容才可见，可见区域外的部分不可见，所以可以认为<strong><code>SurfaceView</code>就是展示<code>Surface</code>中数据的地方</strong>,<code>Surface</code>就是管理数据的地方，<br>  <code>SurfaceView</code>就是展示数据的地方，只有通过<code>SurfaceView</code>才能展现<code>Surface</code>中的数据。<br>  <img src="https://github.com/CharonChui/Pictures/master/SurfaceView.png?raw=true" alt="image">   </li>
+<li><code>Surface</code>的排版显示受到视图层级关系的影响，它的兄弟视图结点会在顶端显示。这意味者<code>Surface</code>的内容会被它的兄弟视图遮挡，这一特性可以用来放置遮盖物<code>(overlays)</code>(例如，文本和按钮等控件)。<br>  注意，如果<code>Surface</code>上面有透明控件，那么它的每次变化都会引起框架重新计算它和顶层控件的透明效果，这会影响性能。surfaceview变得可见时，surface被创建；surfaceview隐藏前，surface被销毁。<br>  这样能节省资源。如果你要查看 surface被创建和销毁的时机，可以重载surfaceCreated(SurfaceHolder)和 surfaceDestroyed(SurfaceHolder)。<br>  <strong><code>SurfaceView</code>的核心在于提供了两个线程：<code>UI</code>线程和渲染线程</strong>,两个线程通过“双缓冲”机制来达到高效的界面适时更新。</li>
+</ul>
+<p>##SurfaceHolder简介</p>
+<p>显示一个<code>Surface</code>的抽象接口，使你可以控制<code>Surface</code>的大小和格式以及在<code>Surface</code>上编辑像素，和监视<code>Surace</code>的改变。这个接口通常通过<code>SurfaceView</code>类实现。<br>简单的说就是我们无法直接操作<code>Surface</code>只能通过<code>SurfaceHolder</code>这个接口来获取和操作<code>Surface</code>。<br>SurfaceHolder<code>中提供了一些</code>lockCanvas()`：获取一个Canvas对象，并锁定之。所得到的Canvas对象，其实就是Surface中一个成员。加锁的目的其实就是为了在绘制的过程中，<br>Surface中的数据不会被改变。lockCanvas是为了防止同一时刻多个线程对同一canvas写入。</p>
+<p><em>从设计模式的角度来看,<code>Surface、SurfaceView、SurfaceHolder</code>实质上就是<code>MVC(Model-View-Controller)</code>，<code>Model</code>就是模型或者说是数据模型，更简单的可以理解成数据，在这里也就是<code>Surface</code>，<br><code>View</code>就是视图，代表用户交互界面，这里就是<code>SurfaceView</code>,<code>SurfaceHolder</code>就是<code>Controller.</code></em></p>
+<p>##MediaController</p>
+<ul>
+<li><code>MediaController</code>继承<code>FrameLayout</code>，通过<code>MediaPlayerControl</code>接口与<code>VideoView</code>进行结合控制，内部是通过<code>PopupWindow</code>将整个控制栏界面显示到界面上，<br>  而该<code>PopupWindow</code>所显示在的位置就是通过<code>setAnchorView()</code>设置进来的<code>Anchor</code>一般可以使当前的<code>VideoView</code>或者是整个<code>Activity</code>的根布局。这里要分为小屏和全屏两种情况来进行设置。<br>  如果当前的<code>MediaController</code>只是播放前下面的控制栏部分(进度条、快进、快退、暂停等)这样我们可以通过对VideoView设置点击事件，控制它的显示和隐藏。<br>  如果<code>MediaController</code>为整个屏幕包括了控制栏部分、上端的信息显示部分、以及左右栏的功能部分、这时候就可以通过对<code>MediaController</code>本身设置点击事件来控制显示和隐藏。         </li>
+</ul>
+<p><code>Controller</code>可以用<code>PopupWindow</code>来实现,具体有两种方式：     </p>
+<pre><code>- 整个控制栏(上面的信息部分、下面的控制部分以及左右边)都在`Controller`中，`setAnchorView()`的时候就会让`Controller`中的`PopupWindow`显示出来(一直显示，但是这个`PopupWindow`是透明的)，
+    真正的显示与隐藏是控制在`PopupWindow`中的`View`部分的显示与隐藏来实现。开始的时候我是想用这种方式，当时我想的是播放就播放、控制就控制，分离开来多好，但是没想到，
+    一旦有`PopupWindow`显示出来后，Activity是接收不到任何`Touch`事件的，所有的重试界面等都要放到`Controller`中实现(手势处理等)。但是也有好处，就是不管显示还是隐藏都可以去处理手势.
+
+- `PopupWindow`不是全屏的，只包含下面真正的控制部分(快进、快退、暂停等,不包含上面的信息部分和左右边),而且也不是开始就显示，显示隐藏是通过控制`PopupWindow`的显示与隐藏来进行的。
+    而对于信息部分、以及左右边都是在`Activity`的布局当中，我们通过接口回调得到`PopupWindow`的显示与隐藏来控制这些布局的显示与隐藏即可。
+    这样的话我们就需要将手势等全部放到`Activity`中去处理，但是也有一个问题，就是如果`Controller`正在显示的话`Activity`是接收不到`Touch`事件的，就无法处理手势，只能是让`Controller`消失后才能处理手势。
+</code></pre><hr>
 <ul>
 <li>邮箱 ：itgoyo@gmail.com  </li>
 <li>Good Luck! </li>
@@ -668,7 +750,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android应用发布/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
         </p>
       
 
@@ -874,6 +956,84 @@ jlrField.set(instance, combined);
 
 
   
+    <article id="post-视频解码之软解与硬解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/视频解码之软解与硬解/">视频解码之软解与硬解</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/视频解码之软解与硬解/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="视频解码之软解与硬解"><a href="#视频解码之软解与硬解" class="headerlink" title="视频解码之软解与硬解"></a>视频解码之软解与硬解</h1><p><strong>硬解</strong>：从字面意思上理解就是用硬件来进行解码，通过显卡的视频加速功能对高清视频进行解码，很明显就是一个专门的电路板(这样好理解…)来进行视频的解码，是依靠显卡<code>GPU</code>的。                    </p>
+<p><strong>软解</strong>：字面上理解就是用软件进行解码，这样理解也对，但是实际最总还是要硬件来支持的，这个硬件就是<code>CPU</code>。</p>
+<p>既然有这两种不同的解码方式，我们在开发中该如何进行选择？哪个更好？                     </p>
+<ul>
+<li><p>硬解优缺点：<br>  显卡核心GPU拥有独特的计算方法，解码效率非常高，而且充当解码核心的模块成本并不高。这样不但能够减轻CPU的负担，还有着低功耗、发热少等特点。但是由于硬解码起步比较晚，<br>  软件和驱动对其的支持度低。硬解码内置有什么样的模块就能够解码什么样的视频，面对网络上杂乱无章的视频编码格式，不可能做到完全兼容同。此外，硬解码的滤镜、字母、画质增强方面都做的十分不足。</p>
+<p>  优点：低功耗、发热少、效率高。<br>  缺点：视频兼容性差、支持度低。                </p>
+</li>
+<li><p>软解优缺点：<br>  软解码技术的解码过程中，需要对大量的视频信息进行运算，对CPU性能的要求非常高。尤其是对高清晰度大码率的视频来说，巨大的运算量就会造成转换效率低、发热量大等问题。<br>  但是由于软解码的过程中不需要复杂的硬件支持，兼容性非常高。即使是新出的视频编码格式，只要安装好相应的解码器文件，就能顺利播放。而且软解码拥有丰富的滤镜、字幕、画面处理优化等效果，<br>  如果<code>CPU</code>足够强悍的话，能够实现更加出色的画面效果。</p>
+<p>  优点：  兼容强、全解码、效果好<br>  缺点：  对<code>CPU</code>要求高、效率低、发热大                 </p>
+</li>
+</ul>
+<p>关于软解与硬解究竟哪个更好的问题一直是争论的热点，其实我倒是感觉没有好坏之分，各自有各自的优缺点和使用条件，根据需要去选择才是最合适的。<br>播放码率比较大的视频，硬解可能流畅的播放，但是软解可能会出现演示、画面和声音卡顿不同步的问题。但是硬解播放出的视频大多都不允许在解码之后进行软件后处理，比如进行一些降噪锐化之类的后期滤镜，<br>这样可能会让人感觉画质不太好的。当然上面的这种情况也是和<code>CPU</code>及<code>GPU</code>能力的不同而不同的。 总的来说，还是各有春秋，适合你的才是最好的。 </p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/视频解码之软解与硬解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-自定义View详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1003,215 +1163,6 @@ jlrField.set(instance, combined);
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/自定义View详解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/视频播放相关内容总结/">视频播放相关内容总结</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/视频播放相关内容总结/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="视频播放相关内容总结"><a href="#视频播放相关内容总结" class="headerlink" title="视频播放相关内容总结"></a>视频播放相关内容总结</h1><h2 id="多媒体常识："><a href="#多媒体常识：" class="headerlink" title="多媒体常识："></a>多媒体常识：</h2><ul>
-<li><p>什么是多媒体             </p>
-<p>  多媒体是计算机和视频技术的结合，实际上它是两个媒体；声音和图像，或者用现在的术语：音响和电视</p>
-</li>
-<li><p>常用的视频格式</p>
-<p>  Android系统默认：mp4、3gp<br>  常用格式：ts、3gpp、3g2、3gpp2、avi、mkv、flv、divx、f4v、rm、rmvb、rv、wmv、asf、mov、mpg、v8、ram、mpeg、<br>  swf、m2v、asx、ra、ram、ndivx、xvid等     </p>
-</li>
-<li><p>常用音频格式：</p>
-<p>  Android系统：mp3、ogg；<br>  常用格式：wma、mid、m4a、xmf、aac、mpa、midi、ar等</p>
-</li>
-<li><p>常用图片格式：PNG、GIF、BMP、jpg</p>
-</li>
-<li><p>国内各个视频网站采用的解码框架：</p>
-<ul>
-<li>优酷、搜狐、奇艺、pps、暴风影音土豆、56网都是用的ffmpeg.       </li>
-<li>pptv已经使用p2p技术<br>  点对点技术（peer-to-peer， 简称P2P）又称对等互联网络技术，是一种网络新技术，依赖网络中参与者的计算能力和带宽，<br>  而不是把依赖都聚集在较少的几台服务器上。P2P网络通常用于通过Ad Hoc连接来连接节点。这类网络可以用于多种用途，<br>  各种档案分享软件已经得到了广泛的使用。P2P技术也被使用在类似VoIP等实时媒体业务的数据通信中。</li>
-</ul>
-</li>
-</ul>
-<p>目前常用的开发框架：</p>
-<ul>
-<li><p>VLC框架：<br>  VLC是一个开源项目，基于ffmpeg框架的自定义播放器。其中LibVLC是VLC的核心部分，就相当于MediaPlayer类<br>  VLC一个最主要的部分，它可以播放各种类型的媒体文件和流媒体文件，并且可以创造媒体流并保存成各种格式的媒体文件<br>  VLC是一种跨平台的媒体播放器和流媒体服务器，最初为videolan的客户端，它是一种非常简便的多媒体播放器，<br>  它可以用来播放各种各样的音视频的格式文件(MPEG-1、MPEG-2、MPEG- 4、DivX、WMV、mp3、OGG、Vorbis、AC3、AAC等等)流媒体协议<br>  最具特色的功能是可以边下载边观看Divx媒体文件，并可以播放不完全的AVI文件。并且支持界面的更改。<br>  缺点：有C/C++代码，还有Java代码，代码太庞大             </p>
-</li>
-<li><p>ffmpeg框架：<br>  优点：轻量级框架，易于维护<br>  FFmpeg是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案<br>  FFMPEG几乎为你把所有的繁重工作都做了，比如解码、编码、复用和解复用。<br>  这使得多媒体应用程序变得容易编写。它是一个简单的，用C编写的，快速的并且能够解码几乎所有你能用到的格式，当然也包括编码多种格式。<br>  FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，支持AVI、MPEG、OGG、Matroska、ASF等90多种解码<br>  FFmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中libavcodec用于存放各个encode/decode模块<br>  libavformat用于存放muxer/demuxer模块，libavutil用于存放内存操作等辅助性模块</p>
-</li>
-<li><p>vitamio框架：<br>  vitamio也是基于ffmpeg开源框架<br>  VPlayer是vitamio的一个产品，vitamio和VPlayer是同一个团队开发的，VPlayer能播放的vitamio也能播放         </p>
-</li>
-</ul>
-<p>##Surface简介</p>
-<ul>
-<li><code>Surface</code>就是“表面”的意思。在<code>SDK</code>的文档中，对<code>Surface</code>的描述是这样的：“<code>Handle onto a raw buffer that is being managed by the screen compositor</code>”，<br>  翻译成中文就是“由屏幕显示内容合成器<code>(screen compositor)</code>所管理的原生缓冲器的句柄”，    这句话包括下面两个意思：<ul>
-<li>通过Surface（因为Surface是句柄）就可以获得原生缓冲器以及其中的内容。就像在C语言中，可以通过一个文件的句柄，就可以获得文件的内容一样；</li>
-<li>原生缓冲器（rawbuffer）是用于保存当前窗口的像素数据的。</li>
-</ul>
-</li>
-<li>简单的说<code>Surface</code>对应了一块屏幕缓冲区，每个<code>Window</code>对应一个<code>Surface</code>，任何<code>View</code>都是画在<code>Surface</code>上的，传统的<code>view</code>共享一块屏幕缓冲区，所有的绘制必须在<code>UI</code>线程中进行</li>
-<li>我们不能直接操作Surface实例，要通过SurfaceHolder，在SurfaceView中可以通过getHolder()方法获取到SurfaceHolder实例。</li>
-<li><code>Surface</code>是一个用来画图形的地方，但是我们知道画图都是在一个<code>Canvas</code>对象上面进行的，<em><code>Surface</code>中的<code>Canvas</code>成员，是专门用于提供画图的地方，就像黑板一样，其中的原始缓冲区是用来保存数据的地方，<br>  <code>Surface</code>本身的作用类似一个句柄，得到了这个句柄就可以得到其中的<code>Canvas</code>、原始缓冲区以及其他方面的内容，所以简单的说<code>Surface</code>是用来管理数据的(句柄)</em>。</li>
-</ul>
-<p>##SurfaceView简介      </p>
-<ul>
-<li><p>简单的说<code>SurfaceView</code>就是一个有<code>Surface</code>的<code>View</code>里面内嵌了一个专门用于绘制的<code>Surface</code>,<code>SurfaceView</code>控制这个<code>Surface</code>的格式和尺寸以及绘制位置.<code>SurfaceView</code>是一个<code>View</code>也许不够严谨，<br>  然而从定义中 <code>public class SurfaceView extends View</code>显示<code>SurfaceView</code>确实是派生自<code>View</code>，但是<code>SurfaceView</code>却有着自己的<code>Surface</code>，源码：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">if</span> (mWindow == <span class="keyword">null</span>) &#123;  </div><div class="line">mWindow = <span class="keyword">new</span> MyWindow(<span class="keyword">this</span>);  </div><div class="line">mLayout.type = mWindowType;  </div><div class="line">mLayout.gravity = Gravity.LEFT|Gravity.TOP;  </div><div class="line">mSession.addWithoutInputChannel(mWindow, mWindow.mSeq, mLayout,  </div><div class="line">mVisible ? VISIBLE : GONE, mContentInsets);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>  很明显，每个<code>SurfaceView</code>创建的时候都会创建一个<code>MyWindow</code>，<code>new MyWindow(this)</code>中的<code>this</code>正是<code>SurfaceView</code>自身，因此将<code>SurfaceView</code>和<code>window</code>绑定在一起，而前面提到过每个<code>window</code>对应一个<code>Surface</code>，<br>  所以<code>SurfaceView</code>也就内嵌了一个自己的<code>Surface</code>，可以认为<code>SurfaceView</code>是来控制<code>Surface</code>的位置和尺寸。传统<code>View</code>及其派生类的更新只能在<code>UI</code>线程，然而<code>UI</code>线程还同时处理其他交互逻辑，<br>  这就无法保证<code>view</code>更新的速度和帧率了，而<code>SurfaceView</code>可以用独立的线程来进行绘制，因此可以提供更高的帧率，例如游戏，摄像头取景等场景就比较适合用<code>SurfaceView</code>来实现。</p>
-</li>
-<li><p><code>Surface</code>是纵深排序<code>(Z-ordered)</code>的，这表明它总在自己所在窗口的后面。</p>
-</li>
-<li><code>Surfaceview</code>提供了一个可见区域，只有在这个可见区域内的<code>Surface</code>部分内容才可见，可见区域外的部分不可见，所以可以认为<strong><code>SurfaceView</code>就是展示<code>Surface</code>中数据的地方</strong>,<code>Surface</code>就是管理数据的地方，<br>  <code>SurfaceView</code>就是展示数据的地方，只有通过<code>SurfaceView</code>才能展现<code>Surface</code>中的数据。<br>  <img src="https://github.com/CharonChui/Pictures/master/SurfaceView.png?raw=true" alt="image">   </li>
-<li><code>Surface</code>的排版显示受到视图层级关系的影响，它的兄弟视图结点会在顶端显示。这意味者<code>Surface</code>的内容会被它的兄弟视图遮挡，这一特性可以用来放置遮盖物<code>(overlays)</code>(例如，文本和按钮等控件)。<br>  注意，如果<code>Surface</code>上面有透明控件，那么它的每次变化都会引起框架重新计算它和顶层控件的透明效果，这会影响性能。surfaceview变得可见时，surface被创建；surfaceview隐藏前，surface被销毁。<br>  这样能节省资源。如果你要查看 surface被创建和销毁的时机，可以重载surfaceCreated(SurfaceHolder)和 surfaceDestroyed(SurfaceHolder)。<br>  <strong><code>SurfaceView</code>的核心在于提供了两个线程：<code>UI</code>线程和渲染线程</strong>,两个线程通过“双缓冲”机制来达到高效的界面适时更新。</li>
-</ul>
-<p>##SurfaceHolder简介</p>
-<p>显示一个<code>Surface</code>的抽象接口，使你可以控制<code>Surface</code>的大小和格式以及在<code>Surface</code>上编辑像素，和监视<code>Surace</code>的改变。这个接口通常通过<code>SurfaceView</code>类实现。<br>简单的说就是我们无法直接操作<code>Surface</code>只能通过<code>SurfaceHolder</code>这个接口来获取和操作<code>Surface</code>。<br>SurfaceHolder<code>中提供了一些</code>lockCanvas()`：获取一个Canvas对象，并锁定之。所得到的Canvas对象，其实就是Surface中一个成员。加锁的目的其实就是为了在绘制的过程中，<br>Surface中的数据不会被改变。lockCanvas是为了防止同一时刻多个线程对同一canvas写入。</p>
-<p><em>从设计模式的角度来看,<code>Surface、SurfaceView、SurfaceHolder</code>实质上就是<code>MVC(Model-View-Controller)</code>，<code>Model</code>就是模型或者说是数据模型，更简单的可以理解成数据，在这里也就是<code>Surface</code>，<br><code>View</code>就是视图，代表用户交互界面，这里就是<code>SurfaceView</code>,<code>SurfaceHolder</code>就是<code>Controller.</code></em></p>
-<p>##MediaController</p>
-<ul>
-<li><code>MediaController</code>继承<code>FrameLayout</code>，通过<code>MediaPlayerControl</code>接口与<code>VideoView</code>进行结合控制，内部是通过<code>PopupWindow</code>将整个控制栏界面显示到界面上，<br>  而该<code>PopupWindow</code>所显示在的位置就是通过<code>setAnchorView()</code>设置进来的<code>Anchor</code>一般可以使当前的<code>VideoView</code>或者是整个<code>Activity</code>的根布局。这里要分为小屏和全屏两种情况来进行设置。<br>  如果当前的<code>MediaController</code>只是播放前下面的控制栏部分(进度条、快进、快退、暂停等)这样我们可以通过对VideoView设置点击事件，控制它的显示和隐藏。<br>  如果<code>MediaController</code>为整个屏幕包括了控制栏部分、上端的信息显示部分、以及左右栏的功能部分、这时候就可以通过对<code>MediaController</code>本身设置点击事件来控制显示和隐藏。         </li>
-</ul>
-<p><code>Controller</code>可以用<code>PopupWindow</code>来实现,具体有两种方式：     </p>
-<pre><code>- 整个控制栏(上面的信息部分、下面的控制部分以及左右边)都在`Controller`中，`setAnchorView()`的时候就会让`Controller`中的`PopupWindow`显示出来(一直显示，但是这个`PopupWindow`是透明的)，
-    真正的显示与隐藏是控制在`PopupWindow`中的`View`部分的显示与隐藏来实现。开始的时候我是想用这种方式，当时我想的是播放就播放、控制就控制，分离开来多好，但是没想到，
-    一旦有`PopupWindow`显示出来后，Activity是接收不到任何`Touch`事件的，所有的重试界面等都要放到`Controller`中实现(手势处理等)。但是也有好处，就是不管显示还是隐藏都可以去处理手势.
-
-- `PopupWindow`不是全屏的，只包含下面真正的控制部分(快进、快退、暂停等,不包含上面的信息部分和左右边),而且也不是开始就显示，显示隐藏是通过控制`PopupWindow`的显示与隐藏来进行的。
-    而对于信息部分、以及左右边都是在`Activity`的布局当中，我们通过接口回调得到`PopupWindow`的显示与隐藏来控制这些布局的显示与隐藏即可。
-    这样的话我们就需要将手势等全部放到`Activity`中去处理，但是也有一个问题，就是如果`Controller`正在显示的话`Activity`是接收不到`Touch`事件的，就无法处理手势，只能是让`Controller`消失后才能处理手势。
-</code></pre><hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-视频解码之软解与硬解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/视频解码之软解与硬解/">视频解码之软解与硬解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/视频解码之软解与硬解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="视频解码之软解与硬解"><a href="#视频解码之软解与硬解" class="headerlink" title="视频解码之软解与硬解"></a>视频解码之软解与硬解</h1><p><strong>硬解</strong>：从字面意思上理解就是用硬件来进行解码，通过显卡的视频加速功能对高清视频进行解码，很明显就是一个专门的电路板(这样好理解…)来进行视频的解码，是依靠显卡<code>GPU</code>的。                    </p>
-<p><strong>软解</strong>：字面上理解就是用软件进行解码，这样理解也对，但是实际最总还是要硬件来支持的，这个硬件就是<code>CPU</code>。</p>
-<p>既然有这两种不同的解码方式，我们在开发中该如何进行选择？哪个更好？                     </p>
-<ul>
-<li><p>硬解优缺点：<br>  显卡核心GPU拥有独特的计算方法，解码效率非常高，而且充当解码核心的模块成本并不高。这样不但能够减轻CPU的负担，还有着低功耗、发热少等特点。但是由于硬解码起步比较晚，<br>  软件和驱动对其的支持度低。硬解码内置有什么样的模块就能够解码什么样的视频，面对网络上杂乱无章的视频编码格式，不可能做到完全兼容同。此外，硬解码的滤镜、字母、画质增强方面都做的十分不足。</p>
-<p>  优点：低功耗、发热少、效率高。<br>  缺点：视频兼容性差、支持度低。                </p>
-</li>
-<li><p>软解优缺点：<br>  软解码技术的解码过程中，需要对大量的视频信息进行运算，对CPU性能的要求非常高。尤其是对高清晰度大码率的视频来说，巨大的运算量就会造成转换效率低、发热量大等问题。<br>  但是由于软解码的过程中不需要复杂的硬件支持，兼容性非常高。即使是新出的视频编码格式，只要安装好相应的解码器文件，就能顺利播放。而且软解码拥有丰富的滤镜、字幕、画面处理优化等效果，<br>  如果<code>CPU</code>足够强悍的话，能够实现更加出色的画面效果。</p>
-<p>  优点：  兼容强、全解码、效果好<br>  缺点：  对<code>CPU</code>要求高、效率低、发热大                 </p>
-</li>
-</ul>
-<p>关于软解与硬解究竟哪个更好的问题一直是争论的热点，其实我倒是感觉没有好坏之分，各自有各自的优缺点和使用条件，根据需要去选择才是最合适的。<br>播放码率比较大的视频，硬解可能流畅的播放，但是软解可能会出现演示、画面和声音卡顿不同步的问题。但是硬解播放出的视频大多都不允许在解码之后进行软件后处理，比如进行一些降噪锐化之类的后期滤镜，<br>这样可能会让人感觉画质不太好的。当然上面的这种情况也是和<code>CPU</code>及<code>GPU</code>能力的不同而不同的。 总的来说，还是各有春秋，适合你的才是最好的。 </p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/视频解码之软解与硬解/">展开全文 >></a>
         </p>
       
 
@@ -1903,19 +1854,19 @@ jlrField.set(instance, combined);
         <ul class="search-ul">
           
             <li class="search-li">
-              <a href="https://github.com/itgoyo" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+              <a href="https://github.com/itgoyo" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>Github</a>
             </li>
           
             <li class="search-li">
-              <a href="http://weibo.com/5792513777/profile?topnav=1&wvr=6&is_all=1" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+              <a href="http://weibo.com/5792513777/profile?topnav=1&wvr=6&is_all=1" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>微博</a>
             </li>
           
             <li class="search-li">
-              <a href="https://www.zhihu.com/people/mkosto" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
+              <a href="https://www.zhihu.com/people/mkosto" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>知乎</a>
             </li>
           
             <li class="search-li">
-              <a href="https://itgoyo.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
+              <a href="https://itgoyo.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>博客</a>
             </li>
           
         </ul>
