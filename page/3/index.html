@@ -21,7 +21,7 @@
     <link rel="alternative" href="/atom.xml" title="itgoyo" type="application/atom+xml">
   
   
-    <link rel="icon" href="http://p1.bpimg.com/567571/df0e0761203aaeb8.jpg">
+    <link rel="icon" href="http://p1.bpimg.com/567571/d74ce7abbbfa1240.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.04d600.css">
   <style type="text/css">
@@ -165,76 +165,6 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-3D旋转动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/3D旋转动画/">3D旋转动画</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/3D旋转动画/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="3D旋转动画"><a href="#3D旋转动画" class="headerlink" title="3D旋转动画"></a>3D旋转动画</h1><p>终于切切实实弄明白matrix那几个方法的使用了，比如preTranslate, setTranslate, postTranslate这些。以前对它们都是一知半解，以为这几个方法没什么区别，其实还是有很大不同的，最紧要是这几个方法的调用顺序对坐标变换的影响。抽象的说pre方法是向前”生长”, post方法是向后”生长”，具体拿个例子来说，比如一个matrix调用了下列一系列的方法：</p>
-<p>matrix.preScale(0.5f, 1); matrix.preTranslate(10, 0); matrix.postScale(0.7f, 1); matrix.postTranslate(15, 0); 则坐标变换经过的4个变换过程依次是：translate(10, 0) -&gt; scale(0.5f, 1) -&gt; scale(0.7f, 1) -&gt; translate(15, 0), 所以对matrix方法的调用顺序是很重要的，不同的顺序往往会产生不同的变换效果。pre方法的调用顺序和post方法的互不影响，即以下的方法调用和前者在真实坐标变换顺序里是一致的， matrix.postScale(0.7f, 1); matrix.preScale(0.5f, 1); matrix.preTranslate(10, 0); matrix.postTranslate(15, 0);</p>
-<p>而matrix的set方法则会对先前的pre和post操作进行刷除，而后再设置它的值，比如下列的方法调用:</p>
-<p>matrix.preScale(0.5f, 1); matrix.postTranslate(10, 0); matrix.setScale(1, 0.6f); matrix.postScale(0.7f, 1); matrix.preTranslate(15, 0); 其坐标变换顺序是translate(15, 0) -&gt; scale(1, 0.6f) -&gt; scale(0.7f, 1).</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/3D旋转动画/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Handler导致内存泄露分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -332,19 +262,19 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Android Studio你可能不知道的操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-3D旋转动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android Studio你可能不知道的操作/">Android Studio你可能不知道的操作</a>
+      <a class="article-title" href="/2015/01/01/3D旋转动画/">3D旋转动画</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/Android Studio你可能不知道的操作/" class="archive-article-date">
+        <a href="/2015/01/01/3D旋转动画/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -352,24 +282,10 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Android-Studio你可能不知道的操作"><a href="#Android-Studio你可能不知道的操作" class="headerlink" title="Android Studio你可能不知道的操作"></a>Android Studio你可能不知道的操作</h1><p>今天看在<code>Youtube</code>看视频，看到<code>Reto Meier</code>在讲解<code>Studio</code>，<br>一查才知道他现在是<code>Studio</code>的开发人员。<br>想起刚开始学<code>Android</code>时买的他写的书<code>Professional Android 4 Application Development</code>，<br>当时很多内容没看懂。不过看了这个视频才发现大神写代码如此之快…</p>
-<p>现在天天用着大神开发的工具，没有理由不去好好学习下。</p>
-<p>工欲善其事必先利其器，一个好的开发工具可以让你事半功倍。<code>Android Studio</code>是一个非常好的开发工具，但是虽然都在用，你可能还是了解的不全面，今天就来说一下一些你可能不知道的功能。</p>
-<p>熟练使用快捷键是非常有必要的:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/use_shortcut.gif?raw=true" alt="image">  </p>
-<ul>
-<li><p>自动导入<br>经常听到同事抱怨，<code>Studio</code>怎么没有<code>Eclipse</code>那种批量导包啊，那么多类要到，费劲了。其实不用一个个导的。<br>使用<code>Command+Shift+A(Windows或Linux是Ctrl+Shift+A)</code>快速的查找设置命令。我们输入<code>auto import</code>后将<code>Add unambiguous imports on fly</code>选项开启就好了，很爽有木有？你的是不是也没开啊？<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/auto_import.gif?raw=true" alt="image"><br>你可以快速打开一些设置，例如你想在<code>finder</code>中查看该文件，直接输入<code>find</code>就好了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/action_find.png?raw=true" alt="image">        </p>
-</li>
-<li><p>在自动完成代码时使用<code>Tab</code>键来替换已存在的方法和参数。<br>经常如我们想要修改一个已经存在的方法时，我们移动到对象的<code>.</code>的提示区域，如果使用<code>Command+Space</code>来补充代码选择后按<code>enter</code>的话，会把之前已经存在的代码往后移动，这样还要再去删除，很不方便。但是如果我们直接使用<code>Tag</code>键，那就会直接替换当前已经存在的方法。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/tab_tip.gif?raw=true" alt="image">  </p>
-</li>
-<li><p>内容选择技巧<br>使用<code>Control+↑或↓</code>能在方法间移动。使用<code>Shift+↑或↓</code>来选择至上一行或者至下一行代码的代码？那么使用<code>option++↑或↓(Windows或Linux是alt++↑或↓)</code>呢？它能选择或者取消选择和你鼠标所在位置的代码区域。同时使用`option+shift++↑或↓(Windows或Linux是alt+shift++↑或↓)可以交换选中代码块与上一行的位置。这样我们就不需要剪切和粘贴了。</p>
-</li>
-<li><p>使用模板补全代码<br>你可以在代码后加用后缀的方式补充代码块，也可以用<code>Command+J(Windows是Ctrl+J)</code>来提示。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/command_j.gif?raw=true" alt="image"><br>对于一些更多的模式，在代码自动完成时也支持生成对应的模板，例如使用<code>Toast</code>的快捷键可以很方便的生成一个新的<code>toast</code>对象，你只需要指定文字就可以了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/toast_autocomp.gif?raw=true" alt="image"><br>用<code>Command+Shift+A</code>然后输入<code>live template</code>然后打开对应的页面，可以看到目前已经存在的模板。当然你也可以添加新的模板。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/live_templete.png?raw=true" alt="image">  </p>
-</li>
-<li><p>在<code>Evaluating Expressions</code>中为<code>Object</code>对象指定显示内容<br>如果我们在<code>debug</code>的时候查看断点处的变量值或者<code>evaluating expressions</code>，你会发现<code>objects</code>会显示他们的<code>toString()</code>值。如果你的变量是<code>String</code>类型或者基础类型那不会有问题，但是大多数其他对象，这样没有什么意义。<br>尤其是在集合对象时，你看的是一个<code>CallsName:HashValue</code>的列表。而为了需要看清数据，我们需要知道每个对象的内容。<br>你当然可以去对每个对象类型指定索要显示的内容。在对应的对象上邮件<code>View as</code>然后创建你想要显示的内容就可以了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/debug_eva.gif?raw=true" alt="image">  </p>
-</li>
-<li><p>结构性的搜索、替换、和检查<br><code>Command+shift+A</code>然后输入<code>structural</code>后选择<code>search structurally</code>或者<code>replace structurally</code>，然后可以对应的结构性搜索的模板，完成之后所有符合该模板的代码都会提示<code>warning</code>。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/structural_search.gif?raw=true" alt="image"><br>更有用的是可以使用快速修复来替换一些代码，例如一些废弃的代码或者你在<code>review</code>时发现的其他团队成员提交的一些普遍的错误。</p>
-</li>
-</ul>
+        <h1 id="3D旋转动画"><a href="#3D旋转动画" class="headerlink" title="3D旋转动画"></a>3D旋转动画</h1><p>终于切切实实弄明白matrix那几个方法的使用了，比如preTranslate, setTranslate, postTranslate这些。以前对它们都是一知半解，以为这几个方法没什么区别，其实还是有很大不同的，最紧要是这几个方法的调用顺序对坐标变换的影响。抽象的说pre方法是向前”生长”, post方法是向后”生长”，具体拿个例子来说，比如一个matrix调用了下列一系列的方法：</p>
+<p>matrix.preScale(0.5f, 1); matrix.preTranslate(10, 0); matrix.postScale(0.7f, 1); matrix.postTranslate(15, 0); 则坐标变换经过的4个变换过程依次是：translate(10, 0) -&gt; scale(0.5f, 1) -&gt; scale(0.7f, 1) -&gt; translate(15, 0), 所以对matrix方法的调用顺序是很重要的，不同的顺序往往会产生不同的变换效果。pre方法的调用顺序和post方法的互不影响，即以下的方法调用和前者在真实坐标变换顺序里是一致的， matrix.postScale(0.7f, 1); matrix.preScale(0.5f, 1); matrix.preTranslate(10, 0); matrix.postTranslate(15, 0);</p>
+<p>而matrix的set方法则会对先前的pre和post操作进行刷除，而后再设置它的值，比如下列的方法调用:</p>
+<p>matrix.preScale(0.5f, 1); matrix.postTranslate(10, 0); matrix.setScale(1, 0.6f); matrix.postScale(0.7f, 1); matrix.preTranslate(15, 0); 其坐标变换顺序是translate(15, 0) -&gt; scale(1, 0.6f) -&gt; scale(0.7f, 1).</p>
 <hr>
 <ul>
 <li>邮箱 ：itgoyo@gmail.com  </li>
@@ -398,7 +314,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android Studio你可能不知道的操作/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/3D旋转动画/">展开全文 >></a>
         </p>
       
 
@@ -477,6 +393,90 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Activity界面绘制过程详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android Studio你可能不知道的操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android Studio你可能不知道的操作/">Android Studio你可能不知道的操作</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android Studio你可能不知道的操作/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android-Studio你可能不知道的操作"><a href="#Android-Studio你可能不知道的操作" class="headerlink" title="Android Studio你可能不知道的操作"></a>Android Studio你可能不知道的操作</h1><p>今天看在<code>Youtube</code>看视频，看到<code>Reto Meier</code>在讲解<code>Studio</code>，<br>一查才知道他现在是<code>Studio</code>的开发人员。<br>想起刚开始学<code>Android</code>时买的他写的书<code>Professional Android 4 Application Development</code>，<br>当时很多内容没看懂。不过看了这个视频才发现大神写代码如此之快…</p>
+<p>现在天天用着大神开发的工具，没有理由不去好好学习下。</p>
+<p>工欲善其事必先利其器，一个好的开发工具可以让你事半功倍。<code>Android Studio</code>是一个非常好的开发工具，但是虽然都在用，你可能还是了解的不全面，今天就来说一下一些你可能不知道的功能。</p>
+<p>熟练使用快捷键是非常有必要的:<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/use_shortcut.gif?raw=true" alt="image">  </p>
+<ul>
+<li><p>自动导入<br>经常听到同事抱怨，<code>Studio</code>怎么没有<code>Eclipse</code>那种批量导包啊，那么多类要到，费劲了。其实不用一个个导的。<br>使用<code>Command+Shift+A(Windows或Linux是Ctrl+Shift+A)</code>快速的查找设置命令。我们输入<code>auto import</code>后将<code>Add unambiguous imports on fly</code>选项开启就好了，很爽有木有？你的是不是也没开啊？<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/auto_import.gif?raw=true" alt="image"><br>你可以快速打开一些设置，例如你想在<code>finder</code>中查看该文件，直接输入<code>find</code>就好了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/action_find.png?raw=true" alt="image">        </p>
+</li>
+<li><p>在自动完成代码时使用<code>Tab</code>键来替换已存在的方法和参数。<br>经常如我们想要修改一个已经存在的方法时，我们移动到对象的<code>.</code>的提示区域，如果使用<code>Command+Space</code>来补充代码选择后按<code>enter</code>的话，会把之前已经存在的代码往后移动，这样还要再去删除，很不方便。但是如果我们直接使用<code>Tag</code>键，那就会直接替换当前已经存在的方法。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/tab_tip.gif?raw=true" alt="image">  </p>
+</li>
+<li><p>内容选择技巧<br>使用<code>Control+↑或↓</code>能在方法间移动。使用<code>Shift+↑或↓</code>来选择至上一行或者至下一行代码的代码？那么使用<code>option++↑或↓(Windows或Linux是alt++↑或↓)</code>呢？它能选择或者取消选择和你鼠标所在位置的代码区域。同时使用`option+shift++↑或↓(Windows或Linux是alt+shift++↑或↓)可以交换选中代码块与上一行的位置。这样我们就不需要剪切和粘贴了。</p>
+</li>
+<li><p>使用模板补全代码<br>你可以在代码后加用后缀的方式补充代码块，也可以用<code>Command+J(Windows是Ctrl+J)</code>来提示。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/command_j.gif?raw=true" alt="image"><br>对于一些更多的模式，在代码自动完成时也支持生成对应的模板，例如使用<code>Toast</code>的快捷键可以很方便的生成一个新的<code>toast</code>对象，你只需要指定文字就可以了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/toast_autocomp.gif?raw=true" alt="image"><br>用<code>Command+Shift+A</code>然后输入<code>live template</code>然后打开对应的页面，可以看到目前已经存在的模板。当然你也可以添加新的模板。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/live_templete.png?raw=true" alt="image">  </p>
+</li>
+<li><p>在<code>Evaluating Expressions</code>中为<code>Object</code>对象指定显示内容<br>如果我们在<code>debug</code>的时候查看断点处的变量值或者<code>evaluating expressions</code>，你会发现<code>objects</code>会显示他们的<code>toString()</code>值。如果你的变量是<code>String</code>类型或者基础类型那不会有问题，但是大多数其他对象，这样没有什么意义。<br>尤其是在集合对象时，你看的是一个<code>CallsName:HashValue</code>的列表。而为了需要看清数据，我们需要知道每个对象的内容。<br>你当然可以去对每个对象类型指定索要显示的内容。在对应的对象上邮件<code>View as</code>然后创建你想要显示的内容就可以了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/debug_eva.gif?raw=true" alt="image">  </p>
+</li>
+<li><p>结构性的搜索、替换、和检查<br><code>Command+shift+A</code>然后输入<code>structural</code>后选择<code>search structurally</code>或者<code>replace structurally</code>，然后可以对应的结构性搜索的模板，完成之后所有符合该模板的代码都会提示<code>warning</code>。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/structural_search.gif?raw=true" alt="image"><br>更有用的是可以使用快速修复来替换一些代码，例如一些废弃的代码或者你在<code>review</code>时发现的其他团队成员提交的一些普遍的错误。</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android Studio你可能不知道的操作/">展开全文 >></a>
         </p>
       
 

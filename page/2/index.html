@@ -21,7 +21,7 @@
     <link rel="alternative" href="/atom.xml" title="itgoyo" type="application/atom+xml">
   
   
-    <link rel="icon" href="http://p1.bpimg.com/567571/df0e0761203aaeb8.jpg">
+    <link rel="icon" href="http://p1.bpimg.com/567571/d74ce7abbbfa1240.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.04d600.css">
   <style type="text/css">
@@ -436,111 +436,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Android开发工具及类库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android开发工具及类库/">Android开发工具及类库</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android开发工具及类库/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android开发工具及类库"><a href="#Android开发工具及类库" class="headerlink" title="Android开发工具及类库"></a>Android开发工具及类库</h1><p>在项目开发过程中，总有一些必要的工具和类库。下面就简单介绍下我常用的一些(还在用<code>Eclipse</code>的请无视)。      </p>
-<ol>
-<li><p><a href="https://android.googlesource.com/platform/frameworks/volley" target="_blank" rel="external">volley</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/volley.png?raw=true" alt="image"><br>在<code>Google I/0 2013</code>中发布了<code>Volley</code>.<code>Volley</code>是<code>Android</code>平台上的网络通信库，能使网络通信更快，更简单，更健壮。<br>这是<code>Volley</code>名称的由来:<code>a burst or emission of many things or a large amount at once</code>.<code>Volley</code>特别适合数据量不大但是通信频繁的场景。<br><code>Github</code>上面已经有大神做了镜像，使用更方便有木有。<a href="https://github.com/mcxiaoke/android-volley">Volley On Github</a>                     </p>
-</li>
-<li><p><a href="https://code.google.com/p/google-gson/" target="_blank" rel="external">Gson</a><br><code>Json</code>转换神器。</p>
-</li>
-<li><p><a href="https://github.com/zzz40500/GsonFormat">GsonFormat</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/GsonFormat.gif?raw=true" alt="image"><br>既然用了<code>Gson</code>怎么能少了该神器呢？</p>
-</li>
-<li><p><a href="https://github.com/avast/android-butterknife-zelezny">android-butterknife-zelezny</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/zelezny_animated.gif?raw=true" alt="image"><br>使用<a href="https://github.com/JakeWharton/butterknife">butterknife</a>制作的<code>Android Studio/IDEA</code>插件。非常方便有木有。</p>
-</li>
-<li><p><a href="https://github.com/inmite/android-selector-chapek">android-selector-chapek</a><br><code>selector</code>写起来是不是很麻烦？以后让<code>UI</code>规范化命名，然后就没有然后了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_folder.png?raw=true" alt="image"><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_option.png?raw=true" alt="image"><br>接下来你就会在<code>drawable</code>目录发现对应的<code>selector</code>文件。           </p>
-</li>
-<li><p><a href="https://github.com/square/leakcanary">leakcanary</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/screenshot.png?raw=true" alt="image"><br>内存泄漏你怕不怕？         </p>
-</li>
-<li><p><a href="https://github.com/facebook/fresco">fresco</a><br>怎么能少了对图片的处理呢？<code>Fracebook</code>出品。更快、更强、更方便。       </p>
-</li>
-<li><p><a href="https://github.com/KeepSafe/android-resource-remover">android-resource-remover</a><br> 开发过程中可能会经常遇到需求的变更，时间长了，项目中的无用资源就会越来越多。 虽然在<code>Gradle</code>中支持相应的配置来去除无用资源: </p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line">       debug &#123;</div><div class="line">           minifyEnabled false</div><div class="line">           zipAlignEnabled false</div><div class="line">           shrinkResources false</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       release &#123;</div><div class="line">           zipAlignEnabled true</div><div class="line">           // remove unused resources</div><div class="line">           shrinkResources true</div><div class="line">           minifyEnabled true</div><div class="line">           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'</div><div class="line">           signingConfig signingConfigs.release</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<pre><code>但是这只是在打包的时候不会打进去无用的资源，但是这些资源还是会在工程中。
-那我们怎么能快速的移除掉这些无用资源呢？答案也很简单，就是使用`lint`检查出无用的资源后用工具删除，这个工具就是`android-resource-remover`。 
-因为它是一个`python`脚本，所以如果不懂`python`的话使用起来会比较麻烦，下面就介绍一下具体的使用方法:            
-- 下载并安装`Python 2.x`版本
-    去[Python](https://www.python.org/)下载后即可，这里要下载2.x版本，因为3.x版本对语法做了很多改动，可能会不兼容，下载完成后安装就可。安装完成后将安装路径加入到`Path`中。如`D:\Python;`。
-- 安装`android-resource-remover`     
-    在命令行输入下面的命令`pip install android-resource-remover`。 这里有些电脑可能会提示错误，是因为没有安装`pip`导致的，具体可以看[pip](https://pip.pypa.io/en/latest/installing.html)找到安装的方法。上面介绍了要下载`get-pip.py`后执行`python get-pip.py`就能安装了。
-- 将`D:\Python\Scripts`添加到`Path`中。
-- 将`lint`命令添加到`Path`中，`D:\android-sdk-windows\tools`.
-- 在`Studio`右侧的`Gradle`窗口中执行`lint`任务。 这样就会在`app/build/outputs`下生成`lint-results.xml`文件。下一步清理的时候需要使用`lint-results.xml`文件。               
-    ![Image](https://raw.githubusercontent.com/CharonChui/Pictures/master/lint.png?raw=true)    
-- 进入到`Android Studio`中的具体项目中执行`./gradlew clean`后再执行`./gradlew lint &amp;&amp; android-resource-remover --xml app/build/outputs/lint-results.xml`
-</code></pre><ol>
-<li><a href="https://github.com/facebook/stetho">stetho</a><br> <code>facebook</code>出品。快速查看布局、数据库、网络请求。实在不能再方便了。   </li>
-<li><a href="https://github.com/ReactiveX/RxJava">RxJava</a><br>用了后你会爱上它。</li>
-<li><a href="https://github.com/square/retrofit">Retrofilt</a><br><code>Square</code>出品。大神<code>JakeWharton</code>主导出品的网络请求框架。内部结合<code>OkHttp</code>。结合<code>RxJava</code>使用非常方便。   </li>
-<li><a href="https://github.com/googlesamples/android-architecture">android-architecture</a><br>放到这里可能不太合适，因为它并不是工具和类库，而是<code>Google</code>官方发布的<code>Android</code>架构示例。非常值得参考。  </li>
-<li><a href="https://github.com/pedrovgs/AndroidWiFiADB">AndroidWiFiADB</a><br>还在为数据线不够用而烦恼嘛?</li>
-</ol>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android开发工具及类库/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Android开发中的MVP模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -691,6 +586,111 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Android开发中的MVP模式详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android开发工具及类库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android开发工具及类库/">Android开发工具及类库</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android开发工具及类库/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android开发工具及类库"><a href="#Android开发工具及类库" class="headerlink" title="Android开发工具及类库"></a>Android开发工具及类库</h1><p>在项目开发过程中，总有一些必要的工具和类库。下面就简单介绍下我常用的一些(还在用<code>Eclipse</code>的请无视)。      </p>
+<ol>
+<li><p><a href="https://android.googlesource.com/platform/frameworks/volley" target="_blank" rel="external">volley</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/volley.png?raw=true" alt="image"><br>在<code>Google I/0 2013</code>中发布了<code>Volley</code>.<code>Volley</code>是<code>Android</code>平台上的网络通信库，能使网络通信更快，更简单，更健壮。<br>这是<code>Volley</code>名称的由来:<code>a burst or emission of many things or a large amount at once</code>.<code>Volley</code>特别适合数据量不大但是通信频繁的场景。<br><code>Github</code>上面已经有大神做了镜像，使用更方便有木有。<a href="https://github.com/mcxiaoke/android-volley">Volley On Github</a>                     </p>
+</li>
+<li><p><a href="https://code.google.com/p/google-gson/" target="_blank" rel="external">Gson</a><br><code>Json</code>转换神器。</p>
+</li>
+<li><p><a href="https://github.com/zzz40500/GsonFormat">GsonFormat</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/GsonFormat.gif?raw=true" alt="image"><br>既然用了<code>Gson</code>怎么能少了该神器呢？</p>
+</li>
+<li><p><a href="https://github.com/avast/android-butterknife-zelezny">android-butterknife-zelezny</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/zelezny_animated.gif?raw=true" alt="image"><br>使用<a href="https://github.com/JakeWharton/butterknife">butterknife</a>制作的<code>Android Studio/IDEA</code>插件。非常方便有木有。</p>
+</li>
+<li><p><a href="https://github.com/inmite/android-selector-chapek">android-selector-chapek</a><br><code>selector</code>写起来是不是很麻烦？以后让<code>UI</code>规范化命名，然后就没有然后了。<br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_folder.png?raw=true" alt="image"><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/select_option.png?raw=true" alt="image"><br>接下来你就会在<code>drawable</code>目录发现对应的<code>selector</code>文件。           </p>
+</li>
+<li><p><a href="https://github.com/square/leakcanary">leakcanary</a><br><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/screenshot.png?raw=true" alt="image"><br>内存泄漏你怕不怕？         </p>
+</li>
+<li><p><a href="https://github.com/facebook/fresco">fresco</a><br>怎么能少了对图片的处理呢？<code>Fracebook</code>出品。更快、更强、更方便。       </p>
+</li>
+<li><p><a href="https://github.com/KeepSafe/android-resource-remover">android-resource-remover</a><br> 开发过程中可能会经常遇到需求的变更，时间长了，项目中的无用资源就会越来越多。 虽然在<code>Gradle</code>中支持相应的配置来去除无用资源: </p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line">       debug &#123;</div><div class="line">           minifyEnabled false</div><div class="line">           zipAlignEnabled false</div><div class="line">           shrinkResources false</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       release &#123;</div><div class="line">           zipAlignEnabled true</div><div class="line">           // remove unused resources</div><div class="line">           shrinkResources true</div><div class="line">           minifyEnabled true</div><div class="line">           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'</div><div class="line">           signingConfig signingConfigs.release</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>但是这只是在打包的时候不会打进去无用的资源，但是这些资源还是会在工程中。
+那我们怎么能快速的移除掉这些无用资源呢？答案也很简单，就是使用`lint`检查出无用的资源后用工具删除，这个工具就是`android-resource-remover`。 
+因为它是一个`python`脚本，所以如果不懂`python`的话使用起来会比较麻烦，下面就介绍一下具体的使用方法:            
+- 下载并安装`Python 2.x`版本
+    去[Python](https://www.python.org/)下载后即可，这里要下载2.x版本，因为3.x版本对语法做了很多改动，可能会不兼容，下载完成后安装就可。安装完成后将安装路径加入到`Path`中。如`D:\Python;`。
+- 安装`android-resource-remover`     
+    在命令行输入下面的命令`pip install android-resource-remover`。 这里有些电脑可能会提示错误，是因为没有安装`pip`导致的，具体可以看[pip](https://pip.pypa.io/en/latest/installing.html)找到安装的方法。上面介绍了要下载`get-pip.py`后执行`python get-pip.py`就能安装了。
+- 将`D:\Python\Scripts`添加到`Path`中。
+- 将`lint`命令添加到`Path`中，`D:\android-sdk-windows\tools`.
+- 在`Studio`右侧的`Gradle`窗口中执行`lint`任务。 这样就会在`app/build/outputs`下生成`lint-results.xml`文件。下一步清理的时候需要使用`lint-results.xml`文件。               
+    ![Image](https://raw.githubusercontent.com/CharonChui/Pictures/master/lint.png?raw=true)    
+- 进入到`Android Studio`中的具体项目中执行`./gradlew clean`后再执行`./gradlew lint &amp;&amp; android-resource-remover --xml app/build/outputs/lint-results.xml`
+</code></pre><ol>
+<li><a href="https://github.com/facebook/stetho">stetho</a><br> <code>facebook</code>出品。快速查看布局、数据库、网络请求。实在不能再方便了。   </li>
+<li><a href="https://github.com/ReactiveX/RxJava">RxJava</a><br>用了后你会爱上它。</li>
+<li><a href="https://github.com/square/retrofit">Retrofilt</a><br><code>Square</code>出品。大神<code>JakeWharton</code>主导出品的网络请求框架。内部结合<code>OkHttp</code>。结合<code>RxJava</code>使用非常方便。   </li>
+<li><a href="https://github.com/googlesamples/android-architecture">android-architecture</a><br>放到这里可能不太合适，因为它并不是工具和类库，而是<code>Google</code>官方发布的<code>Android</code>架构示例。非常值得参考。  </li>
+<li><a href="https://github.com/pedrovgs/AndroidWiFiADB">AndroidWiFiADB</a><br>还在为数据线不够用而烦恼嘛?</li>
+</ol>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android开发工具及类库/">展开全文 >></a>
         </p>
       
 
