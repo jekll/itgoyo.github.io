@@ -253,93 +253,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Android开发不申请权限来使用对应功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android开发不申请权限来使用对应功能/">Android开发不申请权限来使用对应功能</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android开发不申请权限来使用对应功能/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android开发不申请权限来使用对应功能"><a href="#Android开发不申请权限来使用对应功能" class="headerlink" title="Android开发不申请权限来使用对应功能"></a>Android开发不申请权限来使用对应功能</h1><p>从用户角度来说很难获取到正确的<code>android</code>权限。通常你只需要做一些很基础的事(例如编辑一个联系人)但实际你申请的权限却远远比这更强大(例如可以获取到所有的联系人明细等)。</p>
-<p>这样能很容易的理解到用户会怀疑到你的应用。如果你的应用不是开源的，那他们就没有方法来验证你会不会下载所有的联系人数据并上传到服务器。及时你去解释为什么需要这个权限，但是人们不会相信你。原来我会选择不去使用这些敏感的权限来防止用户产生不信任。(当然很多应用他们申请权限只是为了后台获取你的联系人数据上传- -!以及之前被爆的某宝使用摄像头拍照的问题)</p>
-<p>这就是说，有一件事在困扰着我，<strong>如何能在做一些操作时不去申请权限。</strong></p>
-<p>打个比方说:<code>android.permission.CALL_PHONE</code>这个权限。你需要它来在应用中拨打电话，是吗？这就是你怎么去实现拨号的吗？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_CALL);</div><div class="line">intent.setData(Uri.parse(<span class="string">"tel:1234567890"</span>))</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p><strong>错！</strong>，你通过这段代码需要该权限的原因是因为你可以在任何时间在不需要用户操作的情况下打电话。也就是说如果我的应用申请了这个权限，我可以在你不知情的情况下每天凌晨三点去拨打骚扰电话。</p>
-<p>正确的方式是使用<code>ACTION_VIEW</code>或者<code>ACTION_DIAL</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_DIAL);</div><div class="line">intent.setData(Uri.parse(<span class="string">"tel:1234567890"</span>))</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
-<p><strong>这个问题的完美解决方案就是不需要申请权限了。</strong>原因就是你不是直接拨号，而是用指定的号码调起拨号器，仍然需要用户点击”拨号”来开始打电话。老实的说，这样让人感觉更好。</p>
-<p>简单的说就是如果我想要的操作不是让用户在应用内点击某个按钮就直接开始拨打电话，而是让用户点击在应用内点击某个按钮是我们去调起拨号程序，并且显示指定号码，让用户在拨号器中点击拨号后再开始拨打电话。这样的话我们就完全不用申请拨号权限了。</p>
-<p>另一个例子: 我想获取某一个联系人的号码，你可能会想这需要申请获取所有联系人的权限。这是错的！。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_PICK);</div><div class="line">intent.setType(StructuredPostal.CONTENT_TYPE);</div><div class="line">startActivityForResult(intent, <span class="number">1</span>);</div></pre></td></tr></table></figure></p>
-<p>我们可以使用上面的代码，来启动联系人管理器，让用户来选择某一个联系人。这样不仅是不需要申请任何权限，也不需要提供任何联系人相关的<code>UI</code>。这样也能完全保证你选择联系人时的体验。</p>
-<p><code>Android</code>系统最酷的部分之一就是<code>Intent</code>系统，这意味着我不需要自己来实现所有的东西。应用可以注册处理它所擅长的指定数据，像电话号码、短信或者联系人。如果这些都要自己在一个应用中去实现，那这将会是很大的工作量，也会让应用变得臃肿。</p>
-<p><code>Android</code>系统的另一个优势就是你可以使用其他应用申请的权限，而不用自己申请。这样才保证了上面的情况。拨号器需要申请拨打电话的权限，我只需要一个能调起拨号器的<code>Intent</code>就好了。用户信任拨号器拨打电话，而不是我们的应用。他们无论如何都宁愿使用系统的拨号器。</p>
-<p>写这篇文章的意义是<strong>在你想要申请一个权限的时候，你需要至少看看<a href="https://developer.android.com/reference/android/content/Intent.html" target="_blank" rel="external">Intent的官方文档</a>看能否请求另外一个应用来帮我们做这些操作。</strong>如果想要深入的研究，可以学习下<a href="https://developer.android.com/guide/topics/security/permissions.html" target="_blank" rel="external">关于权限的详细介绍</a>，这里面包含了很多精细的权限。</p>
-<p>使用更少的权限可以不但可以让用户更加信任你，而且可以让用户有一个更好的体验，因为他们仍然在使用他们所期望的应用。</p>
-<ol>
-<li>遗憾的是，不是一个真实的号码。</li>
-<li>不幸的是，<code>Intent</code>系统的属性也建立了<a href="http://css.csail.mit.edu/6.858/2012/projects/ocderby-dennisw-kcasteel.pdf" target="_blank" rel="external">可能会被滥用的漏洞</a>，但你也不会写一个滥用的应用，是吗？</li>
-</ol>
-<ul>
-<li>(译)<a href="http://blog.danlew.net/2014/11/26/i-dont-need-your-permission/" target="_blank" rel="external">感谢Dan Lew</a></li>
-</ul>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android开发不申请权限来使用对应功能/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Android应用发布" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -425,6 +338,93 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Android应用发布/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android开发不申请权限来使用对应功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android开发不申请权限来使用对应功能/">Android开发不申请权限来使用对应功能</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android开发不申请权限来使用对应功能/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android开发不申请权限来使用对应功能"><a href="#Android开发不申请权限来使用对应功能" class="headerlink" title="Android开发不申请权限来使用对应功能"></a>Android开发不申请权限来使用对应功能</h1><p>从用户角度来说很难获取到正确的<code>android</code>权限。通常你只需要做一些很基础的事(例如编辑一个联系人)但实际你申请的权限却远远比这更强大(例如可以获取到所有的联系人明细等)。</p>
+<p>这样能很容易的理解到用户会怀疑到你的应用。如果你的应用不是开源的，那他们就没有方法来验证你会不会下载所有的联系人数据并上传到服务器。及时你去解释为什么需要这个权限，但是人们不会相信你。原来我会选择不去使用这些敏感的权限来防止用户产生不信任。(当然很多应用他们申请权限只是为了后台获取你的联系人数据上传- -!以及之前被爆的某宝使用摄像头拍照的问题)</p>
+<p>这就是说，有一件事在困扰着我，<strong>如何能在做一些操作时不去申请权限。</strong></p>
+<p>打个比方说:<code>android.permission.CALL_PHONE</code>这个权限。你需要它来在应用中拨打电话，是吗？这就是你怎么去实现拨号的吗？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_CALL);</div><div class="line">intent.setData(Uri.parse(<span class="string">"tel:1234567890"</span>))</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
+<p><strong>错！</strong>，你通过这段代码需要该权限的原因是因为你可以在任何时间在不需要用户操作的情况下打电话。也就是说如果我的应用申请了这个权限，我可以在你不知情的情况下每天凌晨三点去拨打骚扰电话。</p>
+<p>正确的方式是使用<code>ACTION_VIEW</code>或者<code>ACTION_DIAL</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_DIAL);</div><div class="line">intent.setData(Uri.parse(<span class="string">"tel:1234567890"</span>))</div><div class="line">startActivity(intent);</div></pre></td></tr></table></figure></p>
+<p><strong>这个问题的完美解决方案就是不需要申请权限了。</strong>原因就是你不是直接拨号，而是用指定的号码调起拨号器，仍然需要用户点击”拨号”来开始打电话。老实的说，这样让人感觉更好。</p>
+<p>简单的说就是如果我想要的操作不是让用户在应用内点击某个按钮就直接开始拨打电话，而是让用户点击在应用内点击某个按钮是我们去调起拨号程序，并且显示指定号码，让用户在拨号器中点击拨号后再开始拨打电话。这样的话我们就完全不用申请拨号权限了。</p>
+<p>另一个例子: 我想获取某一个联系人的号码，你可能会想这需要申请获取所有联系人的权限。这是错的！。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_PICK);</div><div class="line">intent.setType(StructuredPostal.CONTENT_TYPE);</div><div class="line">startActivityForResult(intent, <span class="number">1</span>);</div></pre></td></tr></table></figure></p>
+<p>我们可以使用上面的代码，来启动联系人管理器，让用户来选择某一个联系人。这样不仅是不需要申请任何权限，也不需要提供任何联系人相关的<code>UI</code>。这样也能完全保证你选择联系人时的体验。</p>
+<p><code>Android</code>系统最酷的部分之一就是<code>Intent</code>系统，这意味着我不需要自己来实现所有的东西。应用可以注册处理它所擅长的指定数据，像电话号码、短信或者联系人。如果这些都要自己在一个应用中去实现，那这将会是很大的工作量，也会让应用变得臃肿。</p>
+<p><code>Android</code>系统的另一个优势就是你可以使用其他应用申请的权限，而不用自己申请。这样才保证了上面的情况。拨号器需要申请拨打电话的权限，我只需要一个能调起拨号器的<code>Intent</code>就好了。用户信任拨号器拨打电话，而不是我们的应用。他们无论如何都宁愿使用系统的拨号器。</p>
+<p>写这篇文章的意义是<strong>在你想要申请一个权限的时候，你需要至少看看<a href="https://developer.android.com/reference/android/content/Intent.html" target="_blank" rel="external">Intent的官方文档</a>看能否请求另外一个应用来帮我们做这些操作。</strong>如果想要深入的研究，可以学习下<a href="https://developer.android.com/guide/topics/security/permissions.html" target="_blank" rel="external">关于权限的详细介绍</a>，这里面包含了很多精细的权限。</p>
+<p>使用更少的权限可以不但可以让用户更加信任你，而且可以让用户有一个更好的体验，因为他们仍然在使用他们所期望的应用。</p>
+<ol>
+<li>遗憾的是，不是一个真实的号码。</li>
+<li>不幸的是，<code>Intent</code>系统的属性也建立了<a href="http://css.csail.mit.edu/6.858/2012/projects/ocderby-dennisw-kcasteel.pdf" target="_blank" rel="external">可能会被滥用的漏洞</a>，但你也不会写一个滥用的应用，是吗？</li>
+</ol>
+<ul>
+<li>(译)<a href="http://blog.danlew.net/2014/11/26/i-dont-need-your-permission/" target="_blank" rel="external">感谢Dan Lew</a></li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android开发不申请权限来使用对应功能/">展开全文 >></a>
         </p>
       
 
@@ -908,86 +908,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-BroadcastReceiver安全问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/BroadcastReceiver安全问题/">BroadcastReceiver安全问题</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/BroadcastReceiver安全问题/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="BroadcastReceiver安全问题"><a href="#BroadcastReceiver安全问题" class="headerlink" title="BroadcastReceiver安全问题"></a>BroadcastReceiver安全问题</h1><p><code>BroadcastReceiver</code>设计的初衷是从全局考虑可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言<code>BroadcastReceiver</code>是存在安全性问题的(恶意程序脚本不断的去发送你所接收的广播)</p>
-<ul>
-<li><p>保证发送的广播要发送给指定的对象<br>  当应用程序发送某个广播时系统会将发送的<code>Intent</code>与系统中所有注册的<code>BroadcastReceiver</code>的<code>IntentFilter</code>进行匹配，若匹配成功则执行相应的<code>onReceive</code>函数。可以通过类似<code>sendBroadcast(Intent, String)</code>的接口在发送广播时指定接收者必须具备的<code>permission</code>或通过<code>Intent.setPackage</code>设置广播仅对某个程序有效。</p>
-</li>
-<li><p>保证我接收到的广播室指定对象发送过来的<br>  当应用程序注册了某个广播时，即便设置了<code>IntentFilter</code>还是会接收到来自其他应用程序的广播进行匹配判断。对于动态注册的广播可以通过类似<code>registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)</code>的接口指定发送者必须具备的<code>permission</code>，对于静态注册的广播可以通过<code>android:exported=&quot;false&quot;</code>属性表示接收者对外部应用程序不可用，即不接受来自外部的广播。</p>
-</li>
-</ul>
-<p><code>android.support.v4.content.LocalBroadcastManager</code>工具类，可以实现在自己的进程内进行局部广播发送与注册，使用它比直接通过sendBroadcast(Intent)发送系统全局广播有以下几个好处：</p>
-<ul>
-<li>因广播数据在本应用范围内传播，你不用担心隐私数据泄露的问题。</li>
-<li>不用担心别的应用伪造广播，造成安全隐患。</li>
-<li>相比在系统内发送全局广播，它更高效。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> LocalBroadcastManager mLocalBroadcastManager;  </div><div class="line"> BroadcastReceiver mReceiver;  </div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	 IntentFilter filter = <span class="keyword">new</span> IntentFilter();  </div><div class="line">	 filter.addAction(<span class="string">"test"</span>);  </div><div class="line"></div><div class="line">	 mReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;  </div><div class="line">		<span class="meta">@Override</span>  </div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;  </div><div class="line">			<span class="keyword">if</span> (intent.getAction().equals(<span class="string">"test"</span>)) &#123;  </div><div class="line">				<span class="comment">//Do Something</span></div><div class="line">			&#125; </div><div class="line">		&#125;  </div><div class="line">	&#125;;  </div><div class="line">	mLocalBroadcastManager = LocalBroadcastManager.getInstance(<span class="keyword">this</span>);</div><div class="line">	mLocalBroadcastManager.registerReceiver(mReceiver, filter);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">   mLocalBroadcastManager.unregisterReceiver(mReceiver);</div><div class="line">   <span class="keyword">super</span>.onDestroy();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/BroadcastReceiver安全问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Github个人主页绑定域名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1052,6 +972,86 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Github个人主页绑定域名/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-BroadcastReceiver安全问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/BroadcastReceiver安全问题/">BroadcastReceiver安全问题</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/BroadcastReceiver安全问题/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="BroadcastReceiver安全问题"><a href="#BroadcastReceiver安全问题" class="headerlink" title="BroadcastReceiver安全问题"></a>BroadcastReceiver安全问题</h1><p><code>BroadcastReceiver</code>设计的初衷是从全局考虑可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言<code>BroadcastReceiver</code>是存在安全性问题的(恶意程序脚本不断的去发送你所接收的广播)</p>
+<ul>
+<li><p>保证发送的广播要发送给指定的对象<br>  当应用程序发送某个广播时系统会将发送的<code>Intent</code>与系统中所有注册的<code>BroadcastReceiver</code>的<code>IntentFilter</code>进行匹配，若匹配成功则执行相应的<code>onReceive</code>函数。可以通过类似<code>sendBroadcast(Intent, String)</code>的接口在发送广播时指定接收者必须具备的<code>permission</code>或通过<code>Intent.setPackage</code>设置广播仅对某个程序有效。</p>
+</li>
+<li><p>保证我接收到的广播室指定对象发送过来的<br>  当应用程序注册了某个广播时，即便设置了<code>IntentFilter</code>还是会接收到来自其他应用程序的广播进行匹配判断。对于动态注册的广播可以通过类似<code>registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)</code>的接口指定发送者必须具备的<code>permission</code>，对于静态注册的广播可以通过<code>android:exported=&quot;false&quot;</code>属性表示接收者对外部应用程序不可用，即不接受来自外部的广播。</p>
+</li>
+</ul>
+<p><code>android.support.v4.content.LocalBroadcastManager</code>工具类，可以实现在自己的进程内进行局部广播发送与注册，使用它比直接通过sendBroadcast(Intent)发送系统全局广播有以下几个好处：</p>
+<ul>
+<li>因广播数据在本应用范围内传播，你不用担心隐私数据泄露的问题。</li>
+<li>不用担心别的应用伪造广播，造成安全隐患。</li>
+<li>相比在系统内发送全局广播，它更高效。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> LocalBroadcastManager mLocalBroadcastManager;  </div><div class="line"> BroadcastReceiver mReceiver;  </div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	 IntentFilter filter = <span class="keyword">new</span> IntentFilter();  </div><div class="line">	 filter.addAction(<span class="string">"test"</span>);  </div><div class="line"></div><div class="line">	 mReceiver = <span class="keyword">new</span> BroadcastReceiver() &#123;  </div><div class="line">		<span class="meta">@Override</span>  </div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;  </div><div class="line">			<span class="keyword">if</span> (intent.getAction().equals(<span class="string">"test"</span>)) &#123;  </div><div class="line">				<span class="comment">//Do Something</span></div><div class="line">			&#125; </div><div class="line">		&#125;  </div><div class="line">	&#125;;  </div><div class="line">	mLocalBroadcastManager = LocalBroadcastManager.getInstance(<span class="keyword">this</span>);</div><div class="line">	mLocalBroadcastManager.registerReceiver(mReceiver, filter);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">   mLocalBroadcastManager.unregisterReceiver(mReceiver);</div><div class="line">   <span class="keyword">super</span>.onDestroy();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/BroadcastReceiver安全问题/">展开全文 >></a>
         </p>
       
 
@@ -1282,11 +1282,11 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Lantern</a>
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+                <a href="javascript:void(0)" class="js-tag color3">Lantern</a>
               </li>
              
               <li class="article-tag-list-item">
