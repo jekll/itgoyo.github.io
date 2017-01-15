@@ -171,6 +171,88 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
+<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
+<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
+<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
+  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
+<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
+<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
+</ul>
+</li>
+<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
+<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
+<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
+<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Android应用发布" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -256,88 +338,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/Android应用发布/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android启动模式详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android启动模式详解/">Android启动模式详解</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android启动模式详解/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android启动模式详解"><a href="#Android启动模式详解" class="headerlink" title="Android启动模式详解"></a>Android启动模式详解</h1><ul>
-<li>standard<br>  默认模式。在该模式下，<code>Activity</code>可以拥有多个实例，并且这些实例既可以位于同一个task，也可以位于不同的task。每次都会新创建。</li>
-<li>singleTop<br>  该模式下，在同一个<code>task</code>中，如果存在该<code>Activity</code>的实例，并且该<code>Activity</code>实例位于栈顶则不会创建该<code>Activity</code>的示例,而仅仅只是调用<code>Activity</code>的<code>onNewIntent()</code>。否则的话，则新建该<code>Activity</code>的实例，并将其置于栈顶。</li>
-<li>singleTask<br>  顾名思义，只容许有一个包含该<code>Activity</code>实例的<code>task</code>存在！<br>  在<code>android</code>浏览器<code>browser</code>中，<code>BrowserActivity</code>的<code>launcherMode=&quot;singleTask&quot;</code>，因为<code>browser</code>不断地启动自己，所以要求这个栈中保持只能有一个自己的实例，<code>browser</code>上网的时候，<br>  遇到播放视频的链接，就会通过隐式<code>intent</code>方式跳转找<code>Gallery3D</code>中的<code>MovieView</code>这个类来播放视频，这时候如果你点击<code>home</code>键，再点击<code>browser</code>，你会发现<code>MovieView</code>这个类已经销毁不存在了，<br>  而不会像保存这个<code>MovieView</code>的类对象，给客户带来的用户体验特别的不好。就像别人总结的<code>singleTask</code>模式的<code>Activity</code>不管是位于栈顶还是栈底，再次运行这个<code>Activity</code>时，都会<code>destory</code>掉它上面的<code>Activity</code>来保证整个栈中只有一个自己。<br>  下面是官方文档中的介绍:<br>  <code>The system creates a new task and instantiates the activity at the root of the new task. However, if an instance of the activity already exists in a separate task, the system routes the intent to the existing 
-  instance through a call to its onNewIntent() method, rather than creating a new instance. Only one instance of the activity can exist at a time.</code><br>  以<code>singleTask</code>方式启动的<code>Activity</code>，全局只有唯一个实例存在，因此，当我们第一次启动这个<code>Activity</code>时，系统便会创建一个新的任务栈，并且初始化一个<code>Activity</code>实例，放在新任务栈的底部，如果下次再启动这个<code>Activity</code>时，<br>  系统发现已经存在这样的<code>Activity</code>实例，就会调用这个<code>Activity</code>实例的<code>onNewIntent</code>方法，从而把它激活起来。从这句话就可以推断出，以<code>singleTask</code>方式启动的<code>Activity</code>总是属于一个任务栈的根<code>Activity</code>。<br>  下面我们看一下示例图:　<br>  <img src="https://github.com/CharonChui/Pictures/blob/master/singletask.gif?raw=true" alt="image"><br>   坑爹啊！有木有！前面刚说<code>singleTask</code>会在新的任务中运行，并且位于任务堆栈的底部，这里在<code>Task B</code>中，一个赤裸裸的带着<code>singleTask</code>标签的箭头无情地指向<code>Task B</code>堆栈顶端的<code>Activity Y</code>，什么鬼？<br>这其实是和<code>taskAffinity</code>有关，在将要启动时，系统会根据要启动的<code>Activity</code>的<code>taskAffinity</code>属性值在系统中查找这样的一个<code>Task</code>：<code>Task</code>的<code>affinity</code>属性值与即将要启动的<code>Activity</code>的<code>taskAffinity</code>属性值一致。如果存在，<br>就返回这个<code>Task</code>堆栈顶端的<code>Activity</code>回去，不重新创建任务栈了，再去启动另外一个<code>singletask</code>的<code>activity</code>时就会在跟它有相同<code>taskAffinity</code>的任务中启动，并且位于这个任务的堆栈顶端，于是，前面那个图中，<br>就会出现一个带着<code>singleTask</code>标签的箭头指向一个任务堆栈顶端的<code>Activity Y</code>了。在上面的<code>AndroidManifest.xml</code>文件中，没有配置<code>MainActivity</code>和<code>SubActivity</code>的<code>taskAffinity</code>属性，<br>于是它们的<code>taskAffinity</code>属性值就默认为父标签<code>application</code>的<code>taskAffinity</code>属性值，这里，标签<code>application</code>的<code>taskAffinity</code>也没有配置，于是它们就默认为包名。<br>总的来说：<code>singleTask</code>的结论与<code>android:taskAffinity</code>相关：　　           <ul>
-<li>设置了<code>singleTask</code>启动模式的<code>Activity</code>，它在启动的时候，会先在系统中查找属性值<code>affinity</code>等于它的属性值<code>taskAffinity</code>的任务栈的存在；如果存在这样的任务栈，它就会在这个任务栈中启动，否则就会在新任务栈中启动。<br>因此，如果我们想要设置了<code>singleTask</code>启动模式的<code>Activity</code>在新的任务栈中启动，就要为它设置一个独立的<code>taskAffinity</code>属性值。以<code>A</code>启动<code>B</code>来说当<code>A</code>和<code>B</code>的<code>taskAffinity</code>相同时：第一次创建<code>B</code>的实例时，并不会启动新的<code>task</code>，<br>而是直接将<code>B</code>添加到<code>A</code>所在的<code>task</code>；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-<li>如果设置了<code>singleTask</code>启动模式的<code>Activity</code>不是在新的任务中启动时，它会在已有的任务中查看是否已经存在相应的<code>Activity</code>实例，如果存在，就会把位于这个<code>Activity</code>实例上面的<code>Activity</code>全部结束掉，<br>即最终这个Activity实例会位于任务的堆栈顶端中。以<code>A</code>启动<code>B</code>来说,当<code>A</code>和<code>B</code>的<code>taskAffinity</code>不同时：第一次创建<code>B</code>的实例时，会启动新的<code>task</code>，然后将<code>B</code>添加到新建的<code>task</code>中；否则，将<code>B</code>所在<code>task</code>中位于<code>B</code>之上的全部<code>Activity</code>都删除，然后跳转到<code>B</code>中。</li>
-</ul>
-</li>
-<li>singleInstance<br>顾名思义，是单一实例的意思，即任意时刻只允许存在唯一的<code>Activity</code>实例，而且该<code>Activity</code>所在的<code>task</code>不能容纳除该<code>Activity</code>之外的其他<code>Activity</code>实例！<br>它与<code>singleTask</code>有相同之处，也有不同之处。<br>相同之处：任意时刻，最多只允许存在一个实例。<br>不同之处：<ul>
-<li><code>singleTask</code>受<code>android:taskAffinity</code>属性的影响，而<code>singleInstance</code>不受<code>android:taskAffinity</code>的影响。 </li>
-<li><code>singleTask</code>所在的<code>task</code>中能有其它的<code>Activity</code>，而<code>singleInstance</code>的<code>task</code>中不能有其他<code>Activity</code>。     </li>
-<li>当跳转到<code>singleTask</code>类型的<code>Activity</code>，并且该<code>Activity</code>实例已经存在时，会删除该<code>Activity</code>所在<code>task</code>中位于该<code>Activity</code>之上的全部<code>Activity</code>实例；而跳转到<code>singleInstance</code>类型的<code>Activity</code>，并且该<code>Activity</code>已经存在时，<br>不需要删除其他<code>Activity</code>，因为它所在的<code>task</code>只有该<code>Activity</code>唯一一个<code>Activity</code>实例。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android启动模式详解/">展开全文 >></a>
         </p>
       
 
@@ -1069,19 +1069,19 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Handler导致内存泄露分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Gradle专题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Handler导致内存泄露分析/">Handler导致内存泄露分析</a>
+      <a class="article-title" href="/2015/01/01/Gradle专题/">Gradle专题</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/Handler导致内存泄露分析/" class="archive-article-date">
+        <a href="/2015/01/01/Gradle专题/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -1089,37 +1089,237 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Handler导致内存泄露分析"><a href="#Handler导致内存泄露分析" class="headerlink" title="Handler导致内存泄露分析"></a>Handler导致内存泄露分析</h1><p>有关内存泄露请猛戳<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.md">内存泄露</a></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Handler mHandler = <span class="keyword">new</span> Handler() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">	    <span class="comment">// do something.</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当我们这样创建<code>Handler</code>的时候<code>Android Lint</code>会提示我们这样一个<code>warning： In Android, Handler classes should be static or leaks might occur.</code>。       </p>
-<p>一直以来没有仔细的去分析泄露的原因，先把主要原因列一下：    </p>
+        <h1 id="Gradle专题"><a href="#Gradle专题" class="headerlink" title="Gradle专题"></a>Gradle专题</h1><p>随着<code>Google</code>对<code>Eclipse</code>的无情抛弃以及<code>Studio</code>的不断壮大，<code>Android</code>开发者逐渐拜倒在<code>Studio</code>的石榴裙下。<br>而作为<code>Studio</code>的默认编译方式，<code>Gradle</code>已逐渐普及。我最开始是被它的多渠道打包所吸引。关于多渠道打包，请看之前我写的文章<a href="https://github.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80/AndroidStudio%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B(%E7%AC%AC%E4%B8%83%E5%BC%B9">AndroidStudio使用教程(第七弹)</a>.md)</p>
+<p>接下来我们就系统的学习一下<code>Gradle</code>。    </p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><code>Gradle</code>是以<code>Groovy</code>语言为基础，面向<code>Java</code>应用为主。基于<code>DSL(Domain Specific Language)</code>语法的自动化构建工具。</p>
+<p><code>Gradle</code>集合了<code>Ant</code>的灵活性和强大功能，同时也集合了<code>Maven</code>的依赖管理和约定，从而创造了一个更有效的构建方式。凭借<code>Groovy</code>的<code>DSL</code>和创新打包方式，<code>Gradle</code>提供了一个可声明的方式，并在合理默认值的基础上描述所有类型的构建。 <code>Gradle</code>目前已被选作许多开源项目的构建系统。</p>
+<p>因为<code>Gradle</code>是基于<code>DSL</code>语法的，如果想看到<code>build.gradle</code>文件中全部可以选项的配置，可以看这里<br><a href="http://google.github.io/android-gradle-dsl/current/" target="_blank" rel="external">DSL Reference</a></p>
+<h2 id="基本的项目设置"><a href="#基本的项目设置" class="headerlink" title="基本的项目设置"></a>基本的项目设置</h2><p>一个<code>Gradle</code>项目通过一个在项目根目录中的<code>build.gradle</code>文件来描述它的构建。</p>
+<p>###简单的<code>Build</code>文件</p>
+<p>最简单的<code>Android</code>应用中的<code>build.gradle</code>都会包含以下几个配置：<br><code>Project</code>根目录的<code>build.gradle</code>:       </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.android.tools.build:gradle:1.5.0&apos;</div><div class="line"></div><div class="line">        // NOTE: Do not place your application dependencies here; they belong</div><div class="line">        // in the individual module build.gradle files</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Module</code>中的<code>build.gradle</code>:    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion 23</div><div class="line">    buildToolsVersion &quot;23.0.3&quot;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
-<li><code>Android</code>程序第一次创建的时候，默认会创建一个<code>Looper</code>对象，<code>Looper</code>去处理<code>Message Queue</code>中的每个<code>Message</code>,主线程的<code>Looper</code>存在整个应用程序的生命周期.</li>
-<li><code>Hanlder</code>在主线程创建时会关联到<code>Looper</code>的<code>Message Queue</code>,<code>Message</code>添加到消息队列中的时候<code>Message(排队的Message)</code>会持有当前<code>Handler</code>引用，<br>当<code>Looper</code>处理到当前消息的时候，会调用<code>Handler#handleMessage(Message)</code>.就是说在<code>Looper</code>处理这个<code>Message</code>之前，<br>会有一条链<code>MessageQueue -&gt; Message -&gt; Handler -&gt; Activity</code>，由于它的引用导致你的<code>Activity</code>被持有引用而无法被回收`</li>
-<li><strong>在java中，no-static的内部类会隐式的持有当前类的一个引用。static的内部类则没有。</strong></li>
+<li><code>buildscript { ... }</code>配置了编译时的代码驱动. 这种情况下，它声明所使用的是<code>jCenter</code>仓库。还有一个声明所依赖的在<code>Maven</code>文件的路径。这里声明的包含了<code>Android</code>插件所使用的1.5.0版本的<code>Gradle</code>. <strong><em>注意:</em></strong>这只会影响<code>build</code>中运行的代码，不是项目中。项目中需要声明它自己所需要仓库和依赖关系。</li>
+<li><code>apply plugin : com.android.application</code>，声明使用<code>com.androdi.application</code>插件。这是构建<code>Android</code>应用所需要的插件。</li>
+<li><code>android{...}</code>配置了所有<code>Android</code>构建时的参数。默认情况下，只有编译的目标版本以及编译工具的版本是需要的。</li>
 </ul>
-<p>##具体分析<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Handler mHandler = <span class="keyword">new</span> Handler() &#123;</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">		  <span class="comment">// do something</span></div><div class="line">		&#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">	<span class="comment">// 发送一个10分钟后执行的一个消息</span></div><div class="line">	mHandler.postDelayed(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">	  <span class="meta">@Override</span></div><div class="line">	  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">	&#125;, <span class="number">600000</span>);</div><div class="line"></div><div class="line">	<span class="comment">// 结束当前的Activity</span></div><div class="line">	finish();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在<code>finish()</code>的时候，该<code>Message</code>还没有被处理，<code>Message</code>持有<code>Handler</code>,<code>Handler</code>持有<code>Activity</code>,这样会导致该<code>Activity</code>不会被回收，就发生了内存泄露.</p>
-<p>##解决方法 </p>
+<p>重要: 这里只能使用<code>com.android.application</code>插件。如果使用<code>java</code>插件将会报错。</p>
+<p>###目录结构<br><code>module/src/main</code>下的目录结构，因为有时候很多人把<code>so</code>放到<code>libs</code>目录就会报错:    </p>
 <ul>
-<li>通过程序逻辑来进行保护。<ul>
-<li>如果<code>Handler</code>中执行的是耗时的操作，在关闭<code>Activity</code>的时候停掉你的后台线程。线程停掉了，就相当于切断了<code>Handler</code>和外部连接的线，<br><code>Activity</code>自然会在合适的时候被回收。 </li>
-<li>如果<code>Handler</code>是被<code>delay</code>的<code>Message</code>持有了引用，那么在<code>Activity</code>的<code>onDestroy()</code>方法要调用<code>Handler</code>的<code>remove*</code>方法，把消息对象从消息队列移除就行了。 <ul>
-<li>关于<code>Handler.remove*</code>方法<ul>
-<li><code>removeCallbacks(Runnable r)</code> ——清除r匹配上的Message。    </li>
-<li><code>removeC4allbacks(Runnable r, Object token)</code> ——清除r匹配且匹配token（Message.obj）的Message，token为空时，只匹配r。</li>
-<li><code>removeCallbacksAndMessages(Object token)</code> ——清除token匹配上的Message。</li>
-<li><code>removeMessages(int what)</code> ——按what来匹配     </li>
-<li><code>removeMessages(int what, Object object)</code> ——按what来匹配<br>我们更多需要的是清除以该<code>Handler</code>为<code>target</code>的所有<code>Message(Callback)</code>就调用如下方法即可<code>handler.removeCallbacksAndMessages(null)</code>;</li>
+<li>java/</li>
+<li>res/</li>
+<li>AndroidManifest.xml</li>
+<li>assets/</li>
+<li>aidl/  </li>
+<li>jniLibs/</li>
+<li>jni/  </li>
+<li>rs/</li>
+</ul>
+<p>###配置目录结构<br>如果项目的结构不标准的时候，可能就需要去配置它。<code>Android</code>插件使用了相似的语法，但是因为它有自己的<code>sourceSets</code>，所以要在<code>android</code>代码块中进行配置。下面就是一个从<code>Eclipse</code>的老项目结构中配置主要代码并且将<code>androidTest</code>的<code>sourceSet</code>设置给<code>tests</code>目录的例子:     </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest.srcFile &apos;AndroidManifest.xml&apos;</div><div class="line">            java.srcDirs = [&apos;src&apos;]</div><div class="line">            resources.srcDirs = [&apos;src&apos;]</div><div class="line">            aidl.srcDirs = [&apos;src&apos;]</div><div class="line">            renderscript.srcDirs = [&apos;src&apos;]</div><div class="line">            res.srcDirs = [&apos;res&apos;]</div><div class="line">            assets.srcDirs = [&apos;assets&apos;]</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        androidTest.setRoot(&apos;tests&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>就像有些人就是要把<code>so</code>放到<code>libs</code>目录中(这类人有点犟)，那就需要这样进行修改。<br><strong><em>注意:</em></strong>因为在旧的项目结构中所有的源文件(<code>Java</code>,<code>AIDL</code>和<code>RenderScript</code>)都放到同一个目录中，我们需要将<code>sourceSet</code>中的这些新部件都设置给<code>src</code>目录。</p>
+<h2 id="Build-Tasks"><a href="#Build-Tasks" class="headerlink" title="Build Tasks"></a>Build Tasks</h2><p>对构建文件声明插件时通常或自动创建一些列的构建任务去执行。不管<code>Java</code>插件还是<code>Android</code>插件都是这样。<code>Android</code>常规的任务如下：    </p>
+<ul>
+<li><code>assemble</code>生成项目<code>output</code>目录中的内容的任务。</li>
+<li><code>check</code>执行所有的检查的任务。</li>
+<li><code>build</code>执行<code>assemble</code>和<code>check</code>的任务。</li>
+<li><code>clean</code>清理项目<code>output</code>目录的任务。</li>
+</ul>
+<p>在<code>Android</code>项目中至少会有两种<code>output</code>输出:一个<code>debug apk</code>和一个<code>release apk</code>。他们都有自己的主任务来分别执行构建:    </p>
+<ul>
+<li><code>assemble</code><ul>
+<li><code>assembleDebug</code></li>
+<li><code>assembleRelease</code>  </li>
+</ul>
+</li>
+</ul>
+<p><strong><em>提示:</em></strong><code>Gradle</code>支持通过命令行执行任务首字母缩写的方式。例如:<br>在没有其他任务符合<code>aR</code>的前提下，<code>gradle aR</code>与<code>gradle assembleRelease</code>是相同的。</p>
+<p>最后，构建插件创建了为所有<code>build type(debug, release, test)</code>类型安装和卸载的任务，只要他们能被安装(需要签名)。</p>
+<ul>
+<li><code>installDebug</code></li>
+<li><code>installRelease</code></li>
+<li><code>uninstallAll</code><ul>
+<li><code>uninstallDebug</code></li>
+<li><code>uninstallRelease</code></li>
+<li><code>uninstallDebugAndroidTest</code></li>
+</ul>
+</li>
+</ul>
+<p>###基本的<code>Build</code>定制</p>
+<p><code>Android</code>插件提供了一些列的<code>DSL</code>来让直接从构建系统中做大部分的定制。</p>
+<p>#####<code>Manifest</code>整体部分<br><code>DSL</code>提供了很多重要的配置<code>manifest</code>文件的参数，例如:     </p>
+<ul>
+<li><code>minSdkVersion</code></li>
+<li><code>targetSdkVersion</code></li>
+<li><code>versionCode</code></li>
+<li><code>versionName</code></li>
+<li><code>applicationId</code></li>
+<li><code>testApplicationId</code></li>
+<li><code>testInstrumentationRunnder</code></li>
+</ul>
+<p><a href="http://google.github.io/android-gradle-dsl/current/" target="_blank" rel="external">Android Plugin DSL Reference</a>提供了一个完整的构建参数列表。</p>
+<p>把这些<code>manifest</code>属性放到<code>build</code>文件中的一个重要功能就是它可以被动态的设置。例如，可以通过读取一个文件或者其他逻辑来获取版本名称。     </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">def computeVersionName() &#123;</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion 23</div><div class="line">    buildToolsVersion &quot;23.0.1&quot;</div><div class="line"></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        versionCode 12 </div><div class="line">        versionName computeVersionName()</div><div class="line">        minSdkVersion 16</div><div class="line">        targetSdkVersion 23</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong><em>注意:</em></strong>不要使用可能与现有给定冲突的方法名。例如<code>defaultConfig{...}</code>中使用<code>getVersionName()</code>方法将会自动使用<code>defaultConfig.getVersionName()</code>来带起自定义的方法。</p>
+<p>#####<code>Build Types</code></p>
+<p>默认情况下<code>Android</code>插件会自动将应用程序设置成有一个<code>debug</code>版本和一个<code>release</code>版本。<br>这就是通过调用<code>BuildType</code>对象完成。默认情况下会创建两个实例，一个<code>debug</code>实例和一个<code>release</code>实例。<code>Android</code>插件同样允许通过其他的<code>Build Types</code>来定制其他的实例。这就是通过<code>buildTypes</code>来设置的:     </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    buildTypes &#123;</div><div class="line">        debug &#123;</div><div class="line">            applicationIdSuffix &quot;.debug&quot;</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        jnidebug &#123;</div><div class="line">            initWith(buildTypes.debug)</div><div class="line">            applicationIdSuffix &quot;.jnidebug&quot;</div><div class="line">            jniDebuggable true</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码执行了以下操作:     </p>
+<ul>
+<li>配置了默认<code>debug</code>的<code>Build Type</code>:     <ul>
+<li>设置了它的<code>applicationId</code>。这样<code>debug</code>模式就能与<code>release</code>模式的<code>apk</code>同时安装在同一手机上。</li>
+</ul>
+</li>
+<li>创建了一个新的<code>jnidebug</code>的<code>Build Type</code>，并且把它设置为<code>debug</code>的拷贝。</li>
+<li>通过允许<code>JNI</code>组件的<code>debug</code>和增加一个新的包名后缀来继续定制该<code>Build Type</code>。  </li>
+</ul>
+<p>不管使用<code>initWith()</code>还是使用其他的代码块，创建一个新的<code>Build Types</code>都是非常简单的在<code>buildTypes</code>代码块中创建一个新的元素就可以了。</p>
+<p>#####签名配置</p>
+<p>为应用签名需要使用如下几个部分:      </p>
+<ul>
+<li><code>A keystore</code></li>
+<li><code>A keystore password</code></li>
+<li><code>A key alias name</code></li>
+<li><code>A key password</code></li>
+<li><code>The store type</code></li>
+</ul>
+<p>默认情况下有一个<code>debug</code>的配置，设置了一个<code>debug</code>的<code>keystore</code>，有一个已知的密码。<code>debug keystore</code>的位置是在<code>$HOME/.android/debug.keystore</code>，如果没有的话他会被默认创建。<code>Debug</code>的<code>Build Type</code>会默认使用该<code>debug</code>的签名设置。</p>
+<p>当然也可以通过使用<code>DSL</code>语法中的<code>signingconfigs</code>部分来创建其他的配置来进行定制:    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    signingConfigs &#123;</div><div class="line">        debug &#123;</div><div class="line">            storeFile file(&quot;debug.keystore&quot;)</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        myConfig &#123;</div><div class="line">            storeFile file(&quot;other.keystore&quot;)</div><div class="line">            storePassword &quot;android&quot;</div><div class="line">            keyAlias &quot;androiddebugkey&quot;</div><div class="line">            keyPassword &quot;android&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line">        foo &#123;</div><div class="line">            signingConfig signingConfigs.myConfig</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的设置将把<code>debug keystore</code>的位置改为项目的根目录。同样也创建了一个新的签名配置，并且有一个新的<code>Build Type</code>使用它。</p>
+<p>###<code>Dependencies, Android Libraries and Multi-project setup</code></p>
+<p><code>Gradle</code>项目可以依赖其他的外部二进制包、或者其他的<code>Gradle</code>项目。</p>
+<h5 id="本地包"><a href="#本地包" class="headerlink" title="本地包"></a>本地包</h5><p>想要配置依赖一个外部<code>jar</code>包，需要在<code>compile</code>的配置中添加一个<code>dependency</code>。下面的配置是添加了所有在<code>libs</code>目录的<code>jar</code>包:   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile fileTree(dir: &apos;libs&apos;, include: [&apos;*.jar&apos;])</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">android &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong><em>注意:</em></strong><code>DSL</code>元素中的<code>dependencies</code>是<code>Gradle API</code>中的标准元素。不属于<code>andorid</code>元素。<br><code>compile</code>配置是用来编译主应用的。它配置的所有部分都会被打包到<code>apk</code>中。当然也有一些其他的配置:      </p>
+<ul>
+<li><code>compile</code>: <code>main application</code></li>
+<li><code>androidTestCompile</code>:<code>test application</code></li>
+<li><code>debugCompile</code>:<code>debug Build Type</code></li>
+<li><code>release Compile</code>:<code>release Build Type</code></li>
+</ul>
+<p>当然我们可以使用<code>compile</code>和<code>&lt;buildtype&gt;.compile</code>这两种配置。创建一个新的<code>Build Type</code>通常会自动基于它的名字创建一个新的配置部分。这样在像<code>debug</code>版本而<code>release</code>版本不适用的一些特别的<code>library</code>时非常有用。</p>
+<p>#####远程仓库</p>
+<p><code>Gradle</code>只是使用<code>Maven</code>和<code>Ivy</code>仓库。但是仓库必须要添加到列表中，并且必须声明所依赖仓库的<code>Maven</code>或者<code>Ivy</code>定义。      </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">repositories &#123;</div><div class="line">     jcenter()</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile &apos;com.google.guava:guava:18.0&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">android &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong><em>注意: </em></strong><code>jcenter()</code>是指定仓库<code>URL</code>的快捷设置。<code>Gradle</code>支持远程和本地仓库。<br><strong><em>注意: </em></strong><code>Gradle</code>会直接识别所有的依赖关系。这就意味着如果一个依赖库自身又依赖别的库时，他们会被一起下下来。</p>
+<p>#####本地<code>AAR</code>库     </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">	compile(name:&apos;本地aar库的名字，不用加后缀&apos;, ext:&apos;aar&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####多项目设置      </p>
+<p><code>Gradle</code>项目通常使用多项目设置来依赖其他的<code>gradle</code>项目。例如:      </p>
+<ul>
+<li>MyProject/         <ul>
+<li>app/          </li>
+<li>libraries/        <ul>
+<li>lib1/           </li>
+<li>lib2/     </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>Gradle</code>会通过下面的名字来引用他们：<br><code>:app</code><br><code>:libraries:lib1</code><br><code>:libraries:lib2</code>      </p>
+<p>每个项目都会有一个单独的<code>build</code>文件，并且在项目的根目录还会有一个<code>setting.gradle</code>文件：    </p>
+<ul>
+<li>MyProject/         <ul>
+<li>settings.gradle         </li>
+<li>app/      <ul>
+<li>build.gradle       </li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>libraries/      <ul>
+<li>lib1/       <ul>
+<li>build.gradle      </li>
+</ul>
+</li>
+<li>lib2/      <ul>
+<li>build.gradle      </li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>将<code>Handler</code>声明为静态类。<br>  静态类不持有外部类的对象，所以你的<code>Activity</code>可以随意被回收。但是不持有<code>Activity</code>的引用，如何去操作<code>Activity</code>中的一些对象？ 这里要用到弱引用</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> MyHandler mHandler;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		mHandler = <span class="keyword">new</span> MyHandler(<span class="keyword">this</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// Remove all Runnable and Message.</span></div><div class="line">		mHandler.removeCallbacksAndMessages(<span class="keyword">null</span>);</div><div class="line">		<span class="keyword">super</span>.onDestroy();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>&#123;</div><div class="line">		<span class="comment">// WeakReference to the outer class's instance.</span></div><div class="line">		<span class="keyword">private</span> WeakReference&lt;MyActivity&gt; mOuter;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">MyHandler</span><span class="params">(MyActivity activity)</span> </span>&#123;</div><div class="line">			mOuter = <span class="keyword">new</span> WeakReference&lt;MyActivity&gt;(activity);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">			MyActivity outer = mOuter.get();</div><div class="line">			<span class="keyword">if</span> (outer != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="comment">// Do something with outer as your wish.</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>setting.gradle</code>文件中的内容非常简单。它指定了哪个目录是<code>Gralde</code>项目:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">include &apos;:app&apos;, &apos;:libraries:lib1&apos;, &apos;:libraries:lib2&apos;</div></pre></td></tr></table></figure></p>
+<p><code>：app</code>这个项目可能会依赖其他的<code>libraries</code>，这样可以通过如下进行声明:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">     compile project(&apos;:libraries:lib1&apos;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>###<code>Library</code>项目</p>
+<p>上面用到了<code>:libraries:lib1</code>和<code>:libraries:lib2</code>可以是<code>Java</code>项目，<code>:app</code>项目会使用他们俩的输出的<code>jar</code>包。但是如果你需要使用<code>android</code>资源等，这些<code>libraries</code>就不能是普通的<code>Java</code>项目了，他们必须是<code>Android Library</code>项目。    </p>
+<p>#####创建一个<code>Library</code>项目      </p>
+<p><code>Library</code>项目和普通的<code>Android</code>项目的区别比较少，由于<code>libraries</code>的构建类型与应用程序的构建不同，所有它会使用一个别的构建插件。但是他们所使用的插件内部有很多相同的代码，他们都是由<code>com.android.tools.build.gradle</code>这个<code>jar</code>包提供的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.android.tools.build:gradle:1.3.1&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">apply plugin: &apos;com.android.library&apos;</div><div class="line"></div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion 23</div><div class="line">    buildToolsVersion &quot;23.0.1&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####普通项目与<code>Library</code>项目的区别       </p>
+<p><code>Library</code>项目的主要输出我<code>.aar</code>包。它结合了代码(例如<code>jar</code>包或者本地<code>.so</code>文件)和资源(<code>manifest</code>,<code>res</code>,<code>assets</code>)。每个<code>library</code>也可以单独设置<code>Build Type</code>等来指定生成不同版本的<code>aar</code>。</p>
+<p>###<code>Lint Support</code></p>
+<p>你可以通过指定对应的变量来设置<code>lint</code>的运行。可以通过添加<code>lintOptions</code>来进行配置:      </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    lintOptions &#123;</div><div class="line">        // turn off checking the given issue id&apos;s</div><div class="line">        disable &apos;TypographyFractions&apos;,&apos;TypographyQuotes&apos;</div><div class="line"></div><div class="line">        // turn on the given issue id&apos;s</div><div class="line">        enable &apos;RtlHardcoded&apos;,&apos;RtlCompat&apos;, &apos;RtlEnabled&apos;</div><div class="line"></div><div class="line">        // check *only* the given issue id&apos;s</div><div class="line">        check &apos;NewApi&apos;, &apos;InlinedApi&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###<code>Build</code>变量</p>
+<p>构建系统的一个目标就是能对同一个应用创建多个不同的版本。    </p>
+<p>#####<code>Product flavors</code>    </p>
+<p>一个<code>product flavor</code>可以针对一个项目制定不同的构建版本。一个应用可以有多个不同的<code>falvors</code>来改变生成的应用。<br><code>Product flavors</code>是通过<code>DSL</code>语法中的<code>productFlavors</code>来声明的:    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ....</div><div class="line"></div><div class="line"></div><div class="line">    productFlavors &#123;</div><div class="line">        flavor1 &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        flavor2 &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####<code>Build Type + Product Flavor = Build Variant</code></p>
+<p>像我们之前看到的，每个<code>Build Type</code>都会生成一个<code>apk</code>.<code>Product Flavors</code>也是同样的：项目的输出僵尸所有<code>Build Types</code>与<code>Product Flavors</code>的结合。每种结合方式称之为<code>Build Variant</code>。例如，如果有<code>debug</code>和<code>release</code>版本的<code>Build Types</code>，上面的例子就会生成4种<code>Build Variants</code>：    </p>
+<ul>
+<li><code>Flavor1</code> - <code>debug</code></li>
+<li><code>Flavor1</code> - <code>release</code></li>
+<li><code>Flavor2</code> - <code>debug</code></li>
+<li><code>Flavor2</code> - <code>release</code></li>
+</ul>
+<p>没有配置<code>flavors</code>的项目仍然有<code>Build Variants</code>，它只是用了一个默认的<code>flavor/config</code>，没有名字，这导致<code>variants</code>的列表和<code>Build Types</code>的列表比较相同。</p>
+<p>#####<code>Product Flavor</code>配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ...</div><div class="line"></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion 8</div><div class="line">        versionCode 10</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    productFlavors &#123;</div><div class="line">        flavor1 &#123;</div><div class="line">            applicationId &quot;com.example.flavor1&quot;</div><div class="line">            versionCode 20</div><div class="line">         &#125;</div><div class="line"></div><div class="line"></div><div class="line">         flavor2 &#123;</div><div class="line">             applicationId &quot;com.example.flavor2&quot;</div><div class="line">             minSdkVersion 14</div><div class="line">         &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意<code>android.productFlavors.*</code>对象<code>ProductFlavor</code>有<code>android.defaultConfig</code>是相同的类型。这就意味着他们有相同的属性。<br><code>defaultConfig</code>为所有的<code>flavors</code>提供了一些基本的配置，每个<code>flavor</code>都已重写他们。在上面的例子中，这些配置有:       </p>
+<ul>
+<li><code>flavor1</code>        <ul>
+<li><code>applicationId</code>: <code>com.example.flavor1</code>      </li>
+<li><code>minSdkVersion</code>: 8       </li>
+<li><code>versionCode</code>: 20</li>
+</ul>
+</li>
+<li><code>flavor2</code>    <ul>
+<li><code>applicationId</code>: <code>com.example.flavor2</code>      </li>
+<li><code>minSdkVersion</code>: 14       </li>
+<li><code>versionCode</code>: 10       </li>
+</ul>
+</li>
+</ul>
+<p>通常，<code>Build Type</code>配置会覆盖其他的配置。例如，<code>Build Type</code>的<code>applicationIdSuffix</code>会添加到<code>Product Flavor</code>的<code>applicationId</code>上。</p>
+<p>最后，就像<code>Build Types</code>一样，<code>Product Flavors</code>也可以有他们自己的依赖关系。例如，如果有一个单独的<code>flavors</code>会使用一些广告或者支付，那这个<code>flavors</code>生成的<code>apk</code>就会使用广告的依赖，而其他的<code>flavors</code>就不需要使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    flavor1Compile &quot;...&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>###<code>BuildConfig</code>      </p>
+<p>在编译阶段，<code>Android Studio</code>会生成一个叫做<code>BuildConfig</code>的类，该类包含了编译时使用的一些变量的值。你可以观看这些值来改变不同变量的行为:       </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">private void javaCode() &#123;</div><div class="line">    if (BuildConfig.FLAVOR.equals(&quot;paidapp&quot;)) &#123;</div><div class="line">        doIt();</div><div class="line">    else &#123;</div><div class="line">        showOnlyInPaidAppDialog();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面是<code>BuildConfig</code>中包含的一些值:      </p>
+<ul>
+<li><code>boolean DEBUG</code> - <code>if the build is debuggable</code>      </li>
+<li><code>int VERSION_CODE</code> </li>
+<li><code>String VERSION_NAME</code></li>
+<li><code>String APPLICATION_ID</code></li>
+<li><code>String BUILD_TYPE</code>- <code>Build Type</code>的名字，例如<code>release</code>      </li>
+<li><code>String FLAVOR</code> - <code>flavor</code>的名字，例如<code>flavor1</code>      </li>
+</ul>
+<p>###<code>ProGuard</code>配置      </p>
+<p><code>Android</code>插件默认会使用<code>ProGuard</code>插件，并且如果<code>Build Type</code>中使用<code>ProGuard</code>的<code>minifyEnabled</code>属性开启的话，会默认创建对应的<code>task</code>。   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            minifyEnabled true</div><div class="line">            proguardFile getDefaultProguardFile(&apos;proguard-android.txt&apos;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    productFlavors &#123;</div><div class="line">        flavor1 &#123;</div><div class="line">        &#125;</div><div class="line">        flavor2 &#123;</div><div class="line">            proguardFile &apos;some-other-rules.txt&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###<code>Tasks</code>控制     </p>
+<p>基本的<code>Java</code>项目有一系列的<code>tasks</code>一起制作输出文件。<br><code>classes task</code>就是编译<code>Java</code>源码的任务。 我们可以在<code>build.gradle</code>中通过使用<code>classes</code>很简单的获取到它。就是<code>project.tasks.classes</code>.    </p>
+<p>在<code>Android</code>项目中，更多的编译<code>task</code>，因为他们的名字通过<code>Build Types</code>和<code>Product Flavors</code>生成。</p>
+<p>为了解决这个问题，<code>android</code>对象有两种属性:     </p>
+<ul>
+<li><code>applicationVariants</code> - <code>only for the app plugin</code>     </li>
+<li><code>libraryVariants</code> - <code>only for the library plugin</code>      </li>
+<li><code>testVariants</code> - <code>for both plugins</code><br>这些都会返回一个<code>ApplicationVariant</code>, <code>LibraryVariant</code>,<code>TestVariant</code>的<code>DomainObjectCollection</code>接口的实现类对象。<br><code>DomainObjectCollection</code>提供了直接获取或者很方便的间接获取所有对象的方法。     <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">android.applicationVariants.all &#123; variant -&gt;</div><div class="line">   ....</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>###设置编译语言版本</p>
+<p>可以使用<code>compileOptions</code>代码块来设置编译时使用的语言版本。默认是基于<code>compileSdkVersion</code>的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    compileOptions &#123;</div><div class="line">        sourceCompatibility JavaVersion.VERSION_1_6</div><div class="line">        targetCompatibility JavaVersion.VERSION_1_6</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>###<code>Resource Shrinking</code>    </p>
+<p><code>Gradle</code>构建系统支持资源清理：对构建的应用会自动移除无用的资源。不仅会移除项目中未使用的资源，而且还会移除项目所以来的类库中的资源。注意，资源清理只能在与代码清理结合使用(例如<code>ProGuad</code>)。这就是为什么它能移除所依赖类库的无用资源。通常，类库中的所有资源都是使用的，只有类库中无用代码被移除后这些资源才会变成没有代码引用的无用资源。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ...</div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            minifyEnabled true</div><div class="line">            shrinkResources true</div><div class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
 <ul>
 <li>邮箱 ：itgoyo@gmail.com  </li>
@@ -1148,7 +1348,7 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Handler导致内存泄露分析/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/Gradle专题/">展开全文 >></a>
         </p>
       
 
