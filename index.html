@@ -68,12 +68,14 @@ var _hmt = _hmt || [];
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/archives">所有文章</a></li>
-	        
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
     		
+    			
+    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+            
     			
     			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
     			
@@ -124,8 +126,6 @@ var _hmt = _hmt || [];
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
@@ -148,9 +148,7 @@ var _hmt = _hmt || [];
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
-		        
-					<li style="width: 50%"><a href="/archives">所有文章</a></li>
+					<li style="width: 100%"><a href="/">主页</a></li>
 		        
 				</ul>
 			</nav>
@@ -408,6 +406,8 @@ $ hexo d
         <h3 id="Yilia主题（别的主题也是一样的操作）"><a href="#Yilia主题（别的主题也是一样的操作）" class="headerlink" title="Yilia主题（别的主题也是一样的操作）"></a>Yilia主题（别的主题也是一样的操作）</h3><p>首先，我们要有一个多说的账号<a href="http://duoshuo.com/" target="_blank" rel="external">多说</a></p>
 <p>然后进入到后台把我们的网站填写进去</p>
 <p><img src="/pictures/2017_1_15/duoshuoadmin.png" alt=""></p>
+<p>在<code>theme/yilia/layout/_partial/post/</code>目录下创建文件名叫：duoshuo.ejs<br>把以下代码复制进去</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;div class="duoshuo"&gt;</div><div class="line">	&lt;!-- 多说评论框 start --&gt;</div><div class="line">	&lt;div class="ds-thread" data-thread-key="&lt;%=key%&gt;" data-title="&lt;%=title%&gt;" data-url="&lt;%=url%&gt;"&gt;&lt;/div&gt;</div><div class="line">	&lt;!-- 多说评论框 end --&gt;</div><div class="line">	&lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&gt;</div><div class="line">	&lt;script type="text/javascript"&gt;</div><div class="line">	var duoshuoQuery = &#123;short_name:'&lt;%= config.duoshuo_shortname %&gt;'&#125;;</div><div class="line">	(function() &#123;</div><div class="line">		var ds = document.createElement('script');</div><div class="line">		ds.type = 'text/javascript';ds.async = true;</div><div class="line">		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';</div><div class="line">		ds.charset = 'UTF-8';</div><div class="line">		(document.getElementsByTagName('head')[0] </div><div class="line">		 || document.getElementsByTagName('body')[0]).appendChild(ds);</div><div class="line">	&#125;)();</div><div class="line">	&lt;/script&gt;</div><div class="line">	&lt;!-- 多说公共JS代码 end --&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
 <p>在<code>hexo/_comfig.yml</code>里边添加一下代码（名字换成自己的）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">duoshuo_shortname: xxxx(冒号后有空格)</div></pre></td></tr></table></figure>
 <p>最后在<code>theme/yilia/_config.yml</code>  里边添加以下代码（名字换成自己的）</p>
@@ -1330,7 +1330,7 @@ $ hexo d
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
-		innerArchive: false,
+		innerArchive: true,
 		showTags: true
 	}
 </script>
@@ -1366,22 +1366,105 @@ $ hexo d
       
       
     
+      
+      
+      
+    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 50%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
       
         
       
-      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
       
         
     </ul>
   </div>
   <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Android</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Github</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Lantern</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
     
 
     
