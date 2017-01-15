@@ -1097,19 +1097,19 @@ $ hexo d
 
 
   
-    <article id="post-Markdown学习手册" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-MAT内存分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Markdown学习手册/">Markdown学习手册</a>
+      <a class="article-title" href="/2015/01/01/MAT内存分析/">MAT内存分析</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/Markdown学习手册/" class="archive-article-date">
+        <a href="/2015/01/01/MAT内存分析/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -1117,138 +1117,23 @@ $ hexo d
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Markdown学习手册"><a href="#Markdown学习手册" class="headerlink" title="Markdown学习手册"></a>Markdown学习手册</h1><h4 id="一-简单功能"><a href="#一-简单功能" class="headerlink" title="一. 简单功能"></a>一. 简单功能</h4><table>
-<thead>
-<tr>
-<th style="text-align:left">功能</th>
-<th style="text-align:left">效果</th>
-<th style="text-align:left">Markdown代码</th>
-<th style="text-align:left">备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">粗体</td>
-<td style="text-align:left"><strong>粗体</strong></td>
-<td style="text-align:left"><code>**粗体**</code></td>
-<td style="text-align:left">两边加**</td>
-</tr>
-<tr>
-<td style="text-align:left">斜体</td>
-<td style="text-align:left"><em>斜体</em></td>
-<td style="text-align:left"><code>_斜体_</code></td>
-<td style="text-align:left">两边加_</td>
-</tr>
-<tr>
-<td style="text-align:left">中划线</td>
-<td style="text-align:left"><del>中划线</del></td>
-<td style="text-align:left"><code>~~中划线~~</code></td>
-<td style="text-align:left">两边加~~</td>
-</tr>
-<tr>
-<td style="text-align:left">单行代码</td>
-<td style="text-align:left"><code>Log.i(&quot;Hello World!&quot;)</code></td>
-<td style="text-align:left">`Log.i(“Hello World!”)`</td>
-<td style="text-align:left">两边加`</td>
-</tr>
-<tr>
-<td style="text-align:left">插入图片</td>
-<td style="text-align:left"><img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/rss.png?raw=true" alt="Image"></td>
-<td style="text-align:left"><code>![Image](https://raw.githubusercontent.com/CharonChui/Pictures/master/rss.png?raw=true)</code></td>
-<td style="text-align:left">[] 中间为占位符,() 中间为图片链接</td>
-</tr>
-<tr>
-<td style="text-align:left">链接</td>
-<td style="text-align:left"><a href="http://www.github.com" target="_blank" rel="external">Visit Github</a></td>
-<td style="text-align:left"><code>[Visit Github](http://www.github.com)</code></td>
-<td style="text-align:left">[] 中间为显示文字,() 中间为链接</td>
-</tr>
-</tbody>
-</table>
-<h4 id="二-其他功能"><a href="#二-其他功能" class="headerlink" title="二. 其他功能"></a>二. 其他功能</h4><h5 id="1-换行"><a href="#1-换行" class="headerlink" title="1. 换行"></a>1. 换行</h5><p>在需要换行的地方敲击两次空格和一个回车键即可，如:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">这是第一行(空格)(空格)(回车)</div><div class="line">这是第二行</div></pre></td></tr></table></figure>
-<p>Tip: 多条新行都会被视为一行</p>
-<h5 id="2-标题"><a href="#2-标题" class="headerlink" title="2. 标题"></a>2. 标题</h5><p>Markdown 提供了六种规格的标题，分别对应 Html 标签中的<code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>，通过添加不同数量的<code>#</code>字符可以实现不同大小的标题，如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 最大的标题(相当于一个&lt;h1&gt;标签)</div><div class="line">## 次大的标题(相当于一个&lt;h2&gt;标签)</div><div class="line">...</div><div class="line">###### 最小的标题(相当于一个&lt;h6&gt;标签)</div></pre></td></tr></table></figure></p>
-<p>Tip: # 越多，标题越小  </p>
-<p>或者利用 = （最高阶标题）和 - （第二阶标题），任何数量的 = 和 - 都可以有效果。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">H1</div><div class="line">===</div><div class="line"></div><div class="line">H2</div><div class="line">---</div><div class="line">```     </div><div class="line">效果为:</div><div class="line">H1</div><div class="line">===</div><div class="line"></div><div class="line">H2</div><div class="line">---</div><div class="line"></div><div class="line">##### 3. 列表   </div><div class="line">###### 3.1 有序列表</div><div class="line">数字 + . + 空格即可，以下代码：</div></pre></td></tr></table></figure></p>
-<ol>
-<li>项目1  </li>
-<li>项目2  </li>
-<li>项目3  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">效果为：  </div><div class="line">1. 项目1  </div><div class="line">2. 项目2  </div><div class="line">3. 项目3  </div><div class="line"></div><div class="line">###### 3.2 无序列表  </div><div class="line">以 * 和空格开头即可，以下代码:</div></pre></td></tr></table></figure>
-</li>
-</ol>
+        <h1 id="MAT内存分析"><a href="#MAT内存分析" class="headerlink" title="MAT内存分析"></a>MAT内存分析</h1><p><code>Eclipse Memory Analyzer（MAT）</code>是著名的跨平台集成开发环境<code>Eclipse Galileo</code>版本的33个组成项目中之一，它是一个功能丰富的<code>JAVA</code> 堆转储文件分析工具，可以帮助你发现内存漏洞和减少内存消耗。</p>
+<p>[内存泄露介绍]{<a href="https://raw.githubusercontent.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.md}" target="_blank" rel="external">https://raw.githubusercontent.com/CharonChui/AndroidNote/blob/master/Android%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.md}</a></p>
+<p>[MAT(Memory Analyzer)官网]{<a href="http://www.eclipse.org/mat/}" target="_blank" rel="external">http://www.eclipse.org/mat/}</a>    </p>
 <ul>
-<li>项目1</li>
-<li>项目2</li>
-<li><p>项目3</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">效果为：  </div><div class="line">* 项目1</div><div class="line">* 项目2</div><div class="line">* 项目3</div><div class="line"></div><div class="line">###### 3.3 子项目表示： </div><div class="line">子项目缩进一个 tab 并加 * 和 空格表示，以下代码：</div></pre></td></tr></table></figure>
-</li>
-<li><p>项目1</p>
+<li><p>安装：</p>
 <ul>
-<li>子项目1</li>
-<li>子项目2</li>
+<li>单机版，解压后直接使用</li>
+<li><code>Eclipse</code>插件，直接装一个插件,然后<code>open perspective</code>打开 <code>Memory Analysis</code></li>
 </ul>
 </li>
-<li>项目2<ul>
-<li>子项目1<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">效果为：  </div><div class="line">* 项目1</div><div class="line">    * 子项目1</div><div class="line">    * 子项目2</div><div class="line">* 项目2</div><div class="line">    * 子项目1</div><div class="line"></div><div class="line">##### 4. 代码块</div><div class="line">以 \`\`\` 和 \`\`\` 包含，以下代码：  </div><div class="line">&lt;pre&gt;&lt;code&gt;</div></pre></td></tr></table></figure>
-</li>
+<li><p>使用</p>
+<ul>
+<li>DDMS<br>  进入<code>DDMS</code>页面，选择要分析的进程,然后点击<code>Update Heap</code>按钮。然后在右侧<code>Heap</code>页面点击一下<code>Cause GC</code>按钮，点击<code>Cause GC</code>按钮就是手动触发<code>Java</code>垃圾回收。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/mat_1.png" alt="Image"><br>  如果想要看某个<code>Activity</code>是否发生内存泄露，可以反复多次进入和退出该页面, 然后点击几次<code>Cause GC</code>触发垃圾回收，<br>  看一下上图中<code>data object</code>这一栏中的<code>Total Size</code>的大小是保持稳定还是有明显的变大趋势，如果有明显的变大趋势就说明这个页面存在内存泄露的问题，需要进行具体分析。</li>
 </ul>
 </li>
 </ul>
-<p>def hello():<br>    print ‘Hello World!’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;/code&gt;&lt;/pre&gt;</div><div class="line">效果为：</div></pre></td></tr></table></figure></p>
-<p>def hello():<br>    print ‘Hello World!’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">GFM 扩展了 Markdown 的代码块功能，通过在上面第一个 \`\`\` 后添加语言名称，使不同语言展现不同的代码高亮风格，以下代码:  </div><div class="line">&lt;pre&gt;&lt;code&gt;</div><div class="line">```java</div><div class="line">public static void main(String[] args)&#123;</div><div class="line">    System.out.println(&quot;Hello World!&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><br>效果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</div><div class="line">    System.out.println(<span class="string">"Hello World!"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>以下代码：  </p>
-<pre><code>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'Hello World!'</span></div></pre></td></tr></table></figure>
-
-</code></pre>
-
-<p>效果为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'Hello World!'</span></div></pre></td></tr></table></figure></p>
-<h5 id="5-表格"><a href="#5-表格" class="headerlink" title="5. 表格"></a>5. 表格</h5><p>标准的 Markdown 中并不支持表格，但 GFM 可以，表头前空一行，以 <code>---</code>  做为表头分隔，以 <code>|</code> 做为列分隔，以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">表头1|表头2</div><div class="line">---|---</div><div class="line">单元格1|单元格2</div><div class="line">单元格3|单元格4</div></pre></td></tr></table></figure></p>
-<p>效果为：  </p>
-<table>
-<thead>
-<tr>
-<th>表头1</th>
-<th>表头2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>单元格1</td>
-<td>单元格2</td>
-</tr>
-<tr>
-<td>单元格3</td>
-<td>单元格4</td>
-</tr>
-</tbody>
-</table>
-<p>而且还可以通过在表头分隔符中添加 <code>:</code> 来决定单元格的对齐方向，以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">表头1|表头2|表头3</div><div class="line">:--|:--:|--:</div><div class="line">左1|中1|右1</div><div class="line">左2|中2|右2</div></pre></td></tr></table></figure></p>
-<p>效果为：  </p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">表头1</th>
-<th style="text-align:center">表头2</th>
-<th style="text-align:right">表头3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">左1</td>
-<td style="text-align:center">中1</td>
-<td style="text-align:right">右1</td>
-</tr>
-<tr>
-<td style="text-align:left">左2</td>
-<td style="text-align:center">中2</td>
-<td style="text-align:right">右2</td>
-</tr>
-</tbody>
-</table>
-<h5 id="6-特殊字符转义"><a href="#6-特殊字符转义" class="headerlink" title="6. 特殊字符转义"></a>6. 特殊字符转义</h5><p>如果需要在正文里使用特殊字符的话，可以用 <code>\</code> 来转义  </p>
+<p>很长时间之前学习的，一直想记录出来，总是忙，到现在才开始整理，但是现在已经很少用<code>MAT</code>了，因为它太费劲了。<br>自从良心企业发布了<code>leakCanary</code>后，都已经转投到大神门下。</p>
 <hr>
 <ul>
 <li>邮箱 ：itgoyo@gmail.com  </li>
@@ -1277,7 +1162,7 @@ $ hexo d
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Markdown学习手册/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/MAT内存分析/">展开全文 >></a>
         </p>
       
 
