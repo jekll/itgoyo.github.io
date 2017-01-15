@@ -257,6 +257,231 @@ var _hmt = _hmt || [];
 
 
   
+    <article id="post-Android卸载反馈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android卸载反馈/">Android卸载反馈</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android卸载反馈/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android卸载反馈"><a href="#Android卸载反馈" class="headerlink" title="Android卸载反馈"></a>Android卸载反馈</h1><p>最初记得是在360安全卫士中出现的，在手机上卸载他的应用之后浏览器就会弹出一个反馈页面，让用户进行反馈，感觉这种功能对于产品改进特别有帮助。<br>但是仔细一想该怎么去实现却犯愁了，最开始想这也简单啊，不就是监听下自身被卸载就可以了，应该系统会有卸载的广播，可惜没有。甚至其他的一些<br>方法也是不行的，因为你程序都被卸载了，你的代码怎么会执行呢？皮之不存，毛将焉附。那360是怎样实现的呢？说句真心话360做的产品还是非常有创新<br>的，虽然有些时候他会损坏用户的利益，不过但从技术方面，着实让人信服。</p>
+<p>既然<code>Java</code>实现不了，那就得考虑下其他的了，自然最先想到的就是<code>JNI</code>了，可惜<code>C</code>的部分不懂，上网搜了很多资料和介绍，找得到可以通过一下方式实现:   </p>
+<ul>
+<li><p>通过<code>c</code>中的<code>fork</code>方法来复制一个子进程。复制出来的子进程在父进程被销毁后，仍然可以存在。<br>  <code>pid_t fpid = fork()</code>被调用前，就一个进程执行该段代码，这条语句执行之后，就会有两个进程执行该代码，两个进程执行没有固定先后顺序，只要看<br>  系统调度策略，<code>fork()</code>函数的特别之处在于调用一次会返回两次结果：   </p>
+<pre><code>- 返回值大于0，当前是父进程。
+- 返回0，当前是子进程。
+- 返回小于0的负值。(出错了，可能是内存不足或者是进程数已经达到系统最大值)
+</code></pre></li>
+<li><p><code>fork</code>出子进程后让子进程一直去监听<code>/data/data/packageName</code>是否存在，如果不存在了，那就说明程序被卸载了，但是这样一直去轮训判断肯定会浪费<br>  系统资源的，当然也会更加费电，对用户来讲肯定是有损害的。所以这种技术最好也不好用，不然大家的手机以后还能了得。万恶的产品。</p>
+</li>
+<li><p>得到程序被卸载之后弹出浏览器打开指定反馈页面。这就要用到<code>am</code>命令了，最早知道这个命令是在开发<code>TV</code>版的时候，遥控器找不到了，程序安装后无法<br> 打开了，用该命令就不怕了，哈哈。但是在<code>c</code>中怎么执行<code>am</code>命令呢？这就要用到<code>execlp()</code>函数，该函数就是<code>c</code>中执行系统命令的函数。</p>
+</li>
+</ul>
+<p>好了，主要的内容上面都分析完了，下面上代码。</p>
+<ul>
+<li><p><code>Java</code>层定义<code>natvie</code>方法。   </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"@@@"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		String packageDir = <span class="string">"/data/data/"</span> + getPackageName();</div><div class="line">		initUninstallFeedback(packageDir, Build.VERSION.SDK_INT);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">initUninstallFeedback</span><span class="params">(String packagePath, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.loadLibrary(<span class="string">"uninstall_feedback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建jni目录，增加<code>Android.mk</code>以及<code>uninstall_feedback.c</code>文件。<br><code>Android.mk</code>的内容:</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := uninstall_feedback</div><div class="line">LOCAL_SRC_FILES := uninstall_feedback.c</div><div class="line"></div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</div><div class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<p><code>uninstall_feedback.c</code>的实现: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将Java中的String转换成c中的char字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Jstring2CStr</span><span class="params">(JNIEnv* env, jstring jstr)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span>* rtn = <span class="literal">NULL</span>;</div><div class="line">	jclass clsstring = (*env)-&gt;FindClass(env, <span class="string">"java/lang/String"</span>); <span class="comment">//String</span></div><div class="line">	jstring strencode = (*env)-&gt;NewStringUTF(env, <span class="string">"GB2312"</span>); <span class="comment">// 得到一个java字符串 "GB2312"</span></div><div class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, clsstring, <span class="string">"getBytes"</span>,</div><div class="line">			<span class="string">"(Ljava/lang/String;)[B"</span>); <span class="comment">//[ String.getBytes("gb2312");</span></div><div class="line">	jbyteArray barr = (jbyteArray)(*env)-&gt;CallObjectMethod(env, jstr, mid,</div><div class="line">			strencode); <span class="comment">// String .getByte("GB2312");</span></div><div class="line">	jsize alen = (*env)-&gt;GetArrayLength(env, barr); <span class="comment">// byte数组的长度</span></div><div class="line">	jbyte* ba = (*env)-&gt;GetByteArrayElements(env, barr, JNI_FALSE);</div><div class="line">	<span class="keyword">if</span> (alen &gt; <span class="number">0</span>) &#123;</div><div class="line">		rtn = (<span class="keyword">char</span>*) <span class="built_in">malloc</span>(alen + <span class="number">1</span>); <span class="comment">//""</span></div><div class="line">		<span class="built_in">memcpy</span>(rtn, ba, alen);</div><div class="line">		rtn[alen] = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	(*env)-&gt;ReleaseByteArrayElements(env, barr, ba, <span class="number">0</span>); <span class="comment">//</span></div><div class="line">	<span class="keyword">return</span> rtn;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Java_com_charon_uninstallfeedback_MainActivity_initUninstallFeedback</span><span class="params">(</span></span></div><div class="line">		JNIEnv* env, jobject thiz, jstring packageDir, jint sdkVersion) &#123;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> * pd = Jstring2CStr(env, packageDir);</div><div class="line"></div><div class="line">	<span class="comment">//fork子进程，以执行轮询任务</span></div><div class="line">	<span class="keyword">pid_t</span> pid = fork();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// fork失败了</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// 可以一直采用一直判断文件是否存在的方式去判断，但是这样效率稍低，下面使用监听的方式，死循环，每个一秒判断一次，这样太浪费资源了。</span></div><div class="line">		<span class="keyword">int</span> check = <span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span> (check) &#123;</div><div class="line">			FILE* file = fopen(pd, <span class="string">"rt"</span>);</div><div class="line">			<span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (sdkVersion &gt;= <span class="number">17</span>) &#123;</div><div class="line">					<span class="comment">// Android4.2系统之后支持多用户操作，所以得指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"--user"</span>, <span class="string">"0"</span>, <span class="string">"-a"</span>,</div><div class="line">							<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// Android4.2以前的版本无需指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"-a"</span>,</div><div class="line">						<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125;</div><div class="line">				check = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">			&#125;</div><div class="line">			sleep(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>编译so文件。<code>Windows</code>下要用<code>cygwin</code>来操作。<br>上面的介绍是在<code>Eclipse</code>中进行的，用<code>ndk-build</code>命令来编译<code>so</code>。具体请看之前写的<code>JNI基础</code>这篇文章。</li>
+</ul>
+<p>有关如何在<code>Android Stuido</code>中进行<code>ndk</code>开发请看另一篇文章。</p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android卸载反馈/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/视频播放相关内容总结/">视频播放相关内容总结</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/视频播放相关内容总结/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="视频播放相关内容总结"><a href="#视频播放相关内容总结" class="headerlink" title="视频播放相关内容总结"></a>视频播放相关内容总结</h1><h2 id="多媒体常识："><a href="#多媒体常识：" class="headerlink" title="多媒体常识："></a>多媒体常识：</h2><ul>
+<li><p>什么是多媒体             </p>
+<p>  多媒体是计算机和视频技术的结合，实际上它是两个媒体；声音和图像，或者用现在的术语：音响和电视</p>
+</li>
+<li><p>常用的视频格式</p>
+<p>  Android系统默认：mp4、3gp<br>  常用格式：ts、3gpp、3g2、3gpp2、avi、mkv、flv、divx、f4v、rm、rmvb、rv、wmv、asf、mov、mpg、v8、ram、mpeg、<br>  swf、m2v、asx、ra、ram、ndivx、xvid等     </p>
+</li>
+<li><p>常用音频格式：</p>
+<p>  Android系统：mp3、ogg；<br>  常用格式：wma、mid、m4a、xmf、aac、mpa、midi、ar等</p>
+</li>
+<li><p>常用图片格式：PNG、GIF、BMP、jpg</p>
+</li>
+<li><p>国内各个视频网站采用的解码框架：</p>
+<ul>
+<li>优酷、搜狐、奇艺、pps、暴风影音土豆、56网都是用的ffmpeg.       </li>
+<li>pptv已经使用p2p技术<br>  点对点技术（peer-to-peer， 简称P2P）又称对等互联网络技术，是一种网络新技术，依赖网络中参与者的计算能力和带宽，<br>  而不是把依赖都聚集在较少的几台服务器上。P2P网络通常用于通过Ad Hoc连接来连接节点。这类网络可以用于多种用途，<br>  各种档案分享软件已经得到了广泛的使用。P2P技术也被使用在类似VoIP等实时媒体业务的数据通信中。</li>
+</ul>
+</li>
+</ul>
+<p>目前常用的开发框架：</p>
+<ul>
+<li><p>VLC框架：<br>  VLC是一个开源项目，基于ffmpeg框架的自定义播放器。其中LibVLC是VLC的核心部分，就相当于MediaPlayer类<br>  VLC一个最主要的部分，它可以播放各种类型的媒体文件和流媒体文件，并且可以创造媒体流并保存成各种格式的媒体文件<br>  VLC是一种跨平台的媒体播放器和流媒体服务器，最初为videolan的客户端，它是一种非常简便的多媒体播放器，<br>  它可以用来播放各种各样的音视频的格式文件(MPEG-1、MPEG-2、MPEG- 4、DivX、WMV、mp3、OGG、Vorbis、AC3、AAC等等)流媒体协议<br>  最具特色的功能是可以边下载边观看Divx媒体文件，并可以播放不完全的AVI文件。并且支持界面的更改。<br>  缺点：有C/C++代码，还有Java代码，代码太庞大             </p>
+</li>
+<li><p>ffmpeg框架：<br>  优点：轻量级框架，易于维护<br>  FFmpeg是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案<br>  FFMPEG几乎为你把所有的繁重工作都做了，比如解码、编码、复用和解复用。<br>  这使得多媒体应用程序变得容易编写。它是一个简单的，用C编写的，快速的并且能够解码几乎所有你能用到的格式，当然也包括编码多种格式。<br>  FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，支持AVI、MPEG、OGG、Matroska、ASF等90多种解码<br>  FFmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中libavcodec用于存放各个encode/decode模块<br>  libavformat用于存放muxer/demuxer模块，libavutil用于存放内存操作等辅助性模块</p>
+</li>
+<li><p>vitamio框架：<br>  vitamio也是基于ffmpeg开源框架<br>  VPlayer是vitamio的一个产品，vitamio和VPlayer是同一个团队开发的，VPlayer能播放的vitamio也能播放         </p>
+</li>
+</ul>
+<p>##Surface简介</p>
+<ul>
+<li><code>Surface</code>就是“表面”的意思。在<code>SDK</code>的文档中，对<code>Surface</code>的描述是这样的：“<code>Handle onto a raw buffer that is being managed by the screen compositor</code>”，<br>  翻译成中文就是“由屏幕显示内容合成器<code>(screen compositor)</code>所管理的原生缓冲器的句柄”，    这句话包括下面两个意思：<ul>
+<li>通过Surface（因为Surface是句柄）就可以获得原生缓冲器以及其中的内容。就像在C语言中，可以通过一个文件的句柄，就可以获得文件的内容一样；</li>
+<li>原生缓冲器（rawbuffer）是用于保存当前窗口的像素数据的。</li>
+</ul>
+</li>
+<li>简单的说<code>Surface</code>对应了一块屏幕缓冲区，每个<code>Window</code>对应一个<code>Surface</code>，任何<code>View</code>都是画在<code>Surface</code>上的，传统的<code>view</code>共享一块屏幕缓冲区，所有的绘制必须在<code>UI</code>线程中进行</li>
+<li>我们不能直接操作Surface实例，要通过SurfaceHolder，在SurfaceView中可以通过getHolder()方法获取到SurfaceHolder实例。</li>
+<li><code>Surface</code>是一个用来画图形的地方，但是我们知道画图都是在一个<code>Canvas</code>对象上面进行的，<em><code>Surface</code>中的<code>Canvas</code>成员，是专门用于提供画图的地方，就像黑板一样，其中的原始缓冲区是用来保存数据的地方，<br>  <code>Surface</code>本身的作用类似一个句柄，得到了这个句柄就可以得到其中的<code>Canvas</code>、原始缓冲区以及其他方面的内容，所以简单的说<code>Surface</code>是用来管理数据的(句柄)</em>。</li>
+</ul>
+<p>##SurfaceView简介      </p>
+<ul>
+<li><p>简单的说<code>SurfaceView</code>就是一个有<code>Surface</code>的<code>View</code>里面内嵌了一个专门用于绘制的<code>Surface</code>,<code>SurfaceView</code>控制这个<code>Surface</code>的格式和尺寸以及绘制位置.<code>SurfaceView</code>是一个<code>View</code>也许不够严谨，<br>  然而从定义中 <code>public class SurfaceView extends View</code>显示<code>SurfaceView</code>确实是派生自<code>View</code>，但是<code>SurfaceView</code>却有着自己的<code>Surface</code>，源码：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">if</span> (mWindow == <span class="keyword">null</span>) &#123;  </div><div class="line">mWindow = <span class="keyword">new</span> MyWindow(<span class="keyword">this</span>);  </div><div class="line">mLayout.type = mWindowType;  </div><div class="line">mLayout.gravity = Gravity.LEFT|Gravity.TOP;  </div><div class="line">mSession.addWithoutInputChannel(mWindow, mWindow.mSeq, mLayout,  </div><div class="line">mVisible ? VISIBLE : GONE, mContentInsets);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>  很明显，每个<code>SurfaceView</code>创建的时候都会创建一个<code>MyWindow</code>，<code>new MyWindow(this)</code>中的<code>this</code>正是<code>SurfaceView</code>自身，因此将<code>SurfaceView</code>和<code>window</code>绑定在一起，而前面提到过每个<code>window</code>对应一个<code>Surface</code>，<br>  所以<code>SurfaceView</code>也就内嵌了一个自己的<code>Surface</code>，可以认为<code>SurfaceView</code>是来控制<code>Surface</code>的位置和尺寸。传统<code>View</code>及其派生类的更新只能在<code>UI</code>线程，然而<code>UI</code>线程还同时处理其他交互逻辑，<br>  这就无法保证<code>view</code>更新的速度和帧率了，而<code>SurfaceView</code>可以用独立的线程来进行绘制，因此可以提供更高的帧率，例如游戏，摄像头取景等场景就比较适合用<code>SurfaceView</code>来实现。</p>
+</li>
+<li><p><code>Surface</code>是纵深排序<code>(Z-ordered)</code>的，这表明它总在自己所在窗口的后面。</p>
+</li>
+<li><code>Surfaceview</code>提供了一个可见区域，只有在这个可见区域内的<code>Surface</code>部分内容才可见，可见区域外的部分不可见，所以可以认为<strong><code>SurfaceView</code>就是展示<code>Surface</code>中数据的地方</strong>,<code>Surface</code>就是管理数据的地方，<br>  <code>SurfaceView</code>就是展示数据的地方，只有通过<code>SurfaceView</code>才能展现<code>Surface</code>中的数据。<br>  <img src="https://github.com/CharonChui/Pictures/master/SurfaceView.png?raw=true" alt="image">   </li>
+<li><code>Surface</code>的排版显示受到视图层级关系的影响，它的兄弟视图结点会在顶端显示。这意味者<code>Surface</code>的内容会被它的兄弟视图遮挡，这一特性可以用来放置遮盖物<code>(overlays)</code>(例如，文本和按钮等控件)。<br>  注意，如果<code>Surface</code>上面有透明控件，那么它的每次变化都会引起框架重新计算它和顶层控件的透明效果，这会影响性能。surfaceview变得可见时，surface被创建；surfaceview隐藏前，surface被销毁。<br>  这样能节省资源。如果你要查看 surface被创建和销毁的时机，可以重载surfaceCreated(SurfaceHolder)和 surfaceDestroyed(SurfaceHolder)。<br>  <strong><code>SurfaceView</code>的核心在于提供了两个线程：<code>UI</code>线程和渲染线程</strong>,两个线程通过“双缓冲”机制来达到高效的界面适时更新。</li>
+</ul>
+<p>##SurfaceHolder简介</p>
+<p>显示一个<code>Surface</code>的抽象接口，使你可以控制<code>Surface</code>的大小和格式以及在<code>Surface</code>上编辑像素，和监视<code>Surace</code>的改变。这个接口通常通过<code>SurfaceView</code>类实现。<br>简单的说就是我们无法直接操作<code>Surface</code>只能通过<code>SurfaceHolder</code>这个接口来获取和操作<code>Surface</code>。<br>SurfaceHolder<code>中提供了一些</code>lockCanvas()`：获取一个Canvas对象，并锁定之。所得到的Canvas对象，其实就是Surface中一个成员。加锁的目的其实就是为了在绘制的过程中，<br>Surface中的数据不会被改变。lockCanvas是为了防止同一时刻多个线程对同一canvas写入。</p>
+<p><em>从设计模式的角度来看,<code>Surface、SurfaceView、SurfaceHolder</code>实质上就是<code>MVC(Model-View-Controller)</code>，<code>Model</code>就是模型或者说是数据模型，更简单的可以理解成数据，在这里也就是<code>Surface</code>，<br><code>View</code>就是视图，代表用户交互界面，这里就是<code>SurfaceView</code>,<code>SurfaceHolder</code>就是<code>Controller.</code></em></p>
+<p>##MediaController</p>
+<ul>
+<li><code>MediaController</code>继承<code>FrameLayout</code>，通过<code>MediaPlayerControl</code>接口与<code>VideoView</code>进行结合控制，内部是通过<code>PopupWindow</code>将整个控制栏界面显示到界面上，<br>  而该<code>PopupWindow</code>所显示在的位置就是通过<code>setAnchorView()</code>设置进来的<code>Anchor</code>一般可以使当前的<code>VideoView</code>或者是整个<code>Activity</code>的根布局。这里要分为小屏和全屏两种情况来进行设置。<br>  如果当前的<code>MediaController</code>只是播放前下面的控制栏部分(进度条、快进、快退、暂停等)这样我们可以通过对VideoView设置点击事件，控制它的显示和隐藏。<br>  如果<code>MediaController</code>为整个屏幕包括了控制栏部分、上端的信息显示部分、以及左右栏的功能部分、这时候就可以通过对<code>MediaController</code>本身设置点击事件来控制显示和隐藏。         </li>
+</ul>
+<p><code>Controller</code>可以用<code>PopupWindow</code>来实现,具体有两种方式：     </p>
+<pre><code>- 整个控制栏(上面的信息部分、下面的控制部分以及左右边)都在`Controller`中，`setAnchorView()`的时候就会让`Controller`中的`PopupWindow`显示出来(一直显示，但是这个`PopupWindow`是透明的)，
+    真正的显示与隐藏是控制在`PopupWindow`中的`View`部分的显示与隐藏来实现。开始的时候我是想用这种方式，当时我想的是播放就播放、控制就控制，分离开来多好，但是没想到，
+    一旦有`PopupWindow`显示出来后，Activity是接收不到任何`Touch`事件的，所有的重试界面等都要放到`Controller`中实现(手势处理等)。但是也有好处，就是不管显示还是隐藏都可以去处理手势.
+
+- `PopupWindow`不是全屏的，只包含下面真正的控制部分(快进、快退、暂停等,不包含上面的信息部分和左右边),而且也不是开始就显示，显示隐藏是通过控制`PopupWindow`的显示与隐藏来进行的。
+    而对于信息部分、以及左右边都是在`Activity`的布局当中，我们通过接口回调得到`PopupWindow`的显示与隐藏来控制这些布局的显示与隐藏即可。
+    这样的话我们就需要将手势等全部放到`Activity`中去处理，但是也有一个问题，就是如果`Controller`正在显示的话`Activity`是接收不到`Touch`事件的，就无法处理手势，只能是让`Controller`消失后才能处理手势。
+</code></pre><hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-性能优化相关工具" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -543,100 +768,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Android卸载反馈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android卸载反馈/">Android卸载反馈</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android卸载反馈/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android卸载反馈"><a href="#Android卸载反馈" class="headerlink" title="Android卸载反馈"></a>Android卸载反馈</h1><p>最初记得是在360安全卫士中出现的，在手机上卸载他的应用之后浏览器就会弹出一个反馈页面，让用户进行反馈，感觉这种功能对于产品改进特别有帮助。<br>但是仔细一想该怎么去实现却犯愁了，最开始想这也简单啊，不就是监听下自身被卸载就可以了，应该系统会有卸载的广播，可惜没有。甚至其他的一些<br>方法也是不行的，因为你程序都被卸载了，你的代码怎么会执行呢？皮之不存，毛将焉附。那360是怎样实现的呢？说句真心话360做的产品还是非常有创新<br>的，虽然有些时候他会损坏用户的利益，不过但从技术方面，着实让人信服。</p>
-<p>既然<code>Java</code>实现不了，那就得考虑下其他的了，自然最先想到的就是<code>JNI</code>了，可惜<code>C</code>的部分不懂，上网搜了很多资料和介绍，找得到可以通过一下方式实现:   </p>
-<ul>
-<li><p>通过<code>c</code>中的<code>fork</code>方法来复制一个子进程。复制出来的子进程在父进程被销毁后，仍然可以存在。<br>  <code>pid_t fpid = fork()</code>被调用前，就一个进程执行该段代码，这条语句执行之后，就会有两个进程执行该代码，两个进程执行没有固定先后顺序，只要看<br>  系统调度策略，<code>fork()</code>函数的特别之处在于调用一次会返回两次结果：   </p>
-<pre><code>- 返回值大于0，当前是父进程。
-- 返回0，当前是子进程。
-- 返回小于0的负值。(出错了，可能是内存不足或者是进程数已经达到系统最大值)
-</code></pre></li>
-<li><p><code>fork</code>出子进程后让子进程一直去监听<code>/data/data/packageName</code>是否存在，如果不存在了，那就说明程序被卸载了，但是这样一直去轮训判断肯定会浪费<br>  系统资源的，当然也会更加费电，对用户来讲肯定是有损害的。所以这种技术最好也不好用，不然大家的手机以后还能了得。万恶的产品。</p>
-</li>
-<li><p>得到程序被卸载之后弹出浏览器打开指定反馈页面。这就要用到<code>am</code>命令了，最早知道这个命令是在开发<code>TV</code>版的时候，遥控器找不到了，程序安装后无法<br> 打开了，用该命令就不怕了，哈哈。但是在<code>c</code>中怎么执行<code>am</code>命令呢？这就要用到<code>execlp()</code>函数，该函数就是<code>c</code>中执行系统命令的函数。</p>
-</li>
-</ul>
-<p>好了，主要的内容上面都分析完了，下面上代码。</p>
-<ul>
-<li><p><code>Java</code>层定义<code>natvie</code>方法。   </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"@@@"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		String packageDir = <span class="string">"/data/data/"</span> + getPackageName();</div><div class="line">		initUninstallFeedback(packageDir, Build.VERSION.SDK_INT);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">initUninstallFeedback</span><span class="params">(String packagePath, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.loadLibrary(<span class="string">"uninstall_feedback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>创建jni目录，增加<code>Android.mk</code>以及<code>uninstall_feedback.c</code>文件。<br><code>Android.mk</code>的内容:</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := uninstall_feedback</div><div class="line">LOCAL_SRC_FILES := uninstall_feedback.c</div><div class="line"></div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</div><div class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
-<p><code>uninstall_feedback.c</code>的实现: </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将Java中的String转换成c中的char字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Jstring2CStr</span><span class="params">(JNIEnv* env, jstring jstr)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span>* rtn = <span class="literal">NULL</span>;</div><div class="line">	jclass clsstring = (*env)-&gt;FindClass(env, <span class="string">"java/lang/String"</span>); <span class="comment">//String</span></div><div class="line">	jstring strencode = (*env)-&gt;NewStringUTF(env, <span class="string">"GB2312"</span>); <span class="comment">// 得到一个java字符串 "GB2312"</span></div><div class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, clsstring, <span class="string">"getBytes"</span>,</div><div class="line">			<span class="string">"(Ljava/lang/String;)[B"</span>); <span class="comment">//[ String.getBytes("gb2312");</span></div><div class="line">	jbyteArray barr = (jbyteArray)(*env)-&gt;CallObjectMethod(env, jstr, mid,</div><div class="line">			strencode); <span class="comment">// String .getByte("GB2312");</span></div><div class="line">	jsize alen = (*env)-&gt;GetArrayLength(env, barr); <span class="comment">// byte数组的长度</span></div><div class="line">	jbyte* ba = (*env)-&gt;GetByteArrayElements(env, barr, JNI_FALSE);</div><div class="line">	<span class="keyword">if</span> (alen &gt; <span class="number">0</span>) &#123;</div><div class="line">		rtn = (<span class="keyword">char</span>*) <span class="built_in">malloc</span>(alen + <span class="number">1</span>); <span class="comment">//""</span></div><div class="line">		<span class="built_in">memcpy</span>(rtn, ba, alen);</div><div class="line">		rtn[alen] = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	(*env)-&gt;ReleaseByteArrayElements(env, barr, ba, <span class="number">0</span>); <span class="comment">//</span></div><div class="line">	<span class="keyword">return</span> rtn;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Java_com_charon_uninstallfeedback_MainActivity_initUninstallFeedback</span><span class="params">(</span></span></div><div class="line">		JNIEnv* env, jobject thiz, jstring packageDir, jint sdkVersion) &#123;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> * pd = Jstring2CStr(env, packageDir);</div><div class="line"></div><div class="line">	<span class="comment">//fork子进程，以执行轮询任务</span></div><div class="line">	<span class="keyword">pid_t</span> pid = fork();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// fork失败了</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// 可以一直采用一直判断文件是否存在的方式去判断，但是这样效率稍低，下面使用监听的方式，死循环，每个一秒判断一次，这样太浪费资源了。</span></div><div class="line">		<span class="keyword">int</span> check = <span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span> (check) &#123;</div><div class="line">			FILE* file = fopen(pd, <span class="string">"rt"</span>);</div><div class="line">			<span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (sdkVersion &gt;= <span class="number">17</span>) &#123;</div><div class="line">					<span class="comment">// Android4.2系统之后支持多用户操作，所以得指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"--user"</span>, <span class="string">"0"</span>, <span class="string">"-a"</span>,</div><div class="line">							<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// Android4.2以前的版本无需指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"-a"</span>,</div><div class="line">						<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125;</div><div class="line">				check = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">			&#125;</div><div class="line">			sleep(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>编译so文件。<code>Windows</code>下要用<code>cygwin</code>来操作。<br>上面的介绍是在<code>Eclipse</code>中进行的，用<code>ndk-build</code>命令来编译<code>so</code>。具体请看之前写的<code>JNI基础</code>这篇文章。</li>
-</ul>
-<p>有关如何在<code>Android Stuido</code>中进行<code>ndk</code>开发请看另一篇文章。</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android卸载反馈/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-热修复实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -808,137 +939,6 @@ jlrField.set(instance, combined);
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/热修复实现/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-视频播放相关内容总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/视频播放相关内容总结/">视频播放相关内容总结</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/视频播放相关内容总结/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="视频播放相关内容总结"><a href="#视频播放相关内容总结" class="headerlink" title="视频播放相关内容总结"></a>视频播放相关内容总结</h1><h2 id="多媒体常识："><a href="#多媒体常识：" class="headerlink" title="多媒体常识："></a>多媒体常识：</h2><ul>
-<li><p>什么是多媒体             </p>
-<p>  多媒体是计算机和视频技术的结合，实际上它是两个媒体；声音和图像，或者用现在的术语：音响和电视</p>
-</li>
-<li><p>常用的视频格式</p>
-<p>  Android系统默认：mp4、3gp<br>  常用格式：ts、3gpp、3g2、3gpp2、avi、mkv、flv、divx、f4v、rm、rmvb、rv、wmv、asf、mov、mpg、v8、ram、mpeg、<br>  swf、m2v、asx、ra、ram、ndivx、xvid等     </p>
-</li>
-<li><p>常用音频格式：</p>
-<p>  Android系统：mp3、ogg；<br>  常用格式：wma、mid、m4a、xmf、aac、mpa、midi、ar等</p>
-</li>
-<li><p>常用图片格式：PNG、GIF、BMP、jpg</p>
-</li>
-<li><p>国内各个视频网站采用的解码框架：</p>
-<ul>
-<li>优酷、搜狐、奇艺、pps、暴风影音土豆、56网都是用的ffmpeg.       </li>
-<li>pptv已经使用p2p技术<br>  点对点技术（peer-to-peer， 简称P2P）又称对等互联网络技术，是一种网络新技术，依赖网络中参与者的计算能力和带宽，<br>  而不是把依赖都聚集在较少的几台服务器上。P2P网络通常用于通过Ad Hoc连接来连接节点。这类网络可以用于多种用途，<br>  各种档案分享软件已经得到了广泛的使用。P2P技术也被使用在类似VoIP等实时媒体业务的数据通信中。</li>
-</ul>
-</li>
-</ul>
-<p>目前常用的开发框架：</p>
-<ul>
-<li><p>VLC框架：<br>  VLC是一个开源项目，基于ffmpeg框架的自定义播放器。其中LibVLC是VLC的核心部分，就相当于MediaPlayer类<br>  VLC一个最主要的部分，它可以播放各种类型的媒体文件和流媒体文件，并且可以创造媒体流并保存成各种格式的媒体文件<br>  VLC是一种跨平台的媒体播放器和流媒体服务器，最初为videolan的客户端，它是一种非常简便的多媒体播放器，<br>  它可以用来播放各种各样的音视频的格式文件(MPEG-1、MPEG-2、MPEG- 4、DivX、WMV、mp3、OGG、Vorbis、AC3、AAC等等)流媒体协议<br>  最具特色的功能是可以边下载边观看Divx媒体文件，并可以播放不完全的AVI文件。并且支持界面的更改。<br>  缺点：有C/C++代码，还有Java代码，代码太庞大             </p>
-</li>
-<li><p>ffmpeg框架：<br>  优点：轻量级框架，易于维护<br>  FFmpeg是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案<br>  FFMPEG几乎为你把所有的繁重工作都做了，比如解码、编码、复用和解复用。<br>  这使得多媒体应用程序变得容易编写。它是一个简单的，用C编写的，快速的并且能够解码几乎所有你能用到的格式，当然也包括编码多种格式。<br>  FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，支持AVI、MPEG、OGG、Matroska、ASF等90多种解码<br>  FFmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中libavcodec用于存放各个encode/decode模块<br>  libavformat用于存放muxer/demuxer模块，libavutil用于存放内存操作等辅助性模块</p>
-</li>
-<li><p>vitamio框架：<br>  vitamio也是基于ffmpeg开源框架<br>  VPlayer是vitamio的一个产品，vitamio和VPlayer是同一个团队开发的，VPlayer能播放的vitamio也能播放         </p>
-</li>
-</ul>
-<p>##Surface简介</p>
-<ul>
-<li><code>Surface</code>就是“表面”的意思。在<code>SDK</code>的文档中，对<code>Surface</code>的描述是这样的：“<code>Handle onto a raw buffer that is being managed by the screen compositor</code>”，<br>  翻译成中文就是“由屏幕显示内容合成器<code>(screen compositor)</code>所管理的原生缓冲器的句柄”，    这句话包括下面两个意思：<ul>
-<li>通过Surface（因为Surface是句柄）就可以获得原生缓冲器以及其中的内容。就像在C语言中，可以通过一个文件的句柄，就可以获得文件的内容一样；</li>
-<li>原生缓冲器（rawbuffer）是用于保存当前窗口的像素数据的。</li>
-</ul>
-</li>
-<li>简单的说<code>Surface</code>对应了一块屏幕缓冲区，每个<code>Window</code>对应一个<code>Surface</code>，任何<code>View</code>都是画在<code>Surface</code>上的，传统的<code>view</code>共享一块屏幕缓冲区，所有的绘制必须在<code>UI</code>线程中进行</li>
-<li>我们不能直接操作Surface实例，要通过SurfaceHolder，在SurfaceView中可以通过getHolder()方法获取到SurfaceHolder实例。</li>
-<li><code>Surface</code>是一个用来画图形的地方，但是我们知道画图都是在一个<code>Canvas</code>对象上面进行的，<em><code>Surface</code>中的<code>Canvas</code>成员，是专门用于提供画图的地方，就像黑板一样，其中的原始缓冲区是用来保存数据的地方，<br>  <code>Surface</code>本身的作用类似一个句柄，得到了这个句柄就可以得到其中的<code>Canvas</code>、原始缓冲区以及其他方面的内容，所以简单的说<code>Surface</code>是用来管理数据的(句柄)</em>。</li>
-</ul>
-<p>##SurfaceView简介      </p>
-<ul>
-<li><p>简单的说<code>SurfaceView</code>就是一个有<code>Surface</code>的<code>View</code>里面内嵌了一个专门用于绘制的<code>Surface</code>,<code>SurfaceView</code>控制这个<code>Surface</code>的格式和尺寸以及绘制位置.<code>SurfaceView</code>是一个<code>View</code>也许不够严谨，<br>  然而从定义中 <code>public class SurfaceView extends View</code>显示<code>SurfaceView</code>确实是派生自<code>View</code>，但是<code>SurfaceView</code>却有着自己的<code>Surface</code>，源码：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">if</span> (mWindow == <span class="keyword">null</span>) &#123;  </div><div class="line">mWindow = <span class="keyword">new</span> MyWindow(<span class="keyword">this</span>);  </div><div class="line">mLayout.type = mWindowType;  </div><div class="line">mLayout.gravity = Gravity.LEFT|Gravity.TOP;  </div><div class="line">mSession.addWithoutInputChannel(mWindow, mWindow.mSeq, mLayout,  </div><div class="line">mVisible ? VISIBLE : GONE, mContentInsets);  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>  很明显，每个<code>SurfaceView</code>创建的时候都会创建一个<code>MyWindow</code>，<code>new MyWindow(this)</code>中的<code>this</code>正是<code>SurfaceView</code>自身，因此将<code>SurfaceView</code>和<code>window</code>绑定在一起，而前面提到过每个<code>window</code>对应一个<code>Surface</code>，<br>  所以<code>SurfaceView</code>也就内嵌了一个自己的<code>Surface</code>，可以认为<code>SurfaceView</code>是来控制<code>Surface</code>的位置和尺寸。传统<code>View</code>及其派生类的更新只能在<code>UI</code>线程，然而<code>UI</code>线程还同时处理其他交互逻辑，<br>  这就无法保证<code>view</code>更新的速度和帧率了，而<code>SurfaceView</code>可以用独立的线程来进行绘制，因此可以提供更高的帧率，例如游戏，摄像头取景等场景就比较适合用<code>SurfaceView</code>来实现。</p>
-</li>
-<li><p><code>Surface</code>是纵深排序<code>(Z-ordered)</code>的，这表明它总在自己所在窗口的后面。</p>
-</li>
-<li><code>Surfaceview</code>提供了一个可见区域，只有在这个可见区域内的<code>Surface</code>部分内容才可见，可见区域外的部分不可见，所以可以认为<strong><code>SurfaceView</code>就是展示<code>Surface</code>中数据的地方</strong>,<code>Surface</code>就是管理数据的地方，<br>  <code>SurfaceView</code>就是展示数据的地方，只有通过<code>SurfaceView</code>才能展现<code>Surface</code>中的数据。<br>  <img src="https://github.com/CharonChui/Pictures/master/SurfaceView.png?raw=true" alt="image">   </li>
-<li><code>Surface</code>的排版显示受到视图层级关系的影响，它的兄弟视图结点会在顶端显示。这意味者<code>Surface</code>的内容会被它的兄弟视图遮挡，这一特性可以用来放置遮盖物<code>(overlays)</code>(例如，文本和按钮等控件)。<br>  注意，如果<code>Surface</code>上面有透明控件，那么它的每次变化都会引起框架重新计算它和顶层控件的透明效果，这会影响性能。surfaceview变得可见时，surface被创建；surfaceview隐藏前，surface被销毁。<br>  这样能节省资源。如果你要查看 surface被创建和销毁的时机，可以重载surfaceCreated(SurfaceHolder)和 surfaceDestroyed(SurfaceHolder)。<br>  <strong><code>SurfaceView</code>的核心在于提供了两个线程：<code>UI</code>线程和渲染线程</strong>,两个线程通过“双缓冲”机制来达到高效的界面适时更新。</li>
-</ul>
-<p>##SurfaceHolder简介</p>
-<p>显示一个<code>Surface</code>的抽象接口，使你可以控制<code>Surface</code>的大小和格式以及在<code>Surface</code>上编辑像素，和监视<code>Surace</code>的改变。这个接口通常通过<code>SurfaceView</code>类实现。<br>简单的说就是我们无法直接操作<code>Surface</code>只能通过<code>SurfaceHolder</code>这个接口来获取和操作<code>Surface</code>。<br>SurfaceHolder<code>中提供了一些</code>lockCanvas()`：获取一个Canvas对象，并锁定之。所得到的Canvas对象，其实就是Surface中一个成员。加锁的目的其实就是为了在绘制的过程中，<br>Surface中的数据不会被改变。lockCanvas是为了防止同一时刻多个线程对同一canvas写入。</p>
-<p><em>从设计模式的角度来看,<code>Surface、SurfaceView、SurfaceHolder</code>实质上就是<code>MVC(Model-View-Controller)</code>，<code>Model</code>就是模型或者说是数据模型，更简单的可以理解成数据，在这里也就是<code>Surface</code>，<br><code>View</code>就是视图，代表用户交互界面，这里就是<code>SurfaceView</code>,<code>SurfaceHolder</code>就是<code>Controller.</code></em></p>
-<p>##MediaController</p>
-<ul>
-<li><code>MediaController</code>继承<code>FrameLayout</code>，通过<code>MediaPlayerControl</code>接口与<code>VideoView</code>进行结合控制，内部是通过<code>PopupWindow</code>将整个控制栏界面显示到界面上，<br>  而该<code>PopupWindow</code>所显示在的位置就是通过<code>setAnchorView()</code>设置进来的<code>Anchor</code>一般可以使当前的<code>VideoView</code>或者是整个<code>Activity</code>的根布局。这里要分为小屏和全屏两种情况来进行设置。<br>  如果当前的<code>MediaController</code>只是播放前下面的控制栏部分(进度条、快进、快退、暂停等)这样我们可以通过对VideoView设置点击事件，控制它的显示和隐藏。<br>  如果<code>MediaController</code>为整个屏幕包括了控制栏部分、上端的信息显示部分、以及左右栏的功能部分、这时候就可以通过对<code>MediaController</code>本身设置点击事件来控制显示和隐藏。         </li>
-</ul>
-<p><code>Controller</code>可以用<code>PopupWindow</code>来实现,具体有两种方式：     </p>
-<pre><code>- 整个控制栏(上面的信息部分、下面的控制部分以及左右边)都在`Controller`中，`setAnchorView()`的时候就会让`Controller`中的`PopupWindow`显示出来(一直显示，但是这个`PopupWindow`是透明的)，
-    真正的显示与隐藏是控制在`PopupWindow`中的`View`部分的显示与隐藏来实现。开始的时候我是想用这种方式，当时我想的是播放就播放、控制就控制，分离开来多好，但是没想到，
-    一旦有`PopupWindow`显示出来后，Activity是接收不到任何`Touch`事件的，所有的重试界面等都要放到`Controller`中实现(手势处理等)。但是也有好处，就是不管显示还是隐藏都可以去处理手势.
-
-- `PopupWindow`不是全屏的，只包含下面真正的控制部分(快进、快退、暂停等,不包含上面的信息部分和左右边),而且也不是开始就显示，显示隐藏是通过控制`PopupWindow`的显示与隐藏来进行的。
-    而对于信息部分、以及左右边都是在`Activity`的布局当中，我们通过接口回调得到`PopupWindow`的显示与隐藏来控制这些布局的显示与隐藏即可。
-    这样的话我们就需要将手势等全部放到`Activity`中去处理，但是也有一个问题，就是如果`Controller`正在显示的话`Activity`是接收不到`Touch`事件的，就无法处理手势，只能是让`Controller`消失后才能处理手势。
-</code></pre><hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/视频播放相关内容总结/">展开全文 >></a>
         </p>
       
 
