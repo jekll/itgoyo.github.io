@@ -12,7 +12,7 @@
 然后进入到后台把我们的网站填写进去
 
 在theme/yilia/layout/_partial/post/目录下创建文件名叫：duoshuo.ejs把以下代码复制进去
-12345678910111213141516171819202122232425&amp;lt;div class=&quot;duoshuo&quot;&amp;gt;	&amp;lt;!-- 多说">
+123456789101112131415161718&amp;lt;div class=&quot;duoshuo&quot;&amp;gt;	&amp;lt;!-- 多说评论框 start --&amp;g">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo加入评论功能">
 <meta property="og:url" content="https://github.com/itgoyo/2017/01/15/Hexo加入评论功能/index.html">
@@ -21,16 +21,16 @@
 然后进入到后台把我们的网站填写进去
 
 在theme/yilia/layout/_partial/post/目录下创建文件名叫：duoshuo.ejs把以下代码复制进去
-12345678910111213141516171819202122232425&amp;lt;div class=&quot;duoshuo&quot;&amp;gt;	&amp;lt;!-- 多说">
+123456789101112131415161718&amp;lt;div class=&quot;duoshuo&quot;&amp;gt;	&amp;lt;!-- 多说评论框 start --&amp;g">
 <meta property="og:image" content="https://github.com/itgoyo/pictures/2017_1_15/duoshuoadmin.png">
-<meta property="og:updated_time" content="2017-01-15T05:41:22.000Z">
+<meta property="og:updated_time" content="2017-01-15T07:17:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo加入评论功能">
 <meta name="twitter:description" content="Yilia主题（别的主题也是一样的操作）首先，我们要有一个多说的账号多说
 然后进入到后台把我们的网站填写进去
 
 在theme/yilia/layout/_partial/post/目录下创建文件名叫：duoshuo.ejs把以下代码复制进去
-12345678910111213141516171819202122232425&amp;lt;div class=&quot;duoshuo&quot;&amp;gt;	&amp;lt;!-- 多说">
+123456789101112131415161718&amp;lt;div class=&quot;duoshuo&quot;&amp;gt;	&amp;lt;!-- 多说评论框 start --&amp;g">
 <meta name="twitter:image" content="https://github.com/itgoyo/pictures/2017_1_15/duoshuoadmin.png">
   
     <link rel="alternative" href="/atom.xml" title="itgoyo" type="application/atom+xml">
@@ -202,7 +202,9 @@ var _hmt = _hmt || [];
 <p>然后进入到后台把我们的网站填写进去</p>
 <p><img src="/pictures/2017_1_15/duoshuoadmin.png" alt=""></p>
 <p>在<code>theme/yilia/layout/_partial/post/</code>目录下创建文件名叫：duoshuo.ejs<br>把以下代码复制进去</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;div class="duoshuo"&gt;</div><div class="line">	&lt;!-- 多说评论框 start --&gt;</div><div class="line">	&lt;div class="ds-thread" data-thread-key="&lt;%=key%&gt;" data-title="&lt;%=title%&gt;" data-url="&lt;%=url%&gt;"&gt;&lt;/div&gt;</div><div class="line">	&lt;!-- 多说评论框 end --&gt;</div><div class="line">	&lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&gt;</div><div class="line">	&lt;script type="text/javascript"&gt;</div><div class="line">	var duoshuoQuery = &#123;short_name:'&lt;%= config.duoshuo_shortname %&gt;'&#125;;</div><div class="line">	(function() &#123;</div><div class="line">		var ds = document.createElement('script');</div><div class="line">		ds.type = 'text/javascript';ds.async = true;</div><div class="line">		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';</div><div class="line">		ds.charset = 'UTF-8';</div><div class="line">		(document.getElementsByTagName('head')[0] </div><div class="line">		 || document.getElementsByTagName('body')[0]).appendChild(ds);</div><div class="line">	&#125;)();</div><div class="line">	&lt;/script&gt;</div><div class="line">	&lt;!-- 多说公共JS代码 end --&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">```Hexo加入网易云音乐Hexo加入网易</div><div class="line"></div><div class="line"></div><div class="line">在`hexo/_comfig.yml`里边添加一下代码（名字换成自己的）</div><div class="line"></div><div class="line">```java</div><div class="line">duoshuo_shortname: xxxx(冒号后有空格)</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;div class="duoshuo"&gt;</div><div class="line">	&lt;!-- 多说评论框 start --&gt;</div><div class="line">	&lt;div class="ds-thread" data-thread-key="&lt;%=key%&gt;" data-title="&lt;%=title%&gt;" data-url="&lt;%=url%&gt;"&gt;&lt;/div&gt;</div><div class="line">	&lt;!-- 多说评论框 end --&gt;</div><div class="line">	&lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&gt;</div><div class="line">	&lt;script type="text/javascript"&gt;</div><div class="line">	var duoshuoQuery = &#123;short_name:'&lt;%= config.duoshuo_shortname %&gt;'&#125;;</div><div class="line">	(function() &#123;</div><div class="line">		var ds = document.createElement('script');</div><div class="line">		ds.type = 'text/javascript';ds.async = true;</div><div class="line">		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';</div><div class="line">		ds.charset = 'UTF-8';</div><div class="line">		(document.getElementsByTagName('head')[0] </div><div class="line">		 || document.getElementsByTagName('body')[0]).appendChild(ds);</div><div class="line">	&#125;)();</div><div class="line">	&lt;/script&gt;</div><div class="line">	&lt;!-- 多说公共JS代码 end --&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p>在<code>hexo/_comfig.yml</code>里边添加一下代码（名字换成自己的）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">duoshuo_shortname: xxxx(冒号后有空格)</div></pre></td></tr></table></figure>
 <p>最后在<code>theme/yilia/_config.yml</code>  里边添加以下代码（名字换成自己的）</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">duoshuo: true</div><div class="line">short_name: xxxx  #名字换你自己在多说后台的名字(冒号后有空格)</div></pre></td></tr></table></figure>
 <p><strong>一共配置两处地方</strong><br>不然即便是看到评论功能，但是不会保留别人对你的评论</p>
