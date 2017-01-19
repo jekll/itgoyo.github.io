@@ -165,19 +165,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-布局优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/布局优化/">布局优化</a>
+      <a class="article-title" href="/2015/01/01/性能优化/">性能优化</a>
     </h1>
   
 
         
-        <a href="/2015/01/01/布局优化/" class="archive-article-date">
+        <a href="/2015/01/01/性能优化/" class="archive-article-date">
   	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
 </a>
         
@@ -185,33 +185,31 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="布局优化"><a href="#布局优化" class="headerlink" title="布局优化"></a>布局优化</h1><ul>
-<li><p>去除不必要的嵌套和节点<br>  这是最基本的一条，但也是最不好做到的一条，往往不注意的时候难免会一些嵌套等。    </p>
-<ul>
-<li>首次不需要的节点设置为<code>GONE</code>或使用<code>ViewStud</code>.       </li>
-<li>使用<code>Relativelayout</code>代替<code>LinearLayout</code>.<br>平时写布局的时候要多注意，写完后可以通过<code>Hierarchy Viewer</code>或在手机上通过开发者选项中的显示布局边界来查看是否有不必要的嵌套。</li>
+        <h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="代码优化原则"><a href="#代码优化原则" class="headerlink" title="代码优化原则:      "></a>代码优化原则:      </h2><ul>
+<li>时间换时间：<br>  如禁用电脑的一些开机启动项，通过减少这些没必要的启动项的时间从而节省开机时间<br>  如网站界面上数据的分批获取，AJAX技术</li>
+<li>时间换空间：<br>  如拷贝文件时new一个字节数组当缓冲器，即byte[] buffer = new byte[1024]。<br>  为什么只new一个1024个字节的数组呢，new一个更大的字节数组不是一下就把文件拷贝完了么？这么做就是为了牺牲时间节省有限的内存空间</li>
+<li>空间换时间：<br>  如用Windows系统自带的搜索文件的功能搜索文件时会很慢，但是我们牺牲电脑硬盘空间安装一个everything软件来搜索文件就特别快</li>
+<li>空间换空间：<br>  如虚拟内存</li>
 </ul>
-</li>
-<li><p>使用<code>include</code><br>  <code>include</code>可以用于将布局中一些公共的部分提取出来。在需要的时候使用即可，比喻一些页面统一的<code>loading</code>页。<br>   <code>include</code>标签的<code>layout</code>属性指定所要包含的布局文件，我们也可以通过<code>android:id</code>或者一些其他的属性来覆盖被引入布局的根节点所对应<br>的属性值。      </p>
-   <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">include</span></span></div><div class="line"><span class="attr">layout</span>=<span class="string">"@layout/loading"</span></div><div class="line"><span class="attr">android:id</span>=<span class="string">"@+id/loading_main"</span> /&gt;</div></pre></td></tr></table></figure>
-<p>  <code>loading.xml</code>内容为：    </p>
-  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">	<span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">	<span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">ProgressBar</span></span></div><div class="line">		<span class="attr">android:id</span>=<span class="string">"@+id/pb_loadiing"</span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"28dip"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"28dip"</span></div><div class="line">		<span class="attr">android:layout_centerInParent</span>=<span class="string">"true"</span></div><div class="line">		<span class="attr">android:indeterminateDrawable</span>=<span class="string">"@drawable/progressbar_anim_drawable"</span> /&gt;</div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">		<span class="attr">android:layout_below</span>=<span class="string">"@id/pb_loadiing"</span></div><div class="line">		<span class="attr">android:layout_centerHorizontal</span>=<span class="string">"true"</span></div><div class="line">		<span class="attr">android:layout_marginTop</span>=<span class="string">"10dp"</span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">		<span class="attr">android:text</span>=<span class="string">"loading..."</span></div><div class="line">		<span class="attr">android:textSize</span>=<span class="string">"15sp"</span> /&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>使用<code>&lt;merge&gt;</code>标签<br>  <code>merge</code>可以有效的解决布局的层级关系。我们通过一个例子来说明一下：            </p>
-  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">FrameLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">	<span class="attr">android:layout_width</span>=<span class="string">"fill_parent"</span></div><div class="line">	<span class="attr">android:layout_height</span>=<span class="string">"fill_parent"</span>&gt;</div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"fill_parent"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"fill_parent"</span></div><div class="line"></div><div class="line">		<span class="attr">android:scaleType</span>=<span class="string">"center"</span></div><div class="line">		<span class="attr">android:src</span>=<span class="string">"@drawable/ic_launcher"</span> /&gt;</div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">		<span class="attr">android:layout_marginBottom</span>=<span class="string">"20dip"</span></div><div class="line">		<span class="attr">android:textSize</span>=<span class="string">"22sp"</span></div><div class="line">		<span class="attr">android:textColor</span>=<span class="string">"#990000"</span></div><div class="line">		<span class="attr">android:layout_gravity</span>=<span class="string">"center_horizontal|bottom"</span></div><div class="line">		<span class="attr">android:text</span>=<span class="string">"TEST"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">FrameLayout</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>  我们在一个页面中显示该部分内容，运行后观察<code>Hierarchy Viewer</code>。<br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/merge_1.png" alt="image"><br>  我们会发现除了我们布局最外层还会有一层<code>FrameLayout</code>，这是因为<code>Activity</code>内容视图的<code>parent view</code>就是一个<code>FrameLayout</code>，所以对于我们来说无意中已经多了一层毫无意义的布局。<br>  接下来<code>merge</code>的功能就能发挥了，修改代码如下。              </p>
-  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">merge</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"fill_parent"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"fill_parent"</span></div><div class="line">		<span class="attr">android:scaleType</span>=<span class="string">"center"</span></div><div class="line">		<span class="attr">android:src</span>=<span class="string">"@drawable/ic_launcher"</span> /&gt;</div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">		<span class="attr">android:layout_marginBottom</span>=<span class="string">"20dip"</span></div><div class="line">		<span class="attr">android:textSize</span>=<span class="string">"22sp"</span></div><div class="line">		<span class="attr">android:textColor</span>=<span class="string">"#990000"</span></div><div class="line">		<span class="attr">android:layout_gravity</span>=<span class="string">"center_horizontal|bottom"</span></div><div class="line">		<span class="attr">android:text</span>=<span class="string">"TEST"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">merge</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>  接下来我们在用<code>Hierarchy Viewer</code>观察就会发现完美的去掉了一层<code>FrameLayout</code><br>  <img src="https://raw.githubusercontent.com/CharonChui/Pictures/master/merge_2.png" alt="image"><br>  当然上面我们使用<code>merge</code>是因为跟布局正好是<code>FrameLayout</code>并且没有<code>backgroud</code>和<code>padding</code>等这些属性。如果根本局是<code>LinearLayout</code>等，就没法直接使用<code>merge</code>了。<br>  在<code>include</code>的时候很容易造成布局层级嵌套过多，结合<code>merge</code>使用能有效解决这个问题。</p>
-</li>
-<li><p>使用<code>ViewStub</code><br>  <code>ViewStub</code>标签与<code>include</code>一样可以用来引入一个外部布局，但是<code>Viewstub</code>引入的布局默认不会解析与显示，宽高为0，<code>View</code>也为<code>null</code>,这样就会在解析<code>layout</code>时节省<code>cpu</code>和内存。简单的理解就是<code>ViewStub</code>是<br><code>include</code>加上<code>GONE</code>.<code>ViewStub</code>常用来引入那些默认不会显示，只在特殊情况下显示的布局，如进度布局、网络失败显示的刷新布局、信息出错出现的提示布局等.</p>
-  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">	<span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">	<span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span> &gt;</div><div class="line"></div><div class="line">	……</div><div class="line">	<span class="tag">&lt;<span class="name">ViewStub</span></span></div><div class="line">		<span class="attr">android:id</span>=<span class="string">"@+id/network_unreachble"</span></div><div class="line">		<span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">		<span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">		<span class="attr">android:layout</span>=<span class="string">"@layout/network_unreachble"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>  在代码中通过<code>(ViewStub)findViewById(id)</code>找到<code>ViewStub</code>，使用<code>inflate()</code>展开<code>ViewStub</code>,然后得到子<code>View</code>，如下：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> View mNetErrorView;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showNetError</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (mNetErrorView != <span class="keyword">null</span>) &#123;</div><div class="line">		mNetErrorView.setVisibility(View.VISIBLE);</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	ViewStub stub = (ViewStub)findViewById(R.id.network_unreachble);</div><div class="line">	<span class="comment">// 解析并且显示该部分，返回值就是解析后的该`View`</span></div><div class="line">	mNetErrorView = stub.inflate();</div><div class="line">	Button networkSetting = (Button)mNetErrorView.findViewById(R.id.bt_network);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showNormal</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (mNetErrorView != <span class="keyword">null</span>) &#123;</div><div class="line">		mNetErrorView.setVisibility(View.GONE);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>  或者也可以通过第二种方式:</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">View viewStub = findViewById(R.id.network_unreachble);</div><div class="line"><span class="comment">// ViewStub被展开后的布局所替换</span></div><div class="line">viewStub.setVisibility(View.VISIBLE);   </div><div class="line"><span class="comment">// 获取展开后的布局</span></div><div class="line">mNetErrorView =  findViewById(R.id.network_unreachble);</div></pre></td></tr></table></figure>
-</li>
-<li><p>减少不必要的<code>Inflate</code><br>  如上一步中<code>stub.infalte()</code>后将该<code>View</code>进行记录或者是<code>ListView</code>中<code>item inflate</code>的时候。</p>
-</li>
+<h2 id="Android开发中的体现"><a href="#Android开发中的体现" class="headerlink" title="Android开发中的体现"></a>Android开发中的体现</h2><ul>
+<li>采用硬件加速，在清单文件中<code>application</code>节点添加<code>android:hardwareAccelerated=”true”</code>。不过这个需要在<code>android 3.0</code>才可以使用。<code>android4.0</code>这个选项是默认开启的。</li>
+<li><code>View</code>中设置缓存属性<code>setDrawingCache</code>为<code>true</code>.</li>
+<li>优化你的布局.</li>
+<li>动态加载<code>View</code>. 采用<code>ViewStub</code>避免一些不经常的视图长期握住引用.</li>
+<li>将<code>Acitivity</code>中的<code>Window</code>的背景图设置为空。<code>getWindow().setBackgroundDrawable(null);``android</code>的默认背景是不是为空。</li>
+<li>采用<code>&lt;merge&gt;</code>优化布局层数。 采用<code>&lt;include&gt;</code>来共享布局。</li>
+<li>利用<code>TraceView</code>查看跟踪函数调用。有的放矢的优化。</li>
+<li><code>cursor</code>的使用。不过要注意管理好<code>cursor</code>,不要每次打开关闭<code>cursor</code>.因为打开关闭<code>Cursor</code>非常耗时。 <code>Cursor.require</code>用于刷<code>cursor</code>.</li>
+<li>采用<code>SurfaceView</code>在子线程刷新<code>UI</code>, 避免手势的处理和绘制在同一<code>UI</code>线程（普通<code>View</code>都这样做）。</li>
+<li>采用<code>JNI</code>，将耗时间的处理放到<code>c/c++</code>层来处理。</li>
+<li>有些能用文件操作的，尽量采用文件操作，文件操作的速度比数据库的操作要快10倍左右。</li>
+<li>避免创建不必要的对象</li>
+<li>如果方法用不到成员变量，可以把方法申明为<code>static</code>，性能会提高到15%到20%</li>
+<li>避免使用<code>getter/setter</code>存取<code>field</code>，可以把<code>field</code>申明为<code>public</code>，直接访问</li>
+<li><code>static</code>的变量如果不需要修改，应该使用<code>static final</code>修饰符定义为常量</li>
+<li>使用增强<code>for</code>循环,比普通<code>for</code>循环效率高，但是也有缺点就是在遍历 集合过程中，不能对集合本身进行操作</li>
+<li>合理利用浮点数，浮点数比整型慢两倍；</li>
+<li>针对ListView的性能优化</li>
 </ul>
 <hr>
 <ul>
@@ -241,7 +239,101 @@ var _hmt = _hmt || [];
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/布局优化/">展开全文 >></a>
+          <a class="article-more-a" href="/2015/01/01/性能优化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android卸载反馈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/Android卸载反馈/">Android卸载反馈</a>
+    </h1>
+  
+
+        
+        <a href="/2015/01/01/Android卸载反馈/" class="archive-article-date">
+  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android卸载反馈"><a href="#Android卸载反馈" class="headerlink" title="Android卸载反馈"></a>Android卸载反馈</h1><p>最初记得是在360安全卫士中出现的，在手机上卸载他的应用之后浏览器就会弹出一个反馈页面，让用户进行反馈，感觉这种功能对于产品改进特别有帮助。<br>但是仔细一想该怎么去实现却犯愁了，最开始想这也简单啊，不就是监听下自身被卸载就可以了，应该系统会有卸载的广播，可惜没有。甚至其他的一些<br>方法也是不行的，因为你程序都被卸载了，你的代码怎么会执行呢？皮之不存，毛将焉附。那360是怎样实现的呢？说句真心话360做的产品还是非常有创新<br>的，虽然有些时候他会损坏用户的利益，不过但从技术方面，着实让人信服。</p>
+<p>既然<code>Java</code>实现不了，那就得考虑下其他的了，自然最先想到的就是<code>JNI</code>了，可惜<code>C</code>的部分不懂，上网搜了很多资料和介绍，找得到可以通过一下方式实现:   </p>
+<ul>
+<li><p>通过<code>c</code>中的<code>fork</code>方法来复制一个子进程。复制出来的子进程在父进程被销毁后，仍然可以存在。<br>  <code>pid_t fpid = fork()</code>被调用前，就一个进程执行该段代码，这条语句执行之后，就会有两个进程执行该代码，两个进程执行没有固定先后顺序，只要看<br>  系统调度策略，<code>fork()</code>函数的特别之处在于调用一次会返回两次结果：   </p>
+<pre><code>- 返回值大于0，当前是父进程。
+- 返回0，当前是子进程。
+- 返回小于0的负值。(出错了，可能是内存不足或者是进程数已经达到系统最大值)
+</code></pre></li>
+<li><p><code>fork</code>出子进程后让子进程一直去监听<code>/data/data/packageName</code>是否存在，如果不存在了，那就说明程序被卸载了，但是这样一直去轮训判断肯定会浪费<br>  系统资源的，当然也会更加费电，对用户来讲肯定是有损害的。所以这种技术最好也不好用，不然大家的手机以后还能了得。万恶的产品。</p>
+</li>
+<li><p>得到程序被卸载之后弹出浏览器打开指定反馈页面。这就要用到<code>am</code>命令了，最早知道这个命令是在开发<code>TV</code>版的时候，遥控器找不到了，程序安装后无法<br> 打开了，用该命令就不怕了，哈哈。但是在<code>c</code>中怎么执行<code>am</code>命令呢？这就要用到<code>execlp()</code>函数，该函数就是<code>c</code>中执行系统命令的函数。</p>
+</li>
+</ul>
+<p>好了，主要的内容上面都分析完了，下面上代码。</p>
+<ul>
+<li><p><code>Java</code>层定义<code>natvie</code>方法。   </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"@@@"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		String packageDir = <span class="string">"/data/data/"</span> + getPackageName();</div><div class="line">		initUninstallFeedback(packageDir, Build.VERSION.SDK_INT);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">initUninstallFeedback</span><span class="params">(String packagePath, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.loadLibrary(<span class="string">"uninstall_feedback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建jni目录，增加<code>Android.mk</code>以及<code>uninstall_feedback.c</code>文件。<br><code>Android.mk</code>的内容:</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := uninstall_feedback</div><div class="line">LOCAL_SRC_FILES := uninstall_feedback.c</div><div class="line"></div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</div><div class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
+<p><code>uninstall_feedback.c</code>的实现: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将Java中的String转换成c中的char字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Jstring2CStr</span><span class="params">(JNIEnv* env, jstring jstr)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span>* rtn = <span class="literal">NULL</span>;</div><div class="line">	jclass clsstring = (*env)-&gt;FindClass(env, <span class="string">"java/lang/String"</span>); <span class="comment">//String</span></div><div class="line">	jstring strencode = (*env)-&gt;NewStringUTF(env, <span class="string">"GB2312"</span>); <span class="comment">// 得到一个java字符串 "GB2312"</span></div><div class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, clsstring, <span class="string">"getBytes"</span>,</div><div class="line">			<span class="string">"(Ljava/lang/String;)[B"</span>); <span class="comment">//[ String.getBytes("gb2312");</span></div><div class="line">	jbyteArray barr = (jbyteArray)(*env)-&gt;CallObjectMethod(env, jstr, mid,</div><div class="line">			strencode); <span class="comment">// String .getByte("GB2312");</span></div><div class="line">	jsize alen = (*env)-&gt;GetArrayLength(env, barr); <span class="comment">// byte数组的长度</span></div><div class="line">	jbyte* ba = (*env)-&gt;GetByteArrayElements(env, barr, JNI_FALSE);</div><div class="line">	<span class="keyword">if</span> (alen &gt; <span class="number">0</span>) &#123;</div><div class="line">		rtn = (<span class="keyword">char</span>*) <span class="built_in">malloc</span>(alen + <span class="number">1</span>); <span class="comment">//""</span></div><div class="line">		<span class="built_in">memcpy</span>(rtn, ba, alen);</div><div class="line">		rtn[alen] = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	(*env)-&gt;ReleaseByteArrayElements(env, barr, ba, <span class="number">0</span>); <span class="comment">//</span></div><div class="line">	<span class="keyword">return</span> rtn;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Java_com_charon_uninstallfeedback_MainActivity_initUninstallFeedback</span><span class="params">(</span></span></div><div class="line">		JNIEnv* env, jobject thiz, jstring packageDir, jint sdkVersion) &#123;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> * pd = Jstring2CStr(env, packageDir);</div><div class="line"></div><div class="line">	<span class="comment">//fork子进程，以执行轮询任务</span></div><div class="line">	<span class="keyword">pid_t</span> pid = fork();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// fork失败了</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// 可以一直采用一直判断文件是否存在的方式去判断，但是这样效率稍低，下面使用监听的方式，死循环，每个一秒判断一次，这样太浪费资源了。</span></div><div class="line">		<span class="keyword">int</span> check = <span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span> (check) &#123;</div><div class="line">			FILE* file = fopen(pd, <span class="string">"rt"</span>);</div><div class="line">			<span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (sdkVersion &gt;= <span class="number">17</span>) &#123;</div><div class="line">					<span class="comment">// Android4.2系统之后支持多用户操作，所以得指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"--user"</span>, <span class="string">"0"</span>, <span class="string">"-a"</span>,</div><div class="line">							<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// Android4.2以前的版本无需指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"-a"</span>,</div><div class="line">						<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125;</div><div class="line">				check = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">			&#125;</div><div class="line">			sleep(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>编译so文件。<code>Windows</code>下要用<code>cygwin</code>来操作。<br>上面的介绍是在<code>Eclipse</code>中进行的，用<code>ndk-build</code>命令来编译<code>so</code>。具体请看之前写的<code>JNI基础</code>这篇文章。</li>
+</ul>
+<p>有关如何在<code>Android Stuido</code>中进行<code>ndk</code>开发请看另一篇文章。</p>
+<hr>
+<ul>
+<li>邮箱 ：itgoyo@gmail.com  </li>
+<li>Good Luck! </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/01/01/Android卸载反馈/">展开全文 >></a>
         </p>
       
 
@@ -528,100 +620,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2015/01/01/性能优化相关工具/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android卸载反馈" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/01/Android卸载反馈/">Android卸载反馈</a>
-    </h1>
-  
-
-        
-        <a href="/2015/01/01/Android卸载反馈/" class="archive-article-date">
-  	<time datetime="2014-12-31T17:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-01-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Android卸载反馈"><a href="#Android卸载反馈" class="headerlink" title="Android卸载反馈"></a>Android卸载反馈</h1><p>最初记得是在360安全卫士中出现的，在手机上卸载他的应用之后浏览器就会弹出一个反馈页面，让用户进行反馈，感觉这种功能对于产品改进特别有帮助。<br>但是仔细一想该怎么去实现却犯愁了，最开始想这也简单啊，不就是监听下自身被卸载就可以了，应该系统会有卸载的广播，可惜没有。甚至其他的一些<br>方法也是不行的，因为你程序都被卸载了，你的代码怎么会执行呢？皮之不存，毛将焉附。那360是怎样实现的呢？说句真心话360做的产品还是非常有创新<br>的，虽然有些时候他会损坏用户的利益，不过但从技术方面，着实让人信服。</p>
-<p>既然<code>Java</code>实现不了，那就得考虑下其他的了，自然最先想到的就是<code>JNI</code>了，可惜<code>C</code>的部分不懂，上网搜了很多资料和介绍，找得到可以通过一下方式实现:   </p>
-<ul>
-<li><p>通过<code>c</code>中的<code>fork</code>方法来复制一个子进程。复制出来的子进程在父进程被销毁后，仍然可以存在。<br>  <code>pid_t fpid = fork()</code>被调用前，就一个进程执行该段代码，这条语句执行之后，就会有两个进程执行该代码，两个进程执行没有固定先后顺序，只要看<br>  系统调度策略，<code>fork()</code>函数的特别之处在于调用一次会返回两次结果：   </p>
-<pre><code>- 返回值大于0，当前是父进程。
-- 返回0，当前是子进程。
-- 返回小于0的负值。(出错了，可能是内存不足或者是进程数已经达到系统最大值)
-</code></pre></li>
-<li><p><code>fork</code>出子进程后让子进程一直去监听<code>/data/data/packageName</code>是否存在，如果不存在了，那就说明程序被卸载了，但是这样一直去轮训判断肯定会浪费<br>  系统资源的，当然也会更加费电，对用户来讲肯定是有损害的。所以这种技术最好也不好用，不然大家的手机以后还能了得。万恶的产品。</p>
-</li>
-<li><p>得到程序被卸载之后弹出浏览器打开指定反馈页面。这就要用到<code>am</code>命令了，最早知道这个命令是在开发<code>TV</code>版的时候，遥控器找不到了，程序安装后无法<br> 打开了，用该命令就不怕了，哈哈。但是在<code>c</code>中怎么执行<code>am</code>命令呢？这就要用到<code>execlp()</code>函数，该函数就是<code>c</code>中执行系统命令的函数。</p>
-</li>
-</ul>
-<p>好了，主要的内容上面都分析完了，下面上代码。</p>
-<ul>
-<li><p><code>Java</code>层定义<code>natvie</code>方法。   </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"@@@"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		String packageDir = <span class="string">"/data/data/"</span> + getPackageName();</div><div class="line">		initUninstallFeedback(packageDir, Build.VERSION.SDK_INT);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">initUninstallFeedback</span><span class="params">(String packagePath, <span class="keyword">int</span> sdkVersion)</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		System.loadLibrary(<span class="string">"uninstall_feedback"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>创建jni目录，增加<code>Android.mk</code>以及<code>uninstall_feedback.c</code>文件。<br><code>Android.mk</code>的内容:</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LOCAL_PATH := $(call my-dir)</div><div class="line"></div><div class="line">include $(CLEAR_VARS)</div><div class="line"></div><div class="line">LOCAL_MODULE    := uninstall_feedback</div><div class="line">LOCAL_SRC_FILES := uninstall_feedback.c</div><div class="line"></div><div class="line">LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</div><div class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib -llog</div><div class="line"></div><div class="line">include $(BUILD_SHARED_LIBRARY)</div></pre></td></tr></table></figure>
-<p><code>uninstall_feedback.c</code>的实现: </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将Java中的String转换成c中的char字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Jstring2CStr</span><span class="params">(JNIEnv* env, jstring jstr)</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span>* rtn = <span class="literal">NULL</span>;</div><div class="line">	jclass clsstring = (*env)-&gt;FindClass(env, <span class="string">"java/lang/String"</span>); <span class="comment">//String</span></div><div class="line">	jstring strencode = (*env)-&gt;NewStringUTF(env, <span class="string">"GB2312"</span>); <span class="comment">// 得到一个java字符串 "GB2312"</span></div><div class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, clsstring, <span class="string">"getBytes"</span>,</div><div class="line">			<span class="string">"(Ljava/lang/String;)[B"</span>); <span class="comment">//[ String.getBytes("gb2312");</span></div><div class="line">	jbyteArray barr = (jbyteArray)(*env)-&gt;CallObjectMethod(env, jstr, mid,</div><div class="line">			strencode); <span class="comment">// String .getByte("GB2312");</span></div><div class="line">	jsize alen = (*env)-&gt;GetArrayLength(env, barr); <span class="comment">// byte数组的长度</span></div><div class="line">	jbyte* ba = (*env)-&gt;GetByteArrayElements(env, barr, JNI_FALSE);</div><div class="line">	<span class="keyword">if</span> (alen &gt; <span class="number">0</span>) &#123;</div><div class="line">		rtn = (<span class="keyword">char</span>*) <span class="built_in">malloc</span>(alen + <span class="number">1</span>); <span class="comment">//""</span></div><div class="line">		<span class="built_in">memcpy</span>(rtn, ba, alen);</div><div class="line">		rtn[alen] = <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	(*env)-&gt;ReleaseByteArrayElements(env, barr, ba, <span class="number">0</span>); <span class="comment">//</span></div><div class="line">	<span class="keyword">return</span> rtn;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Java_com_charon_uninstallfeedback_MainActivity_initUninstallFeedback</span><span class="params">(</span></span></div><div class="line">		JNIEnv* env, jobject thiz, jstring packageDir, jint sdkVersion) &#123;</div><div class="line"></div><div class="line">	<span class="keyword">char</span> * pd = Jstring2CStr(env, packageDir);</div><div class="line"></div><div class="line">	<span class="comment">//fork子进程，以执行轮询任务</span></div><div class="line">	<span class="keyword">pid_t</span> pid = fork();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// fork失败了</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</div><div class="line">		<span class="comment">// 可以一直采用一直判断文件是否存在的方式去判断，但是这样效率稍低，下面使用监听的方式，死循环，每个一秒判断一次，这样太浪费资源了。</span></div><div class="line">		<span class="keyword">int</span> check = <span class="number">1</span>;</div><div class="line">		<span class="keyword">while</span> (check) &#123;</div><div class="line">			FILE* file = fopen(pd, <span class="string">"rt"</span>);</div><div class="line">			<span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (sdkVersion &gt;= <span class="number">17</span>) &#123;</div><div class="line">					<span class="comment">// Android4.2系统之后支持多用户操作，所以得指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"--user"</span>, <span class="string">"0"</span>, <span class="string">"-a"</span>,</div><div class="line">							<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					<span class="comment">// Android4.2以前的版本无需指定用户</span></div><div class="line">					execlp(<span class="string">"am"</span>, <span class="string">"am"</span>, <span class="string">"start"</span>, <span class="string">"-a"</span>,</div><div class="line">						<span class="string">"android.intent.action.VIEW"</span>, <span class="string">"-d"</span>,</div><div class="line">							<span class="string">"http://shouji.360.cn/web/uninstall/uninstall.html"</span>,</div><div class="line">							(<span class="keyword">char</span>*) <span class="literal">NULL</span>);</div><div class="line">				&#125;</div><div class="line">				check = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">			&#125;</div><div class="line">			sleep(<span class="number">1</span>);</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>编译so文件。<code>Windows</code>下要用<code>cygwin</code>来操作。<br>上面的介绍是在<code>Eclipse</code>中进行的，用<code>ndk-build</code>命令来编译<code>so</code>。具体请看之前写的<code>JNI基础</code>这篇文章。</li>
-</ul>
-<p>有关如何在<code>Android Stuido</code>中进行<code>ndk</code>开发请看另一篇文章。</p>
-<hr>
-<ul>
-<li>邮箱 ：itgoyo@gmail.com  </li>
-<li>Good Luck! </li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/01/01/Android卸载反馈/">展开全文 >></a>
         </p>
       
 
